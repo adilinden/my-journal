@@ -1,0 +1,56 @@
+/*
+ *  bw.scss
+ *
+ * The builtins from Pygment 
+ * 	 https://github.com/richleland/pygments-css/blob/master/github.css
+ *   http://richleland.github.io/pygments-css/
+ *
+ * Run through css2sass 
+ *   http://css2scss.herokuapp.com
+ *
+ * And made it play nice with my theme by adding background and changing
+ * original .codehilite to .highlight
+ */
+.highlight, .highlighter-rouge {
+  .hll {
+    background-color: #ffffcc;
+  }
+  .c {
+    font-style: italic;
+  }
+  .err {
+    border: 1px solid #FF0000;
+  }
+  .k {
+    font-weight: bold;
+  }
+  .cm, .c1, .cs, .ge {
+    font-style: italic;
+  }
+  .gh, .gp, .gs, .gu, .kc, .kd, .kn, .kr {
+    font-weight: bold;
+  }
+  .s {
+    font-style: italic;
+  }
+  .nc, .ni, .ne, .nn, .nt, .ow {
+    font-weight: bold;
+  }
+  .sb, .sc, .sd, .s2 {
+    font-style: italic;
+  }
+  .se {
+    font-weight: bold;
+    font-style: italic;
+  }
+  .sh {
+    font-style: italic;
+  }
+  .si {
+    font-weight: bold;
+    font-style: italic;
+  }
+  .sx, .sr, .s1, .ss {
+    font-style: italic;
+  }
+}

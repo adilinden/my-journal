@@ -2,11 +2,13 @@
 layout: post
 title:  "Codeblock Test Page"
 date:   2016-03-10 21:25:50
+comments: Yes
 tags:
   - rouge
   - test page
 categories:
   - test page
+assets:
 ---
 
 This page demontrates various ways code blocks can be structured in Markdown. It compares a backtick fenced codeblock, a liquid tag enclosed codeblock and an indented codeblock.  Each section displays the raw Markdown, the HTML structure (from rendered page source at time of writing) and finally the rendered code block.

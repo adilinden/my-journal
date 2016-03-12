@@ -2,11 +2,13 @@
 layout: post
 title:  "Lexers supported by Rouge v1.3.1"
 date:   2016-03-10 20:05:10
+comments: Yes
 tags:
   - rouge
   - test page
 categories:
   - test page
+assets:
 ---
 
 This page has been shamelessly lifted from [Rouge’s demo site](http://rouge.jayferd.us/demo).  I am using it to verify synstax highlighting on my site.  Please refer to the original Rouge documentation for an authoritative list of lexers supported by rouge.

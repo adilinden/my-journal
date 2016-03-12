@@ -1,0 +1,106 @@
+/*
+ *  borland.scss
+ *
+ * The builtins from Pygment 
+ * 	 https://github.com/richleland/pygments-css/blob/master/github.css
+ *   http://richleland.github.io/pygments-css/
+ *
+ * Run through css2sass 
+ *   http://css2scss.herokuapp.com
+ *
+ * And made it play nice with my theme by adding background and changing
+ * original .codehilite to .highlight
+ */
+.highlight, .highlighter-rouge {
+  .hll {
+    background-color: #ffffcc;
+  }
+  .c {
+    color: #008800;
+    font-style: italic;
+  }
+  .err {
+    color: #a61717;
+    background-color: #e3d2d2;
+  }
+  .k {
+    color: #000080;
+    font-weight: bold;
+  }
+  .cm {
+    color: #008800;
+    font-style: italic;
+  }
+  .cp {
+    color: #008080;
+  }
+  .c1 {
+    color: #008800;
+    font-style: italic;
+  }
+  .cs {
+    color: #008800;
+    font-weight: bold;
+  }
+  .gd {
+    color: #000000;
+    background-color: #ffdddd;
+  }
+  .ge {
+    font-style: italic;
+  }
+  .gr {
+    color: #aa0000;
+  }
+  .gh {
+    color: #999999;
+  }
+  .gi {
+    color: #000000;
+    background-color: #ddffdd;
+  }
+  .go {
+    color: #888888;
+  }
+  .gp {
+    color: #555555;
+  }
+  .gs {
+    font-weight: bold;
+  }
+  .gu {
+    color: #aaaaaa;
+  }
+  .gt {
+    color: #aa0000;
+  }
+  .kc, .kd, .kn, .kp, .kr, .kt {
+    color: #000080;
+    font-weight: bold;
+  }
+  .m, .s {
+    color: #0000FF;
+  }
+  .na {
+    color: #FF0000;
+  }
+  .nt {
+    color: #000080;
+    font-weight: bold;
+  }
+  .ow {
+    font-weight: bold;
+  }
+  .w {
+    color: #bbbbbb;
+  }
+  .mf, .mh, .mi, .mo, .sb {
+    color: #0000FF;
+  }
+  .sc {
+    color: #800080;
+  }
+  .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss, .il {
+    color: #0000FF;
+  }
+}

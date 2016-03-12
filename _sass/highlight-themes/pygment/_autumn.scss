@@ -1,0 +1,152 @@
+/*
+ *  autumn.scss
+ *
+ * The builtins from Pygment 
+ * 	 https://github.com/richleland/pygments-css/blob/master/github.css
+ *   http://richleland.github.io/pygments-css/
+ *
+ * Run through css2sass 
+ *   http://css2scss.herokuapp.com
+ *
+ * And made it play nice with my theme by adding background and changing
+ * original .codehilite to .highlight
+ */
+.highlight, .highlighter-rouge {
+  .hll {
+    background-color: #ffffcc;
+  }
+  .c {
+    color: #aaaaaa;
+    font-style: italic;
+  }
+  .err {
+    color: #F00000;
+    background-color: #F0A0A0;
+  }
+  .k {
+    color: #0000aa;
+  }
+  .cm {
+    color: #aaaaaa;
+    font-style: italic;
+  }
+  .cp {
+    color: #4c8317;
+  }
+  .c1 {
+    color: #aaaaaa;
+    font-style: italic;
+  }
+  .cs {
+    color: #0000aa;
+    font-style: italic;
+  }
+  .gd {
+    color: #aa0000;
+  }
+  .ge {
+    font-style: italic;
+  }
+  .gr {
+    color: #aa0000;
+  }
+  .gh {
+    color: #000080;
+    font-weight: bold;
+  }
+  .gi {
+    color: #00aa00;
+  }
+  .go {
+    color: #888888;
+  }
+  .gp {
+    color: #555555;
+  }
+  .gs {
+    font-weight: bold;
+  }
+  .gu {
+    color: #800080;
+    font-weight: bold;
+  }
+  .gt {
+    color: #aa0000;
+  }
+  .kc, .kd, .kn, .kp, .kr {
+    color: #0000aa;
+  }
+  .kt {
+    color: #00aaaa;
+  }
+  .m {
+    color: #009999;
+  }
+  .s {
+    color: #aa5500;
+  }
+  .na {
+    color: #1e90ff;
+  }
+  .nb {
+    color: #00aaaa;
+  }
+  .nc {
+    color: #00aa00;
+    text-decoration: underline;
+  }
+  .no {
+    color: #aa0000;
+  }
+  .nd {
+    color: #888888;
+  }
+  .ni {
+    color: #800000;
+    font-weight: bold;
+  }
+  .nf {
+    color: #00aa00;
+  }
+  .nn {
+    color: #00aaaa;
+    text-decoration: underline;
+  }
+  .nt {
+    color: #1e90ff;
+    font-weight: bold;
+  }
+  .nv {
+    color: #aa0000;
+  }
+  .ow {
+    color: #0000aa;
+  }
+  .w {
+    color: #bbbbbb;
+  }
+  .mf, .mh, .mi, .mo {
+    color: #009999;
+  }
+  .sb, .sc, .sd, .s2, .se, .sh, .si, .sx {
+    color: #aa5500;
+  }
+  .sr {
+    color: #009999;
+  }
+  .s1 {
+    color: #aa5500;
+  }
+  .ss {
+    color: #0000aa;
+  }
+  .bp {
+    color: #00aaaa;
+  }
+  .vc, .vg, .vi {
+    color: #aa0000;
+  }
+  .il {
+    color: #009999;
+  }
+}

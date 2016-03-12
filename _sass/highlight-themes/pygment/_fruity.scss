@@ -1,0 +1,148 @@
+/*
+ *  fruity.scss
+ *
+ * The builtins from Pygment 
+ * 	 https://github.com/richleland/pygments-css/blob/master/github.css
+ *   http://richleland.github.io/pygments-css/
+ *
+ * Run through css2sass 
+ *   http://css2scss.herokuapp.com
+ *
+ * And made it play nice with my theme by adding background and changing
+ * original .codehilite to .highlight
+ */
+.highlight, .highlighter-rouge {
+  .hll {
+    background-color: #333333;
+  }
+  .c {
+    color: #008800;
+    font-style: italic;
+    background-color: #0f140f;
+  }
+  .err, .g {
+    color: #ffffff;
+  }
+  .k {
+    color: #fb660a;
+    font-weight: bold;
+  }
+  .l, .n, .o, .x, .p {
+    color: #ffffff;
+  }
+  .cm {
+    color: #008800;
+    font-style: italic;
+    background-color: #0f140f;
+  }
+  .cp {
+    color: #ff0007;
+    font-weight: bold;
+    font-style: italic;
+    background-color: #0f140f;
+  }
+  .c1, .cs {
+    color: #008800;
+    font-style: italic;
+    background-color: #0f140f;
+  }
+  .gd, .ge, .gr {
+    color: #ffffff;
+  }
+  .gh {
+    color: #ffffff;
+    font-weight: bold;
+  }
+  .gi {
+    color: #ffffff;
+  }
+  .go {
+    color: #444444;
+    background-color: #222222;
+  }
+  .gp, .gs {
+    color: #ffffff;
+  }
+  .gu {
+    color: #ffffff;
+    font-weight: bold;
+  }
+  .gt {
+    color: #ffffff;
+  }
+  .kc, .kd, .kn {
+    color: #fb660a;
+    font-weight: bold;
+  }
+  .kp {
+    color: #fb660a;
+  }
+  .kr {
+    color: #fb660a;
+    font-weight: bold;
+  }
+  .kt {
+    color: #cdcaa9;
+    font-weight: bold;
+  }
+  .ld {
+    color: #ffffff;
+  }
+  .m {
+    color: #0086f7;
+    font-weight: bold;
+  }
+  .s {
+    color: #0086d2;
+  }
+  .na {
+    color: #ff0086;
+    font-weight: bold;
+  }
+  .nb, .nc {
+    color: #ffffff;
+  }
+  .no {
+    color: #0086d2;
+  }
+  .nd, .ni, .ne {
+    color: #ffffff;
+  }
+  .nf {
+    color: #ff0086;
+    font-weight: bold;
+  }
+  .nl, .nn, .nx, .py {
+    color: #ffffff;
+  }
+  .nt {
+    color: #fb660a;
+    font-weight: bold;
+  }
+  .nv {
+    color: #fb660a;
+  }
+  .ow {
+    color: #ffffff;
+  }
+  .w {
+    color: #888888;
+  }
+  .mf, .mh, .mi, .mo {
+    color: #0086f7;
+    font-weight: bold;
+  }
+  .sb, .sc, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss {
+    color: #0086d2;
+  }
+  .bp {
+    color: #ffffff;
+  }
+  .vc, .vg, .vi {
+    color: #fb660a;
+  }
+  .il {
+    color: #0086f7;
+    font-weight: bold;
+  }
+}

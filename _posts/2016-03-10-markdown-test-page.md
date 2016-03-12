@@ -2,11 +2,13 @@
 layout: post
 title:  "Markdown Examples"
 date:   2016-03-10 20:11:10
+comments: Yes
 tags:
   - test page
   - markdown
 categories:
   - test page
+assets:
 ---
 
 This page demonstrates the Markdown syntax.  It is primarily intended to see how Markdown renders within Jekyll.  I use it to verify the effects of stylesheet changes. 

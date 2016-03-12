@@ -1,0 +1,60 @@
+/*
+ *  vs.scss
+ *
+ * The builtins from Pygment 
+ * 	 https://github.com/richleland/pygments-css/blob/master/github.css
+ *   http://richleland.github.io/pygments-css/
+ *
+ * Run through css2sass 
+ *   http://css2scss.herokuapp.com
+ *
+ * And made it play nice with my theme by adding background and changing
+ * original .codehilite to .highlight
+ */
+.highlight, .highlighter-rouge {
+  .hll {
+    background-color: #ffffcc;
+  }
+  .c {
+    color: #008000;
+  }
+  .err {
+    border: 1px solid #FF0000;
+  }
+  .k {
+    color: #0000ff;
+  }
+  .cm {
+    color: #008000;
+  }
+  .cp {
+    color: #0000ff;
+  }
+  .c1, .cs {
+    color: #008000;
+  }
+  .ge {
+    font-style: italic;
+  }
+  .gh, .gp, .gs, .gu {
+    font-weight: bold;
+  }
+  .kc, .kd, .kn, .kp, .kr {
+    color: #0000ff;
+  }
+  .kt {
+    color: #2b91af;
+  }
+  .s {
+    color: #a31515;
+  }
+  .nc {
+    color: #2b91af;
+  }
+  .ow {
+    color: #0000ff;
+  }
+  .sb, .sc, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss {
+    color: #a31515;
+  }
+}
