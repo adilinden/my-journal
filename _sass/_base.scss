@@ -433,7 +433,7 @@ blockquote {
 }
 
 .read-more {
-  padding-top: 0px;
+  padding-top: 15px;
 }
 
 @media screen and (max-width: 600px) {
@@ -464,6 +464,15 @@ blockquote {
     }
   }
 }
+
+/**
+ * Page comments
+ */
+
+ .page-comments {
+  @extend .page-content;
+  padding-top: 55px;
+ }
 
 /**
  * Posts
