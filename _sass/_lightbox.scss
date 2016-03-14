@@ -1,0 +1,44 @@
+/**
+ * Lightbox
+ */
+
+.lightbox-wrapper {
+  width: -moz-min-content; 
+  width: -webkit-min-content; 
+  width: min-content;
+  .lightbox-figure {
+    margin-bottom: .5em;
+    padding: .5em;
+    border: 1px solid #888;
+    img {
+      max-width: none;
+    }
+  }
+}
+
+.lightbox-figcaption {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.lightbox-floatleft {
+  float: left;
+  margin-right: 1.5em;
+}
+
+.lightbox-floatright {
+  float: right;
+  margin-left: 1.5em;
+}
+
+.lightbox-clearleft {
+  clear: left;
+}
+
+.lightbox-clearright {
+  clear: right;
+}
+
+.lightbox-clearboth {
+  clear: both !important;
+}

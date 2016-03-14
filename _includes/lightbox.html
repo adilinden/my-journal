@@ -1,0 +1,6 @@
+<div class="lightbox-wrapper {% if include.float == 'left' %} lightbox-floatleft{% elsif include.float == 'right' %} lightbox-floatright{% endif %}{% if include.clear == 'left' %} lightbox-clearleft{% elsif include.clear == 'right' %} lightbox-clearright{% elsif include.clear == 'both' %} lightbox-clearboth{% endif %}">
+  <div class="lightbox-figure">
+    <a href="{{ site.baseurl }}/{{ page.assets }}/{{ include.image }}" rel="{{ page.title | prepend: "lightbox-" | slugify }}" title="{{ include.caption }}"><img src="{{ site.baseurl }}/{{ page.assets }}/{{ include.thumb }}" alt="{{ include.image }}" /></a>
+    <div class="lightbox-figcaption">{{ include.caption }}</div>
+  </div>
+</div>
