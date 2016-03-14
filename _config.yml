@@ -1,24 +1,54 @@
 # Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: Jekyll Writer Blog
-author: Jekyll Writer
-description: > # this means to ignore newlines until "baseurl:"
-  This theme is disigned based on Mailbox Blog, and licensed under MIT.
-  This theme is also default theme for new site created by Jekyll Writer.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://blog.jekyllwriter.com" # the base hostname & protocol for your site
-permalink: /:year/:month/:day/:title/
-paginate: 6
-paginate_path: "/page/:num/"
-twitter_username: jekyllwriter
-github_username:  jekyllwriter
-gems: [jekyll-paginate]
+title       : Adi Linden
+description : "Reflections of a Wandering Mind"
+url         : http://adis.ca
+baseurl     : ""  # without trailing slash
+
+comments: true
+disqus_shortname      : "adilinden"
+
+# Author settings
+author:
+  name      : Adi Linden
+  bio       : "Networking, VMware, Unix professional; Electronics, amateur radio, programming geek; Photography enthusiast; Hobby cook and baker."
+  thumb     : /resources/images/me_charcoal-120.jpeg
+  email     : adi57@adis.ca
+  github    : http://github.com/adilinden
+  twitter   : http://twitter.com/adilinden
+  facebook  : http://facebook.com/adilinden
+  linkedin  : http://ca.linkedin.com/in/adilinden
 
 # Build settings
+permalink: /entry/:year/:title/
 markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    disable: false
+    line_numbers: false
+
+gems:
+  - jekyll-paginate
+  - jekyll-redirect-from
+
+paginate: 6
+paginate_path: /journal/:num/
+
+destination: _site
+sass:
+  sass_dir: _sass
+  style: compressed # expanded
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - CHANGES.md
+  - run.sh
+  - _config.yml
+  - _config_dev.yml
+

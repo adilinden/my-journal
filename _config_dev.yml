@@ -1,0 +1,15 @@
+# Override Jekyll config during local operation
+
+# Site Settings
+url         : http://localhost:4000
+baseurl     : ""  # without trailing slash
+
+comments: true
+disqus_shortname      : "adilinden-localhost"
+
+paginate: 2
+
+destination: _site
+sass:
+  style: expanded
+
