@@ -5,12 +5,13 @@ layout: default
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
-    <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if site.comments %}{% if page.comments %} &#8226; <span class="disqus-comment-count" data-disqus-identifier="{{ page.slug }}">Disqus Comment Count</span><!--<a href="#disqus_thread" data-disqus-identifier="{{ page.slug }}"></a>-->{% else %} &#8226; 0 Comments (disabled){% endif %}{% endif %}<br />
-    {% if page.categories %}Filed under: <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ post.categories.first | replace: ' ', '_' }}">{{ page.categories.first }}</a>{% for category in page.categories offset:1 %}, <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ category | replace: ' ', '_' }}">{{ category }}</a>{% endfor %}{% endif %}{% if page.tags %} &#8226; Tags: <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ post.tags.first | replace: ' ', '_' }}">{{ page.tags.first }}</a>{% for tag in page.tags offset:1 %}, <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ tag | replace: ' ', '_' }}">{{ tag }}</a>{% endfor %}{% endif %}</p>
+    <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if site.comments %}{% if page.comments %} &#8226; <span class="disqus-comment-count" data-disqus-identifier="{{ page.slug }}">Disqus Comment Count</span><!--<a href="#disqus_thread" data-disqus-identifier="{{ page.slug }}"></a>-->{% else %} &#8226; 0 Comments (disabled){% endif %}{% endif %}</p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
     {{ content }}
   </div>
+
+  <div class="post-meta">{% if page.categories %}Filed under: <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ post.categories.first | replace: ' ', '_' }}">{{ page.categories.first }}</a>{% for category in page.categories offset:1 %}, <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ category | replace: ' ', '_' }}">{{ category }}</a>{% endfor %}{% endif %}{% if page.tags %} &#8226; Tags: <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ post.tags.first | replace: ' ', '_' }}">{{ page.tags.first }}</a>{% for tag in page.tags offset:1 %}, <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ tag | replace: ' ', '_' }}">{{ tag }}</a>{% endfor %}{% endif %}</div>
 
 </article>
