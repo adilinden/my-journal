@@ -141,7 +141,7 @@ blockquote {
  * Clearfix
  */
 
-.footer-col-wrapper:after {
+.footer-col-wrapper:after, .archives-col-wrapper:after {
   content: "";
   display: table;
   clear: both;
@@ -385,8 +385,8 @@ blockquote {
   list-style: none;
   > li {
     border-bottom: 1px solid #e8e8e8;
-    padding-top: 25px;   	// Padding between articles
-    padding-bottom: 25px;
+    padding-top: 35px;   	// Padding between articles
+    padding-bottom: 35px;
     > h2 {
       margin-bottom: 26px;
       text-align: center;
@@ -490,13 +490,13 @@ blockquote {
   text-align: center;
   letter-spacing: -1px;
   line-height: 1;
-  margin-top: 90px;
+  margin-top: 35px;  // whitespace above title
   margin-bottom: 30px;
 }
 
 @media screen and (max-width: 1000px) {
   .post-title {
-    margin-top: 60px;
+    margin-top: 35px;
   }
 }
 
@@ -536,5 +536,36 @@ blockquote {
 @media screen and (max-width: 800px) {
   .post-content h4 {
     font-size: 18px;
+  }
+}
+
+/**
+ * Archives
+ */
+
+.archives-col-wrapper {
+  margin-left: -15px;
+}
+
+.archives-col {
+  float: left;
+  padding-left: 15px;
+}
+
+.archives-col-1 {
+  width: -webkit-calc(50% - (30px / 2));
+  width: calc(50% - (30px / 2));
+}
+
+.archives-col-2 {
+  width: -webkit-calc(50% - (30px / 2));
+  width: calc(50% - (30px / 2));
+}
+
+@media screen and (max-width: 600px) {
+  .archives-col {
+    float: none;
+    width: -webkit-calc(100% - (30px / 2));
+    width: calc(100% - (30px / 2));
   }
 }

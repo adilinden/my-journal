@@ -1,0 +1,55 @@
+---
+layout: page
+title: Archives
+---
+
+<div class="archives-col-wrapper">
+  <div class="archives-col archives-col-1">
+    By Categories
+    {% capture words %}
+      {% for word in site.categories %}
+        {{ word | first }}
+        {% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    {% endcapture %}
+    {% assign cats = words | split:',' | sort %}
+    <p>
+    {% for word in cats %}
+      <a href="{{ site.baseurl }}/categories/#category-{{ word | strip | cgi_escape }}">{{ word | strip }}</a>
+      {% unless forloop.last %} &#8226; {% endunless %}
+    {% endfor %}
+    </p>
+  </div>
+
+  <div class="archives-col archives-col-2">
+    By Tags
+    {% capture words %}
+      {% for word in site.tags %}
+        {{ word | first }}
+        {% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    {% endcapture %}
+    {% assign tags = words | split:',' | sort %}
+    <p>
+    {% for word in tags %}
+      <a href="{{ site.baseurl }}/tags/#tag-{{ word | strip | cgi_escape }}">{{ word | strip }}</a>
+      {% unless forloop.last %} &#8226; {% endunless %}
+    {% endfor %}
+    </p>
+  </div>
+</div>
+
+By Dates
+{% capture words %}
+  {% for post in site.posts %}
+    {% capture post_year %}{{ post.date | date: "%Y" }}{% endcapture %}
+        {{ post_year }}
+  {% endfor %}
+{% endcapture %}
+{% assign years = words | split:' ' | uniq %}
+<p>
+{% for word in years %}
+  <a href="{{ site.baseurl }}/dates/#date-{{ word | strip | cgi_escape }}">{{ word | strip }}</a>
+  {% unless forloop.last %} &#8226; {% endunless %}
+{% endfor %}
+</p>
