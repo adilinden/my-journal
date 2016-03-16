@@ -19,16 +19,20 @@ layout: default
   </ul>
   {% if paginator.total_pages > 1 %}
   <div class="paginator">
-    {% if paginator.next_page %}
-      <a class="next_page" href="{{ paginator.next_page_path }}">← Older posts</a>
-    {% endif %}
-
     {% if paginator.previous_page %}
       {% if paginator.previous_page == 1 %}
-        <a class="prev_page" href="/">Newer posts →</a>
+        <a class="prev_page" href="/">← Newer posts</a>
       {% else %}
-        <a class="prev_page" href="{{ paginator.previous_page_path }}">Newer posts →</a>
+        <a class="prev_page" href="{{ paginator.previous_page_path }}">← Newer posts</a>
       {% endif %}
+    {% else %}
+      <span class="prev_page inactive">← Newer posts</span>
+    {% endif %}
+
+    {% if paginator.next_page %}
+      <a class="next_page" href="{{ paginator.next_page_path }}">Older posts →</a>
+    {% else %}
+      <span class="next_page inactive">Older posts →</span>
     {% endif %}
     <div style="clear:both"></div>
   </div>

@@ -457,10 +457,13 @@ blockquote {
   margin-top: 20px;
   > {
     .next_page {
-      float: left;
+      float: right;
     }
     .prev_page {
-      float: right;
+      float: left;
+    }
+    .inactive {
+      color: #a0a7ac;
     }
   }
 }

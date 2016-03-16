@@ -15,3 +15,17 @@ layout: default
   <div class="post-meta">{% if page.categories %}Filed under: <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ post.categories.first | replace: ' ', '_' }}">{{ page.categories.first }}</a>{% for category in page.categories offset:1 %}, <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ category | replace: ' ', '_' }}">{{ category }}</a>{% endfor %}{% endif %}{% if page.tags %} &#8226; Tags: <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ post.tags.first | replace: ' ', '_' }}">{{ page.tags.first }}</a>{% for tag in page.tags offset:1 %}, <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ tag | replace: ' ', '_' }}">{{ tag }}</a>{% endfor %}{% endif %}</div>
 
 </article>
+
+<div class="paginator">
+  {% if page.next.url %}
+    <a class="prev_page" href="{{ page.next.url }}" title="{{ page.next.title }}">← Newer posts</a>
+  {% else %}
+  	<span class="prev_page inactive">← Newer posts</span>
+  {% endif %}
+  {% if page.previous.url %}
+    <a class="next_page" href="{{ page.previous.url }}" title="{{ page.previous.title }}">Older posts →</a>
+  {% else %}
+  	<span class="next_page inactive">Older posts →</span>
+  {% endif %}
+  <div style="clear:both"></div>
+</div>
