@@ -96,6 +96,17 @@ a {
 }
 
 /**
+ * Anchors
+ */
+
+:target:before {
+  content: "";
+  display: block;
+  height: 60px;
+  margin: -60px 0 0;
+}
+
+/**
  * Blockquotes
  */
 
