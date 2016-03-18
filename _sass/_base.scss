@@ -195,7 +195,7 @@ blockquote {
   line-height: 110px;
   letter-spacing: -1px;
   margin-bottom: 0;
-  text-transform: uppercase;
+  text-transform: lowercase;
   float: left;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -217,6 +217,7 @@ blockquote {
 .site-nav {
   float: right;
   line-height: 110px;
+  text-transform: lowercase;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
