@@ -1,0 +1,90 @@
+diff -Naur sccw_1.1a-old/sccw.c sccw_1.1a/sccw.c
+--- sccw_1.1a-old/sccw.c	2002-03-01 21:42:05.000000000 -0600
++++ sccw_1.1a/sccw.c	2003-01-20 21:59:00.000000000 -0600
+@@ -28,12 +28,12 @@
+ /* If no config file is found in the users' home directory, then these */
+ /* defaults will be used instead */
+ 
+-int Morse_speed=10;	/* Speed in WPM */
++int Morse_speed=20;	/* Speed in WPM */
+ int Morse_gap=3;	/* Spacing between each letter */
+ int Num_grps=5;		/* Number of 5 character groups */
+ int Grp_type=1;		/* Type of character set for random groups */
+ int AdLib_tone = 700;	/* Frequency of tone */
+-int AdLib_vol = 32;	/* Soundcard volume */
++int AdLib_vol = 64;	/* Soundcard volume */
+ 
+ char *Code[] = 
+ 		{".-","-...","-.-.","-..",".","..-.","--.",
+@@ -414,6 +414,7 @@
+ /************************************************************************/
+ int main(int argc, char *argv[])
+ {
++    char *buffer = "";
+ 	time_t *t=NULL,seed;
+ 	if (geteuid())
+ 	{
+@@ -429,17 +430,55 @@
+ 	}
+ 	seed = time(t);		/* Set random value depending on time */
+ 	srand(seed);		/* So the random char set is always different */
+-	read_config();
+-	if((argc>1)) {
+-		if ((strcmp(argv[1], "-t") == 0) && argc > 2)
+-			Send_text(argv[2]);
+-		else
+-			Send_file(argv[1]);
+-	} else
++    /* Read command line args, added by Adi Linden <adi@adis.on.ca> */
++	if ((argc>1)) {
++        while (argc > 1) {
++            if (!strcmp(argv[1], "-s")) {
++                sscanf(argv[2], "%d", &Morse_speed);
++            }
++            if (!strcmp(argv[1], "-g")) {
++                sscanf(argv[2], "%d", &Morse_gap);
++            }
++            if (!strcmp(argv[1], "-c")) {
++                sscanf(argv[2], "%d", &AdLib_tone);
++            }
++            if (!strcmp(argv[1], "-v")) {
++                sscanf(argv[2], "%d", &AdLib_vol);
++            }
++            if (!strcmp(argv[1], "-t")) {
++                buffer = argv[2];
++            }
++            if (!strcmp(argv[1], "-h")) {
++                fprintf(stdout, "Usage: sccw [OPTION] ...\n");
++                fprintf(stdout, "Play morse code interactively or from command line. If invoked without\n");
++                fprintf(stdout, "options interactive mode is enterred.\n\n");
++                fprintf(stdout, "  -s     character speed 3-50, default 20\n");
++                fprintf(stdout, "  -g     character spacing 1-20, default 3\n");
++                fprintf(stdout, "  -c     frequency 100-6000, default 700\n");
++                fprintf(stdout, "  -v     volume 0-64, default 64\n");
++                fprintf(stdout, "  -t     text\n\n");
++                fprintf(stdout, "Command line hack by Adi Linden <adi@adis.on.ca>.\n");
++                return(0);
++            }
++            argc -= 2;
++            argv += 2;
++        }
++		if (strlen(buffer) > 0) {
++            Send_text(buffer);
++        } else {
++            fprintf(stderr, "Error: missing test to send\n");
++            fprintf(stderr, "Try `sccw -h' for more information.\n");
++            return(0);
++        }
++    /* Done with command line args */
++	} else {
++	    read_config();
+ 		while (menu()) {};
++	    if (write_config()) 
++            fprintf(stderr,"\nError writing to config file.\n");
++    }
+ 	ioperm(reg_port,17,0);
+ 	ioperm(data_port,17,0);
+-	if (write_config()) fprintf(stderr,"\nError writing to config file.\n");
+ 	return(0);
+ }
+ 

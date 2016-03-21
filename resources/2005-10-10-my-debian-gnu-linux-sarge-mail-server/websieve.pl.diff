@@ -1,0 +1,29 @@
+--- websieve-063a/websieve.pl	2004-07-06 19:20:09.000000000 -0500
++++ cgi-bin/websieve.pl	2004-10-24 02:07:21.000000000 -0500
+@@ -1338,7 +1338,8 @@
+ 
+ 	print start_html(-title=>$header1,-BGCOLOR=>$bg),
+ 		"<BR><CENTER>",h1($header1),
+-		"For Problems with this service, please email <a href=mailto:$problem_email>$problem_email</a><br>",$HOMEURL,"<br>",
++		"For Problems with this service, please consult the help pages",
++		".<br>",$HOMEURL," ",$HELPURL,"<br>",
+ 		start_form,"<TABLE border=1><TR $cb><TD><TABLE>",
+ 	
+ 	 	"<TR><TD $cb>","<b>Login: </b> </TD><TD $cb>",textfield('login'),"</TD>",
+@@ -1352,7 +1353,7 @@
+ 		
+ 		submit('Login'),"</CENTER>",
+ 		hidden('op');
+-	print "<CENTER>Your \"Login\" is the same as the part of your e-mail<BR>address that goes before the \@ symbol.</CENTER>";
++	#print "<CENTER>Your \"Login\" is the same as the part of your e-mail<BR>address that goes before the \@ symbol.</CENTER>";
+ 
+ 		print end_form;
+ }
+@@ -1397,6 +1398,7 @@
+ 	}
+ 	if ($showmenu||$showhome) {
+ 		print "<table align=center size=70%><tr><td>",tablebutton($HOMEURL);
++		print "</TD><td>",tablebutton($HELPURL),"</td>";
+ 		print "</TD><td>",tablebutton($LOGOUTURL),"</td>";
+ 		if ($useldapextras) {
+ 			print "<td>",tablebutton($LDAPSEARCHURL),"</td>";

@@ -1,0 +1,60 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+# General settings
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+biff = no
+recipient_delimiter = +
+message_size_limit = 102400000
+
+# Appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Pass all mail through amavis
+content_filter = smtp-amavis:127.0.0.1:10024
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+relay_domains =
+
+# Localhost
+myorigin = mail.example.com
+myhostname = mail.example.com
+mydestination = $myhostname, localhost.localdomain, localhost
+mynetworks = 127.0.0.0/8
+
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+
+# Virtual hosting
+virtual_transport = lmtp:unix:/var/spool/postfix/socket/lmtp
+virtual_mailbox_domains = mysql:/etc/postfix/mysql_virtual_domains.cf
+virtual_mailbox_maps = mysql:/etc/postfix/mysql_virtual_mailbox.cf
+virtual_alias_maps = mysql:/etc/postfix/mysql_virtual_alias.cf
+
+# smtpd authentication (SMTP AUTH)
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_application_name = smtpd
+smtpd_sasl_security_options = noanonymous
+smtpd_recipient_restrictions = 
+  permit_mynetworks,
+  permit_sasl_authenticated,
+  reject_unauth_destination,
+  reject_invalid_hostname,
+  reject_unauth_pipelining,
+  reject_non_fqdn_sender,
+  reject_multi_recipient_bounce,
+  reject_non_fqdn_recipient
+broken_sasl_auth_clients = yes
+
+# tls support for smtpd
+smtpd_use_tls = no
+smtpd_tls_auth_only = no
+smtpd_tls_key_file = /etc/postfix/tls/mail_example.key 
+smtpd_tls_cert_file = /etc/postfix/tls/mail_example.crt 
+smtpd_tls_CAfile = /etc/postfix/tls/CA.crt 
+smtpd_tls_loglevel = 3
+smtpd_tls_received_header = yes
+smtpd_tls_session_cache_timeout = 3600s
+tls_random_source = dev:/dev/urandom
+
+# End

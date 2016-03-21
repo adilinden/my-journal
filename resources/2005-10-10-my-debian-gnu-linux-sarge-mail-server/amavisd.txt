@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# amavisd	/etc/init.d/ initscript for amavisd
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+
+CONFIG='/etc/amavis/amavisd.conf'
+MYHOME='/var/lib/amavis'
+PIDFILE='/var/run/amavis/amavisd.pid'
+LCKFILE='/var/run/amavis/amavisd.lock'
+DAEMON='/usr/local/sbin/amavisd'
+DAEMONNAME='amavisd'
+DAEMONUSER='amavis'
+DAEMONGROUP='amavis'
+
+test -f ${DAEMON} || exit 0
+test -f ${CONFIG} || exit 0
+
+PARAMS=" -c ${CONFIG} -u ${DAEMONUSER}"
+
+set -e
+
+START="--start --quiet --pidfile ${PIDFILE} --name ${DAEMONNAME} --startas ${DAEMON} -- ${PARAMS}"
+
+cleanup() {
+	[ -d "$MYHOME" ] && 
+	    find "$MYHOME" -maxdepth 1 -name 'amavis-*' -type d \
+	    	-exec rm -rf "{}" \; || true
+	[ -d "$MYHOME/tmp" ] && 
+	    find "$MYHOME/tmp" -maxdepth 1 -name 'amavis-*' -type d \
+	    	-exec rm -rf "{}" \; || true
+	# clear exit status
+	:
+}
+
+case "$1" in
+    start)
+	echo -n "Starting amavis-new daemon: "
+	if start-stop-daemon ${START} >/dev/null 2>&1 ; then
+		echo "${DAEMONNAME}."
+	else
+		if start-stop-daemon --test ${START} >/dev/null 2>&1; then
+			echo "(failed)."
+			exit 1
+		else
+			echo "(already running)."
+			exit 0
+		fi
+	fi
+	;;
+    stop)
+	echo -n "Stopping amavis-new daemon: "
+	if start-stop-daemon --stop --quiet --pidfile ${PIDFILE} \
+		--name $DAEMONNAME --retry 10 >/dev/null 2>&1; then
+		echo "${DAEMONNAME}."
+		cleanup
+	else
+		if start-stop-daemon --test ${START} >/dev/null 2>&1; then
+			echo "(not running)."
+			exit 0
+		else
+			echo "(failed)."
+			exit 1
+		fi
+	fi
+	;;
+    reload|restart|force-reload)
+	$0 stop
+	exec $0 start
+	;;
+    *)
+	echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+	#echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

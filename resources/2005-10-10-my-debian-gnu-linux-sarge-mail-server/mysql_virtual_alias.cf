@@ -1,0 +1,10 @@
+#
+# /etc/postfix/mysql_virtual_alias.cf
+#
+user = postfix
+password = <password>
+hosts = 127.0.0.1
+dbname = postfix
+table = alias
+select_field = goto
+where_field = address

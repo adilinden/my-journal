@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Startup script for cyrus-imapd
+#
+
+my_start ()
+{
+    echo -n "Starting cyrus-imap service: master"
+    start-stop-daemon \
+        --start \
+        --quiet \
+        --exec /usr/local/cyrus/bin/master -- -p /var/run/cyrus-master.pid -d
+    echo "."
+}
+
+my_stop ()
+{
+    echo -n "Stopping cyrus-imap service: master"
+    start-stop-daemon \
+        --stop  \
+        --quiet \
+        --pidfile /var/run/cyrus-master.pid \
+        --exec /usr/local/cyrus/bin/master -- -p /var/run/cyrus-master.pid
+    echo "."
+}
+
+my_restart ()
+{
+    my_stop
+    sleep 3
+    my_start
+}
+
+case "$1" in
+  start)
+    my_start
+    ;;
+  stop)
+    my_stop
+    ;;
+  restart|reload|force-reload)
+    my_restart
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+    exit 1
+    ;;
+esac    
+
+exit 0

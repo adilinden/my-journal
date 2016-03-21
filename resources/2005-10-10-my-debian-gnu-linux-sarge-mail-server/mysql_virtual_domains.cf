@@ -1,0 +1,11 @@
+#
+# /etc/postfix/mysql_virtual_domains.cf
+#
+user = postfix
+password = <password>
+hosts = 127.0.0.1
+dbname = postfix
+table = domain
+select_field = description
+where_field = domain
+#additional_conditions = and backupmx = '0' and active = '1'

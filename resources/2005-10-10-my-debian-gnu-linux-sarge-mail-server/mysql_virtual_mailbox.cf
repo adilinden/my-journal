@@ -1,0 +1,11 @@
+#
+# /etc/postfix/mysql_virtual_mailbox.cf
+#
+user = postfix
+password = <password>
+hosts = 127.0.0.1
+dbname = postfix
+table = mailbox
+select_field = maildir
+where_field = username
+#additional_conditions = and active = '1'

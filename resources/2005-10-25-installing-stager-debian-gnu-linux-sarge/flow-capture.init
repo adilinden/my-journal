@@ -1,0 +1,45 @@
+#!/bin/sh
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+DAEMON=/usr/local/bin/flow-capture
+
+RAWDIR="/var/netflow/raw"
+EXPIRE="3G"
+ZLEVEL="7"
+SOCKET="0/0/9997"
+
+OPTIONS="-E${EXPIRE} -z${ZLEVEL} -w ${RAWDIR} ${SOCKET}"
+
+case "$1" in
+    start)
+        echo -n "Starting netflow collector: flow-capture "
+        if start-stop-daemon --quiet --stop --signal 0 --exec $DAEMON
+        then
+            echo "[already running]"
+        else
+            start-stop-daemon --start --quiet --exec $DAEMON -- $OPTIONS
+            echo "."
+        fi
+        ;;
+    stop)
+        echo -n "Stopping netflow collector: flow-capture "
+        if start-stop-daemon --quiet --stop --signal 0 --exec $DAEMON
+        then
+            start-stop-daemon --quiet --stop --exec $DAEMON
+            echo "."
+        else
+            echo "[not running]"
+        fi
+        ;;
+    force-reload|restart)
+        $0 stop
+        sleep 3
+        $0 start
+        ;;
+    *)
+        echo "Usage: /etc/init.d/flow-capture {start|stop|restart|force-reload}"
+        exit 1
+esac
+
+exit 0
+

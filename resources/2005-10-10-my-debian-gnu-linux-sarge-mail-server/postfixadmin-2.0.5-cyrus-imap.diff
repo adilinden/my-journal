@@ -1,0 +1,872 @@
+diff -Naur postfixadmin-2.0.5.orig/admin/create-mailbox.php postfixadmin-2.0.5/admin/create-mailbox.php
+--- postfixadmin-2.0.5.orig/admin/create-mailbox.php	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/admin/create-mailbox.php	2004-10-27 23:42:03.000000000 -0500
+@@ -26,6 +26,7 @@
+ require ("../variables.inc.php");
+ require ("../config.inc.php");
+ require ("../functions.inc.php");
++if ($CONF['have_cyrus'] == 'YES') require ("../imap.inc.php");
+ include ("../languages/" . check_language () . ".lang");
+ 
+ $list_domains = list_domains ();
+@@ -175,6 +176,30 @@
+ 
+          $tQuota = $CONF['maxquota'];
+ 
++	 if ($CONF['have_cyrus'] == 'YES')
++	 {
++	    if(imap_create_account($fUsername)) 
++	    {
++	       $tMessage .= "<br />".$PALANG['pCyrus_create_mailbox_succes'];
++	    }
++	    else
++	    {
++	       $tMessage .= "<br />".$PALANG['pCyrus_create_mailbox_error'];
++	    }
++	    if ($CONF['quota'] == 'YES') 
++	    {
++	       if (imap_set_quota($fUsername, $quota)) 
++	       {
++	          $tMessage .= "<br />".$PALANG['pCyrus_set_quota_succes']
++		            ." ".$fQuota." ".$PALANG['pCyrus_set_quota_text'];
++	       }
++	       else
++	       {
++	          $tMessage .= "<br />".$PALANG['pCyrus_set_quota_error'];
++	       }
++	    }
++	 }
++
+          if ($fMail == "on")
+          {
+             $fTo = $fUsername;
+@@ -196,13 +221,16 @@
+    
+             $fHeaders .= $PALANG['pSendmail_body_text'];
+ 
+-            if (!smtp_mail ($fTo, $fFrom, $fHeaders))
+-            {
+-               $tMessage .= "<br />" . $PALANG['pSendmail_result_error'] . "<br />";
+-            }
+-            else
+-            {
+-               $tMessage .= "<br />" . $PALANG['pSendmail_result_succes'] . "<br />";
++            if ($CONF['have_cyrus'] != 'YES')
++	    {
++                if (!smtp_mail ($fTo, $fFrom, $fHeaders))
++                {
++                    $tMessage .= "<br />" . $PALANG['pSendmail_result_error'] . "<br />";
++                }
++                else
++                {
++                    $tMessage .= "<br />" . $PALANG['pSendmail_result_succes'] . "<br />";
++		}
+             }
+          }
+       }
+diff -Naur postfixadmin-2.0.5.orig/admin/delete.php postfixadmin-2.0.5/admin/delete.php
+--- postfixadmin-2.0.5.orig/admin/delete.php	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/admin/delete.php	2004-10-27 22:42:27.000000000 -0500
+@@ -18,6 +18,7 @@
+ require ("../variables.inc.php");
+ require ("../config.inc.php");
+ require ("../functions.inc.php");
++if ($CONF['have_cyrus'] == 'YES') require ("../imap.inc.php");
+ include ("../languages/" . check_language () . ".lang");
+ 
+ if ($_SERVER['REQUEST_METHOD'] == "GET")
+@@ -34,6 +35,31 @@
+    
+    if ($fTable == "domain")
+    {
++      // Walk thu available username for domain and delete each one individually
++      // Mayne there is a wildcard way of doing this?
++      $tMessage = '';
++      if ($CONF['have_cyrus'] == 'YES')
++      {
++         $result = db_query ("SELECT username FROM mailbox WHERE domain='$fDelete'");
++         if ($result['rows'] > 0)
++         {
++            $i = 0;
++            while ($row = db_array ($result['result']))
++            {
++               $username = $row['username'];
++	       if ($username != '')
++	       {
++                  if (!imap_del_user($username))
++                  {
++                     $error = 1;
++                     $tMessage .= $PALANG['pCyrus_delete_mailbox_error']
++                               .  "<b>$username</b>";
++                  }
++	       }
++            }
++         }
++      }
++
+       $result_domain = db_delete ("domain",$fWhere,$fDelete);
+       $result_domain_admins = db_delete ("domain_admins",$fWhere,$fDelete);
+       $result_alias = db_delete ("alias",$fWhere,$fDelete);
+@@ -47,9 +73,10 @@
+       if (!($result_domain == 1) and ($result_domain_admins >= 0) and ($result_alias >= 0) and ($result_mailbox >= 0) and ($result_vacation >= 0))
+       {
+          $error = 1;
+-         $tMessage = $PALANG['pAdminDelete_domain_error'];
++         $tMessage .= $PALANG['pAdminDelete_domain_error'];
+       }
+-      else
++
++      if ($error != 1)
+       {
+          $url = "list-domain.php";
+       }
+@@ -94,7 +121,18 @@
+             $error = 1;
+             $tMessage = $PALANG['pDelete_delete_error'] . "<b>$fDelete</b> (mailbox)!</div>";
+          }
+-         else
++
++         if ($CONF['have_cyrus'] == 'YES')
++         {
++            if (!imap_del_user($fDelete))
++            {
++               $error = 1;
++               $tMessage .= $PALANG['pCyrus_delete_mailbox_error']
++                         .  "<b>$fDelete</b>";
++            }
++         }
++
++         if ($error != 1)
+          {
+             $url = "list-virtual.php?domain=$fDomain";
+             db_query ("DELETE FROM vacation WHERE email='$fDelete' AND domain='$fDomain'");
+diff -Naur postfixadmin-2.0.5.orig/admin/edit-mailbox.php postfixadmin-2.0.5/admin/edit-mailbox.php
+--- postfixadmin-2.0.5.orig/admin/edit-mailbox.php	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/admin/edit-mailbox.php	2004-10-23 22:15:04.000000000 -0500
+@@ -9,6 +9,8 @@
+ // tMessage
+ // tName
+ // tQuota
++// tQuotaCyrusUse
++// tQuotaCyrusSet
+ //
+ // Form POST \ GET Variables:
+ //
+@@ -23,6 +25,7 @@
+ require ("../variables.inc.php");
+ require ("../config.inc.php");
+ require ("../functions.inc.php");
++if ($CONF['have_cyrus'] == 'YES') require ("../imap.inc.php");
+ include ("../languages/" . check_language () . ".lang");
+ 
+ if ($_SERVER['REQUEST_METHOD'] == "GET")
+@@ -42,6 +45,20 @@
+    {
+       $tMessage = $PALANG['pEdit_mailbox_login_error'];
+    }
++
++   if ($CONF['have_cyrus'] == 'YES' and $CONF['quota'] == 'YES')
++   {
++      $result_array = imap_get_quota ($fUsername);
++      if ($result_array[0] < 0 or $result_array[1] < 0)
++      {  
++         $tMessage .= "<br />".$PALANG['pCyrus_get_quota_error']."<br />";
++      }
++      else
++      {
++         $tQuotaCyrusUse = $result_array[0] / $CONF['quota_multiplier'];
++         $tQuotaCyrusSet = $result_array[1] / $CONF['quota_multiplier'];
++      }
++   }
+    
+    include ("../templates/header.tpl");
+    include ("../templates/admin_menu.tpl");
+@@ -95,6 +112,10 @@
+          $result = db_query ("UPDATE mailbox SET password='$password',name='$fName',quota='$quota',modified=NOW(),active='$fActive' WHERE username='$fUsername' AND domain='$fDomain'");
+       }
+ 
++      if ($CONF['have_cyrus'] == 'YES' and $CONF['quota'] == 'YES') {
++         imap_set_quota($fUsername, $quota);
++      }
++
+       if ($result['rows'] != 1)
+       {
+          $tMessage = $PALANG['pEdit_mailbox_result_error'];
+diff -Naur postfixadmin-2.0.5.orig/config.inc.php.sample postfixadmin-2.0.5/config.inc.php.sample
+--- postfixadmin-2.0.5.orig/config.inc.php.sample	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/config.inc.php.sample	2004-10-27 23:49:45.000000000 -0500
+@@ -31,6 +31,26 @@
+ $CONF['smtp_server'] = "localhost";
+ $CONF['smtp_port'] = "25";
+ 
++// IMAP Server
++// This is used for a cyrus-imap backend. The cyrus-imap server is
++// administered via the IMAP port and a special administrative user.
++// Set the 'use_cyrus' flag to yes and configure the imap host, port,
++// user and password if you are using cyrus-imap
++$CONF['have_cyrus'] = 'NO';
++$CONF['cyrus_server'] = 'localhost';
++$CONF['cyrus_port'] = '143';
++$CONF['cyrus_user'] = 'cyrus';
++$CONF['cyrus_password'] = 'cyrus';
++$CONF['cyrus_debug'] = 'NO';
++
++// IMAP Server
++// This is used for a cyrus-imap backend only! Specify any folders and
++// permissions you want added for '+' delivery. Remember that '+'
++// folders need to be all lower case.
++$CONF['cyrus_add'] = array('junkmail'     => 'anyone p',
++                           ''             =>  '',
++			   ''             =>  '');
++
+ // Encrypt
+ // In what way do you want the passwords to be crypted?
+ // md5crypt = internal postfix admin md5
+@@ -75,6 +95,7 @@
+ // When you want to enforce quota for your mailbox users set this to 'YES'.
+ $CONF['quota'] = 'NO';
+ // When using maildrop use '102400' otherwise use '1048576'
++// When using cyrus-imap us '1000'
+ $CONF['quota_multiplier'] = '102400';
+ 
+ // Virtual Vacation
+diff -Naur postfixadmin-2.0.5.orig/create-mailbox.php postfixadmin-2.0.5/create-mailbox.php
+--- postfixadmin-2.0.5.orig/create-mailbox.php	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/create-mailbox.php	2004-10-27 23:42:39.000000000 -0500
+@@ -26,6 +26,7 @@
+ require ("./variables.inc.php");
+ require ("./config.inc.php");
+ require ("./functions.inc.php");
++if ($CONF['have_cyrus'] == 'YES') require ("./imap.inc.php");
+ include ("./languages/" . check_language () . ".lang");
+ 
+ $SESSID_USERNAME = check_session ();
+@@ -185,6 +186,30 @@
+    
+          $tQuota = $CONF['maxquota'];
+ 
++         if ($CONF['have_cyrus'] == 'YES')
++         {
++	    if(imap_create_account($fUsername))
++	    {
++               $tMessage .= "<br />".$PALANG['pCyrus_create_mailbox_succes'];
++            }
++	    else
++            {
++               $tMessage .= "<br />".$PALANG['pCyrus_create_mailbox_error'];
++            } 
++            if ($CONF['quota'] == 'YES') 
++            {
++               if (imap_set_quota($fUsername, $quota)) 
++	       {
++                   $tMessage .= "<br />".$PALANG['pCyrus_set_quota_succes']
++                             ." ".$fQuota." ".$PALANG['pCyrus_set_quota_text'];
++               }
++               else
++               {
++                  $tMessage .= "<br />".$PALANG['pCyrus_set_quota_error'];
++               }
++            }
++         }
++
+          if ($fMail == "on")
+          {
+             $fTo = $fUsername;
+@@ -206,13 +231,16 @@
+    
+             $fHeaders .= $PALANG['pSendmail_body_text'];
+ 
+-            if (!smtp_mail ($fTo, $fFrom, $fHeaders))
+-            {
+-               $tMessage .= "<br />" . $PALANG['pSendmail_result_error'] . "<br />";
+-            }
+-            else
+-            {
+-               $tMessage .= "<br />" . $PALANG['pSendmail_result_succes'] . "<br />";
++            if ($CONF['have_cyrus'] != 'YES')
++	    {
++               if (!smtp_mail ($fTo, $fFrom, $fHeaders))
++               {
++                  $tMessage .= "<br />" . $PALANG['pSendmail_result_error'] . "<br />";
++               }
++               else
++               {
++                  $tMessage .= "<br />" . $PALANG['pSendmail_result_succes'] . "<br />";
++               }
+             }
+          }
+       }
+diff -Naur postfixadmin-2.0.5.orig/delete.php postfixadmin-2.0.5/delete.php
+--- postfixadmin-2.0.5.orig/delete.php	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/delete.php	2004-10-27 22:42:42.000000000 -0500
+@@ -16,6 +16,7 @@
+ require ("./variables.inc.php");
+ require ("./config.inc.php");
+ require ("./functions.inc.php");
++if ($CONF['have_cyrus'] == 'YES') require ("./imap.inc.php");
+ include ("./languages/" . check_language () . ".lang");
+ 
+ $SESSID_USERNAME = check_session();
+@@ -59,6 +60,16 @@
+             db_log ($SESSID_USERNAME, $fDomain, "delete mailbox", $fDelete);
+          }
+       }
++
++      if ($CONF['have_cyrus'] == 'YES')
++      {
++         if (!imap_del_user($fDelete))
++	 {
++	    $error = 1;
++            $tMessage .= $PALANG['pCyrus_delete_mailbox_error'] 
++	              .  "<b>$fDelete</b>";
++         }
++      }
+    }
+ 
+    if ($error != 1)
+diff -Naur postfixadmin-2.0.5.orig/edit-mailbox.php postfixadmin-2.0.5/edit-mailbox.php
+--- postfixadmin-2.0.5.orig/edit-mailbox.php	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/edit-mailbox.php	2004-10-23 22:15:04.000000000 -0500
+@@ -9,6 +9,8 @@
+ // tMessage
+ // tName
+ // tQuota
++// tQuotaCyrusUse
++// tQuotaCyrusSet
+ //
+ // Form POST \ GET Variables:
+ //
+@@ -23,6 +25,7 @@
+ require ("./variables.inc.php");
+ require ("./config.inc.php");
+ require ("./functions.inc.php");
++if ($CONF['have_cyrus'] == 'YES') require ("./imap.inc.php");
+ include ("./languages/" . check_language () . ".lang");
+ 
+ $SESSID_USERNAME = check_session ();
+@@ -47,6 +50,20 @@
+    {
+       $tMessage = $PALANG['pEdit_mailbox_login_error'];
+    }
++
++   if ($CONF['have_cyrus'] == 'YES' and $CONF['quota'] == 'YES')
++   {
++      $result_array = imap_get_quota ($fUsername);
++      if ($result_array[0] < 0 or $result_array[1] < 0)
++      {
++         $tMessage .= "<br />".$PALANG['pCyrus_get_quota_error']."<br />";
++      }
++      else
++      {
++         $tQuotaCyrusUse = $result_array[0] / $CONF['quota_multiplier'];
++         $tQuotaCyrusSet = $result_array[1] / $CONF['quota_multiplier'];
++      }
++   }
+    
+    include ("./templates/header.tpl");
+    include ("./templates/menu.tpl");
+@@ -108,6 +125,10 @@
+          $result = db_query ("UPDATE mailbox SET password='$password',name='$fName',quota='$quota',modified=NOW(),active='$fActive' WHERE username='$fUsername' AND domain='$fDomain'");
+       }
+ 
++      if ($CONF['have_cyrus'] == 'YES' and $CONF['quota'] == 'YES') {
++         imap_set_quota($fUsername, $quota);
++      }
++
+       if ($result['rows'] != 1)
+       {
+          $tMessage = $PALANG['pEdit_mailbox_result_error'];
+diff -Naur postfixadmin-2.0.5.orig/functions.inc.php postfixadmin-2.0.5/functions.inc.php
+--- postfixadmin-2.0.5.orig/functions.inc.php	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/functions.inc.php	2004-10-28 00:00:26.000000000 -0500
+@@ -101,7 +101,14 @@
+ //
+ function check_email ($email)
+ {
+-   return (preg_match ('/^[-!#$%&\'*+\\.\/0-9=?A-Z^_{|}~]+' . '@' . '([-0-9A-Z]+\.)+' . '([0-9A-Z]){2,4}$/i', trim ($email)));
++   global $CONF;
++
++   if ($CONF['have_cyrus'] = 'YES') {
++      // Disallow '.'
++      return (preg_match ('/^[-!#$%&\'*+\\/0-9=?A-Z^_{|}~]+' . '@' . '([-0-9A-Z]+\.)+' . '([0-9A-Z]){2,4}$/i', trim ($email)));
++   } else {
++      return (preg_match ('/^[-!#$%&\'*+\\.\/0-9=?A-Z^_{|}~]+' . '@' . '([-0-9A-Z]+\.)+' . '([0-9A-Z]){2,4}$/i', trim ($email)));
++   }
+ }
+ 
+ 
+diff -Naur postfixadmin-2.0.5.orig/imap.inc.php postfixadmin-2.0.5/imap.inc.php
+--- postfixadmin-2.0.5.orig/imap.inc.php	1969-12-31 18:00:00.000000000 -0600
++++ postfixadmin-2.0.5/imap.inc.php	2004-10-27 23:47:16.000000000 -0500
+@@ -0,0 +1,361 @@
++<?php
++//
++// File: imap.inc.php
++//
++#error_reporting  (E_NOTICE | E_ERROR | E_WARNING | E_PARSE);
++
++if (ereg ("imap.inc.php", $_SERVER['PHP_SELF']))
++{
++   header ("Location: login.php");
++   exit;
++}
++
++// Global var
++$IMAP_STREAM;
++$IMAP_DEBUG;
++$IMAP_SID;
++
++//
++// imap_create_account
++// Action: Creates a user mail box and all requested folders
++// Call: imap_create_account (string username)
++//
++function imap_create_account ($username)
++{
++   global $CONF, $IMAP_STREAM;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_create_account ($username) -->\n"; 
++
++   if (!imap_add_user($username)) {
++      return false;
++   }
++
++   list($user, $domain) = explode('@', $username);
++   foreach ($CONF['cyrus_add'] as $folder => $perms) {
++      if ($folder) {
++         $folderpath = 'user.' . $user . '.' . $folder . '@' . $domain;
++         if (!imap_create($folderpath)) {
++            $err = 1;
++         } else {
++            if ($perms) {
++               if (!imap_set_permission($folderpath, $perms)) {
++	          $err = 1;
++	       }
++	    }
++	 }
++      }
++   }
++
++   if ($err) {
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_open
++// Action: Open the imap connection and authenticate
++// Call: imap_open ()
++//
++function imap_open ()
++{
++   global $CONF, $IMAP_STREAM;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_open () -->\n" 
++               .  "<!-- MESSAGE: Connecting to "
++               .  $CONF['cyrus_server'].":".$CONF['cyrus_port']." -->\n";
++
++   /* open socket connection */
++   $IMAP_STREAM = fsockopen($CONF['cyrus_server'], $CONF['cyrus_port'],
++                            $errno, $errstr, 15);
++   if (!$IMAP_STREAM) {
++      $IMAP_DEBUG .= "<!-- MESSAGE: Connection failed -->\n";
++      return false;
++   }
++
++   /* server response */
++   $imap_info = fgets($IMAP_STREAM, 1024);
++   $IMAP_DEBUG .= "<!-- SERVER: ".$server_info." -->\n";
++
++   /* authenticate */
++   $tmp = imap_run_cmd("LOGIN ".$CONF['cyrus_user']." ".$CONF['cyrus_password'],
++                       $response, $message);
++   if ($response != 'OK') {
++      $IMAP_DEBUG .= "<!-- SERVER: Cannot login -->\n";
++      fclose ($IMAP_STREAM);
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_close
++// Action: Close the imap connection
++// Call: imap_close ()
++//
++function imap_close ()
++{
++   global $CONF, $IMAP_STREAM;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_close () -->\n";
++
++   /* close socket connection */
++   $resonse = imap_run_cmd("LOGOUT", $response, $message);
++   fclose ($IMAP_STREAM);
++   unset ($IMAP_STREAM);
++   $IMAP_DEBUG .= "<!-- MESSAGE: Closed imap connection -->\n";
++}
++    
++//
++// imap_get_quota
++// Action: Get current quota setting for a user
++// Call: imap_get_quota (string username)
++//
++function imap_get_quota ($username)
++{
++   global $CONF;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_get_quota ($username) -->\n";
++
++   if (imap_open()) {
++      $result = imap_run_cmd("GETQUOTA user.".$username, $response, $message);
++      imap_close();
++   } else {
++      return array(-1, -1);
++   }
++
++   if ($response != 'OK') {
++      return array(-1, -1);
++   }
++
++   preg_match("/STORAGE ([0-9]*) ([0-9]*)/", $result[0], $match);
++   return array($match[1], $match[2]);
++}
++
++//
++// imap_set_quota
++// Action: Set quota for a user mailbox
++// Call: imap_set_quota (string username, string quota)
++//
++function imap_set_quota ($username, $quota)
++{
++   global $CONF;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_set_quota ($username, $quota) -->\n";
++
++   if (imap_open()) {
++      $tmp = imap_run_cmd("SETQUOTA user.".$username." (STORAGE ". $quota.")",
++                          $response, $message);
++      imap_close();
++   } else {
++      return false;
++   }
++
++   if ($response != 'OK') {
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_set_permission
++// Action: Set the ACL for a user mailbox
++// Call: imap_set_permission (string mailbox, string id, string acl)
++function imap_set_permission ($mailbox, $permission)
++{
++   global $CONF;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_set_permission ($mailbox, $id, $acl) -->\n";
++
++   if (!imap_open()) {
++      return false;
++   }
++   $tmp = imap_run_cmd("SETACL ".$mailbox." ".$permission, 
++                        $response, $message);
++   imap_close();
++
++   if ($response != 'OK') {
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_create
++// Action: Create a mailbox
++// Call: imap_create (string mailbox)
++function imap_create ($mailbox)
++{
++   global $CONF;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_create ($mailbox) -->\n";
++
++   if (!imap_open()) {
++      return false;
++   }
++   $tmp = imap_run_cmd("CREATE ".$mailbox, $response, $message);
++   imap_close();
++
++   if ($response != 'OK') {
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_delete
++// Action: Delete a mailbox
++// Call imap_delete (string mailbox)
++function imap_delete ($mailbox)
++{
++   global $CONF;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_delete ($mailbox) -->\n";
++
++   if (!imap_open()) {
++      return false;
++   }
++   $tmp = imap_run_cmd("DELETE ".$mailbox, $response, $message);
++   imapClose();
++   
++   if ($response != 'OK') {
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_add_user
++// Action: Create user account on the imap server
++// Call: imap_add_user (string username)
++//
++function imap_add_user($username)
++{
++   global $CONF;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_add_user ($username) -->\n";
++
++   if ($username == '') {
++      return false;
++   }
++   if (!imap_open()) {
++      return false;
++   }
++   $tmp = imap_run_cmd("CREATE user.".$username, $response, $message);
++   imap_close();
++
++   if ($response != 'OK') {
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_del_user
++// Action: Delete user account on the imap server
++// Call: imap_del_user (string username)
++//
++function imap_del_user ($username)
++{
++   global $CONF;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_del_user ($username) -->\n";
++
++   if ($username == '') {
++      return false;
++   }
++   if (!imap_open()) {
++      return false;
++   }
++   $tmp = imap_run_cmd("SETACL user.".$username." cyrus lrswipcda",
++                       $response, $message);
++   $tmp = imap_run_cmd("DELETE user.".$username,
++                       $response, $message);
++   imap_close();
++   
++   if ($response != 'OK') {
++      return false;
++   }
++   return true;
++}
++
++//
++// imap_run_cmd
++// Action: Send a command to the imap server and return result
++// Call: imap_run_cmd (string command, string response, string message)
++//
++function imap_run_cmd($command, &$response, &$message)
++{
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_run_cmd ($command) -->\n";
++
++   $sid = imap_gen_sid();
++   imap_send_data($sid, $command);
++   return (imap_read_data($sid, $response, $message));
++}
++
++//
++// imap_gen_sid
++// Action: Generate unique serialized sid to comply with RFC
++// Call: imap_gen_sid ()
++//
++function imap_gen_sid ()
++{
++   global $IMAP_SID;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_gen_sid () -->\n";
++
++   return (sprintf("A%03d", $IMAP_SID++));
++}
++
++//
++// imap_read_data
++// Action: Read data from imap socket connection
++// Call: imap_read_data (string sid, string response, string message)
++//
++function imap_read_data($sid, &$response, &$message)
++{
++   global $IMAP_STREAM;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_read_data ($sid) -->\n";
++
++   $read = '';
++   $data = array();
++   $result = array();
++
++   /* get data from the server */
++   while (true) {
++      $read = fgets($IMAP_STREAM);
++      $IMAP_DEBUG .= "<!-- SERVER: ".$read." -->\n";
++
++      /* the server will send OK, BAD or NO on completion of the command */
++      if (preg_match("/^$sid (OK|BAD|NO)(.*)$/", $read, $result)) {
++         break;
++      }
++
++      /* we're still receiving valid data */
++      $data[] = $read;
++   }
++
++   $response = $result[1];
++   $message = $result[2];
++
++   return $data;
++}
++
++//
++// imap_send_data
++// Action: Send data to imap socket connection
++// Call: imap_send_data (string sid, string command)
++//
++function imap_send_data ($sid, $command)
++{
++   global $IMAP_STREAM;
++   global $IMAP_DEBUG;
++   $IMAP_DEBUG .= "<!-- imap_send_data ($sid) -->\n";
++   $IMAP_DEBUG .= "<!-- COMMAND: ".$sid.' '.$command." -->\n";
++
++   /* send the data to the socket */
++   fputs($IMAP_STREAM, $sid." ".$command."\r\n");
++}
++?>
+diff -Naur postfixadmin-2.0.5.orig/languages/en.lang postfixadmin-2.0.5/languages/en.lang
+--- postfixadmin-2.0.5.orig/languages/en.lang	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/languages/en.lang	2004-10-27 22:18:36.000000000 -0500
+@@ -283,4 +283,22 @@
+ $PALANG['pUsersVacation_button_back'] = 'Coming Back';
+ $PALANG['pUsersVacation_result_error'] = '<div class="standout">Unable to update your auto response settings!</div>';
+ $PALANG['pUsersVacation_result_succes'] = 'Your auto response has been removed!';
++
++$PALANG['pCyrus_set_quota_error'] = 
++  '<div class="standout">Unable to modify cyrus-imap quota!</div>';
++$PALANG['pCyrus_set_quota_succes'] = 'The quota has been set to:';
++$PALANG['pCyrus_set_quota_text'] = 'MB';
++$PALANG['pCyrus_get_quota_error'] = 
++  '<div class="standout">Unable to retrieve cyrus-imap quota!</div>';
++$PALANG['pCyrus_create_mailbox_error'] = 
++  '<div class="standout">Unable to create cyrus-imap mailbox!</div>';
++$PALANG['pCyrus_create_mailbox_succes'] = 
++  'The mailbox has been added to the imap server!';
++$PALANG['pCyrus_delete_mailbox_error'] = 
++  '<div class="standout">Unable to delete cyrus-imap mailbox </div>';
++$PALANG['pCyrus_delete_mailbox_succes'] = 
++  'The mailbox has been removed to the imap server!';
++$PALANG['pEdit_cyrus_quota'] = 'IMAP Mailbox Quota';
++$PALANG['pEdit_cyrus_quota_set'] = 'MB set';
++$PALANG['pEdit_cyrus_quota_use'] = 'MB used';
+ ?>
+diff -Naur postfixadmin-2.0.5.orig/motd-admin.txt postfixadmin-2.0.5/motd-admin.txt
+--- postfixadmin-2.0.5.orig/motd-admin.txt	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/motd-admin.txt	2004-10-23 23:00:14.000000000 -0500
+@@ -1,3 +1,4 @@
++<!--
+ <div class="standout">
+ New Features:<br />
+ Support for Backup MX. Upgrade of domain table is needed, please read BACKUP_MX.TXT.<br />
+@@ -6,4 +7,5 @@
+ </div>
+ <p>
+ To remove this text, delete the motd-admin.txt file.
+-</p>
+\ No newline at end of file
++</p>
++-->
+diff -Naur postfixadmin-2.0.5.orig/motd-users.txt postfixadmin-2.0.5/motd-users.txt
+--- postfixadmin-2.0.5.orig/motd-users.txt	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/motd-users.txt	2004-10-23 22:59:57.000000000 -0500
+@@ -1,7 +1,9 @@
++<!--
+ <div class="standout">
+ === Announcement ===<br />
+ This is a new version of Postfix Admin.<br />
+ If you have any questions please direct them to the <a href="mailto:<?php print $CONF['admin_email']; ?>">Site Admin</a><br />
+ === Announcement ===<br />
+ </div>
+-<p />
+\ No newline at end of file
++<p />
++-->
+diff -Naur postfixadmin-2.0.5.orig/motd.txt postfixadmin-2.0.5/motd.txt
+--- postfixadmin-2.0.5.orig/motd.txt	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/motd.txt	2004-10-23 22:59:42.000000000 -0500
+@@ -1,7 +1,9 @@
++<!--
+ <div class="standout">
+ === Announcement ===<br />
+ This is a new version of Postfix Admin.<br />
+ If you have any questions please direct them to the <a href="mailto:<?php print $CONF['admin_email']; ?>">Site Admin</a><br />
+ === Announcement ===<br />
+ </div>
+-<p />
+\ No newline at end of file
++<p />
++-->
+diff -Naur postfixadmin-2.0.5.orig/templates/edit-mailbox.tpl postfixadmin-2.0.5/templates/edit-mailbox.tpl
+--- postfixadmin-2.0.5.orig/templates/edit-mailbox.tpl	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/templates/edit-mailbox.tpl	2004-10-23 22:15:04.000000000 -0500
+@@ -68,6 +68,21 @@
+    print "      </td>\n";
+    print "   </tr>\n";
+ }
++if ($CONF['have_cyrus'] == 'YES')
++{
++   print "   <tr>\n";
++   print "      <td>\n";
++   print "         " . $PALANG['pEdit_cyrus_quota'] . ":\n";
++   print "      </td>\n";
++   print "      <td>\n";
++   print "         ".$tQuotaCyrusSet." ".$PALANG['pEdit_cyrus_quota_set']." / "
++                    .$tQuotaCyrusUse." ".$PALANG['pEdit_cyrus_quota_use']."\n";
++   print "      </td>\n";
++   print "      <td>\n";
++   print "         \n";
++   print "      </td>\n";
++   print "   </tr>\n";
++}
+ ?>
+    <tr>
+       <td>
+diff -Naur postfixadmin-2.0.5.orig/templates/footer.tpl postfixadmin-2.0.5/templates/footer.tpl
+--- postfixadmin-2.0.5.orig/templates/footer.tpl	2004-08-20 17:00:00.000000000 -0500
++++ postfixadmin-2.0.5/templates/footer.tpl	2004-10-23 22:15:04.000000000 -0500
+@@ -7,6 +7,9 @@
+    print "<br /></br />\n";
+    print "<a href=\"" . $CONF['footer_link'] . "\">" . $CONF['footer_text'] . "</a>\n";
+ }
++if ($CONF['have_cyrus'] == 'YES' && 
++    $CONF['cyrus_debug'] == 'YES' && 
++    isset($IMAP_DEBUG)) echo $IMAP_DEBUG;
+ ?>
+ </div>
+ </center>

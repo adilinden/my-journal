@@ -1,0 +1,53 @@
+<script src="/files/scripts/popup.js" type="text/javascript"></script>
+<a href="/files/posts/pic-thermostat/thermostat_component_400x330.jpg" onClick="popup('/files/posts/pic-thermostat/thermostat_component_400x330.jpg','400','330','Component side of protoboard'); return false;"><img src="/files/posts/pic-thermostat/thermostat_component_150x124.jpg" hspace="10" vspace="5" border="1" width="150" height="124" alt="Component side of protoboard" align="right"></a>During spring and summer of 1998 I developed my second project utilizing a Microchip PIC processor. The primary purpose was to explore character LCD displays and 2-wire bus (I2C) devices with a Microchip PIC microcontroller. The project was a digital room thermostat with multiple setpoints at different times of the day.
+<!--more-->
+
+<p><a href="/files/posts/pic-thermostat/thermostat_lcd_400x333.jpg" onClick="popup('/files/posts/pic-thermostat/thermostat_lcd_400x333.jpg','400','333','Assembled with LCD Display'); return false;"><img src="/files/posts/pic-thermostat/thermostat_lcd_150x125.jpg" hspace="10" vspace="5" border="1" width="150" height="125" alt="Assembled with LCD Display" align="left"></a>The hardware consisted of a Microchip PIC16F84 microcontroller, a Dallas DS1621 temperature sensor, a Dallas DS1307 realtime clock, a Linear LT1173 switched mode voltage regulator and a surplus LCD display. The schematic diagram and pictures provide information on the design and assembly on a prototyping board. The realtime clock chip was powered by a lithium cell for timekeeping and storing of settings in non-volatile memory. The switched mode voltage regulator was selected over a linear regulator to minimize heating of the circuit. Because the temperature sensor was located on the board, power consumption and heat production of the circuit needed to be kept to a minimum.
+
+<p><a href="/files/posts/pic-thermostat/thermostat_solder_400x323.jpg" onClick="popup('/files/posts/pic-thermostat/thermostat_solder_400x323.jpg','400','323','Solder side of protoboard'); return false;"><img src="/files/posts/pic-thermostat/thermostat_solder_150x121.jpg" hspace="10" vspace="5" border="1" width="150" height="121" alt="Solder side of protoboard" align="right"></a>The software was written in MPLAB assembler. Although familiar with 2-wire devices, this was my first opportunity to explore the I2C bus on a PIC microcontroller. Since the PIC16F84 contained no I2C serial hardware the I2C bus was bit-banged on general purpose I/O pins. To save on I/O line requirements the LCD display was connected in 4-bit mode and the input keys were multiplexed with the LCD signal lines. 
+
+<p>All relevant files for the project are provided here. Keep in mind that this is an educational project rather then a finished product. So some things may not work as advertised or not work at all. The project has been placed here for historic purposes. I sincerely doubt I will ever get back to finishing it.
+
+<p>
+<table bgcolor="#cccccc" width="" border="0" cellspacing="1" cellpadding="0">
+<tr><td>
+<table bgcolor="#ffffff" width="100%" border="0" cellspacing="2" cellpadding="0">
+<tr><td>
+<table bgcolor="#cccccc" width="100%" border="0" cellspacing="1" cellpadding="3">
+  <tr>
+    <td width="8%" bgcolor="#ffffff" valign="center" align="left">
+    <a href="/files/posts/pic-thermostat/thermostat_schematic.pdf"><img src="/files/icons/small/pdf.png" hspace="5" vspace="1" border="0" width="16" height="16" alt="PDF"></a>
+    </td>	
+    <td width="92%" bgcolor="#ffffff">
+    <strong>Circuit Diagram</strong> (279kB)
+    </td>
+  </tr>
+  <tr>
+    <td width="8%" bgcolor="#ffffff" valign="center" align="left">
+    <a href="/files/posts/pic-thermostat/th_stat.asm"><img src="/files/icons/small/txt.png" hspace="5" vspace="1" border="0" width="16" height="16" alt="ASM"></a>
+    </td>	
+    <td width="92%" bgcolor="#ffffff">
+    <strong>MPASM Source Code</strong> (40kB)
+    </td>
+  </tr>
+  <tr>
+    <td width="8%" bgcolor="#ffffff" valign="center" align="left">
+    <a href="/files/posts/pic-thermostat/16f84adi.inc"><img src="/files/icons/small/txt.png" hspace="5" vspace="1" border="0" width="16" height="16" alt="INC"></a>
+    </td>	
+    <td width="92%" bgcolor="#ffffff">
+    <strong>MPASM Header File for PIC16F84</strong> (5kB)
+    </td>
+  </tr>
+  <tr>
+    <td width="8%" bgcolor="#ffffff" valign="center" align="left">
+    <a href="/files/posts/pic-thermostat/th_stat.hex"><img src="/files/icons/small/hex.png" hspace="5" vspace="1" border="0" width="16" height="16" alt="HEX"></a>
+    </td>	
+    <td width="92%" bgcolor="#ffffff">
+    <strong>HEX File for PIC16F84</strong> (5kB)
+    </td>
+  </tr>
+</table>
+</td></tr>
+</table>
+</td></tr>
+</table>

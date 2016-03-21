@@ -1,0 +1,746 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Notepad">
+<title>Secrets of the Motorola Mitrek HLN-4181 PL Board and the TRN4224 tone element</title>
+<META NAME="GENERATOR" CONTENT="Notepad">
+<META NAME="Author" CONTENT="Mike Morris WA6ILQ">
+<META NAME="Description" CONTENT="Understanding how the Motorola Mitrek HLN-4181 reedless tone encoder/decoder board works, and how to build your own TRN-4224 tone elements for it.">
+<META NAME="Keywords" CONTENT="Morris, WA6ILQ, Mitrek, TRN4224, TRN4224A, TRN-4224, TRN-4224A, TRN-4224-A, HLN4181, HLN-4181, HLN4020, HLN-4020, WA6ILQ, radio, reed, element, PL, CG, CTCSS, repeater">
+</head>
+
+<body lang=EN-US bgcolor="white" text="black" topmargin="15" leftmargin="15" rightmargin="15" bottommargin="15" marginwidth="15" marginheight="15">
+<!-- Netscape specific: marginheight is the top margin, marginwidth=left margin -->
+
+<!-- top marker --><a name="top">
+<table border=0 width=100% align=full cellpadding=0 cellspacing=0>
+<tr>
+  <td align=left valign=top width=175><!--<font color="#000000"><br><a 
+href="http://www.repeater-builder.com/rbtip/mojoindex.html">Back to the Motorola Index</a><br>
+<a href="http://www.repeater-builder.com/rbtip/">Back to Home</a></font>-->&nbsp;</td>
+
+  <td align=center valign=top><font size=+3><b>Secrets of the Mitrek<br>
+HLN-4181 PL Board</font></b></font>
+  </td>
+  <td align=left width=175>&nbsp;</td>
+</tr>
+</table>
+
+<p align=center><font size=+1>How it and the TRN4224 tone element work together<br>
+with a few notes on the HLN-4020 dual-reed board</b></font><br>
+By <script language="JavaScript"><!--
+ document.write ('<a href="mai')
+ document.write ('lto:')
+ document.write ('wa6il')
+ document.write ('q@a')
+ document.write ('rr')
+ document.write ('l.n')
+ document.write ('et')
+ document.write ('">')
+ document.write ('Mike Morris WA6ILQ')
+ document.write ('</a>')
+ // --></script></p>
+
+<p align=center><b>Comments and additional material are welcome</b><br>
+(even "Hey - you've got a typo at..." messages)<br>
+Look for the authors email info at the end...</p>
+
+<p align="left">There was a discussion on the Mitrek HLN4181 reedless board 
+and the associated TLN4224 tone elements on the repeater-builder mailing list 
+a long time ago, and this writeup is a enhancement (in reality almost a total 
+rewrite) of my posting on that topic... &nbsp; basically I deleted some 
+irrelevant information and added some additional information I had since 
+generated. &nbsp; The second major revision happened when I added the photos.</p>
+
+<blockquote><b>Note:&nbsp;</b>When you print this file make sure that the 
+diagrams below come out in a monospaced font (like Courier) if you want 
+to see the diagrams below properly. &nbsp; I used an exclamation point as 
+a vertical line since the actual vertical line character is one of the first 
+ones replaced by a local language character in non-USA keyboards... I wanted
+this writeup to be as international-compatible as possible. </blockquote>
+
+<p align="left">This writeup was generated using a 40w UHF Mitrek and one 
+each of the HLN-4020 reed board and the HLN4181 reedless board as test beds, 
+but since the PL boards are universal to all the Mitrek models the fact that
+I used a UHF radio shouldn't matter.</p>
+
+<p align="left"><a href="http://www.repeater-builder.com/motorola/moto-parts.html%22">If you need a Mitrek manual read this web page</a>. &nbsp; The manuals are about US$30 each and <a href="http://www.repeater-builder.com/rbtip/mitrek-index.html">the manual part numbers are on this web page</a>.</p>
+
+<p align="left">The Mitrek Plus supplement is 68-81046E05 and is definitely 
+worth getting if you can get one... &nbsp; the last time I called they were 
+out of them and not going to reprint it. &nbsp; As long as you have Motorola
+parts ordering dept. on the phone you will want to order the Mitrek tuning 
+tool, part number 66-82977K01. &nbsp; The real Mitrek tool is (in May of 
+2004) only $2.92 and breaking a slug with the wrong tool is <u>not</u> worth 
+it.  &nbsp; Note also that the Mitrek is an all-metric radio - don't casually 
+mix the leftover screws into your parts bin.</p>
+
+<p align="left">Another note... the UHF book that I have (68-81045E70-A) 
+is the only Mitrek manual I have found that has documentation on all 
+three PL/DPL boards&nbsp;-&nbsp;the HLN-4020 reed-type PL board, the HLN-4181 
+element-type PL board and the HLN-4011 DPL board. &nbsp; These three boards 
+are completely interchangeable - the most you might have to do if you swap 
+a reed PL board for an element PL board or for a DPL or vice versa is to 
+adjust the encoder level. &nbsp; The highband book I looked at seems to be 
+incomplete - it was missing the HLN-4020 reed-type board schematic. &nbsp; The 
+low-band book I have in my file cabinet (a -O original version) has the HLN4020 
+reed board and the DPL 2-code adapter, but no DPL board or the HLN4181 reedless 
+tone PL board.</p>
+
+<p align="left">Note also that Moto uses a -O for the Original release of a manual, 
+a -A is the first revision, and they work their way up the alphabet, skipping the 
+letter O when they get to it. &nbsp; After -Z they continue with -AA, -AB, -AC, and 
+so forth to AZ then BA...etc.</p>
+
+<hr width="80%" color=black noshadow>
+
+<p align="left">This document started in late 1998 / early 1999 with a request 
+for a TRN-4224 element for the HLN-4181 PL board that was posted on the mailing 
+list...</p>
+
+<p align="left">My response started with:<br>
+
+>&nbsp;I bought a tone element for 127.3hz from Telepath in San Jose (south of <br>
+>&nbsp;San Francisco in California) last week. They are at 800-292-1700, they <br>
+>&nbsp;take credit cards over the phone, and will ship parcel post, ground UPS, <br>
+>&nbsp;FedEx and next-day UPS.<br>
+>&nbsp;Obligatory disclaimer - I have no relation to them except as a satisfied, <br>
+>&nbsp;in fact, very satisfied, repeat customer.<br>
+--&nbsp;<br>
+</p>
+
+<p>For what it's worth, Telepath has since put up a web site at <a href="http://www.telepathcorp.com">http://www.telepathcorp.com</a></p>
+
+<p align="left">The rest of my response to the inquiry was how to roll 
+your own element from a few resistors, and was about half of the material 
+that is below. &nbsp; Kevin W3KKC later emailed me and asked if I would 
+write it up for his web site, so I did, and the first version was 
+posted. &nbsp; That was over a dozen revisions ago. &nbsp; Happy 
+reading!</p>
+
+<hr width="80%" color=black noshadow><br>
+
+<p>Photos of the two types of Mitrek tone PL boards 
+(The HLN4011 DPL board is not shown). &nbsp; All connections to the board are made through the 9-pin connector header which looks like a vertical brown line at the right side of the photos (adjacent to a silver mounting screw). &nbsp; The strange shaped holes in the board provide access to tuning adjustments in the receiver.</p>
+
+<table border="1" cellpadding="4" width="410">
+<tr>
+  <td width="400">
+    <center><img src="pix/hln-4020.jpg" 
+alt="The reed-type Mitrek PL board HLN-4020"><br>The HLN 4040 reed-type board.</center><br>
+The two reed sockets are at lower center, with the black plastic hold down arm above them. &nbsp; The KLN-6210 encode reed is on the left, the KLN-6209 decode reed on the right.</td>
+</tr>
+</table>
+
+<br>
+
+<table border="1" cellpadding="4" width="410">
+<tr>
+  <td width="400">
+    <center><img src="pix/hln-4181.jpg" 
+alt="The reedless Mitrek PL board HLN-4181"><br>The HLN4181 reedless board.</center><br>
+The horizontal white component at the top right is a TRN4224 tone element that is plugged into the black socket under it.</td>
+</tr>
+</table>
+
+<p align="left">The pinout of the single-row 9-pin connector at the edge of the PL 
+or DPL board is:<br>
+<br>
+Pin&nbsp;&nbsp;&nbsp;Function<br>
+1 = External tone in or out (depending on option jumpering)<br>
+2 = Squelch disable (via JU5)<br>
+3 = Tone encoder output to TX modulator<br>
+4 = PTT in<br>
+5 = Audio mute (via JU4)<br>
+6 = discriminator audio in to PL decoder<br>
+7 = PL filter<br>
+8 = B+ (pos 12v)<br>
+9 = gnd<br>
+For reference, pin 9 is at the top, nearest the only 8-pin IC on the board.</p>
+
+<p align="left">The HLN-4020 reed-type board uses one each KLN6209 and KLN6210 
+reeds and in perusing the board's schematic I did notice one nice feature that 
+I've not seen in any other reed-based PL board: it can be jumpered to use one 
+reed for a common encode/decode tone or two reeds for split tones. &nbsp; When 
+two reeds are used the encode reed is on the left of the hold-down bracket in the 
+above picture with the decode reed on the right, when one reed is used it goes 
+in the encoder socket and two jumpers are added. &nbsp; The necessary jumpers 
+are documented in the later schematics of the board (they are not included in 
+the board revision D schematic but they are there are in revision F). &nbsp; An 
+early board can be jumpered for a single reed using the info from the later 
+schmatic.</p>
+
+<p align="left">If you can't find the reeds you need on the frequency you need, 
+the HLN-4020 board seems to be just as happy with any of the following 
+reeds (I've tried all of them at one point or another):
+
+<ul compact>
+<li>Bramco A0186B (could have been A01868 - the label on the side of the reed was dinged)</li>
+<li>KLN6209 (this is the number that the Mitrek book calls for, this one 
+is also specified in the later Micor mobile books as the encode reed). &nbsp; It 
+seems to be a plastic-cased (i.e. lower manufacturing cost) version of a TLN6824 
+reed.</li>
+<li>K-1000</li>
+<li>KLN-6210 (this is specified as the decode reed in the Mitrek book, but I 
+have substituted K-1000s, TLN6824s and KLN-6209s in place of it with no change 
+in performance - in fact it behaves as if the '09 and '10 are the same internally)</li>
+<li>TLN6709 (I've found these in HT-220s)</li>
+<li>TLN6824 (the encode reed specified in the late Motrac and early Micor books)</li>
+<li>TLN8381 (the fat decode reeds from later Motracs and Micors)</li>.  
+</ul>
+You do have to remove the hold-down bracket (one screw) to create enough clearance 
+to use the fat decode reeds in the HLN4020, so don't use one in a mobile as the 
+reed will fall out into the receive circuitry (if you haven't been inside a Mitrek 
+the normal mounting position has the PL board upside down over the receiver), but 
+in a pinch the fat decode reed will work just fine as either as a decode or an 
+as an encode reed...</p>
+
+<p align="left">If you are looking for a HLN-4181 board, at the time of 
+this writing they were in stock for $20 each at C. W. Wolfe Electronics, 
+a used 2-way radio dealer in Billings Montana at 406-252-9220. &nbsp; They 
+also have the HLN-4011 DPL board for $10. &nbsp; Note that this is not 
+an endorsement by repeater-builder.com, I'm just mentioning it as a 
+service. &nbsp; I have to say this - like I said in the above email I have 
+no relation to C. W. Wolfe company except as a very satisfied repeat customer.</p>
+
+<p align="left">Note that the HLN-4181 reedless board cannot do split tones 
+due to it's inherent design - the circuitry can only decode the same tone 
+as it encodes due to the fact that the encoder is used as the frequency 
+reference for the decoder. &nbsp; On the web page that I created describing 
+<a href="http://www.repeater-builder.com/mitrek/mitrekinterfacing.html">how 
+to interface a Mitrek to a repeater controller</a> I've included a schematic of 
+how to connect a separate encoder.</p>
+
+<p align="left"><b>HOWEVER...</b> If all you need is a different encode tone, 
+and can live with the decoder not decoding it's intended tone while transmitting,
+well... looking at the HLN-4181 schematic it appears that the custom chip that 
+is used on the board was designed to use two tone element sockets and switch 
+between them (look at pins 12, 13, 14, 15 and 16 of schematic 68-80200W-06)... 
+Just tack a tone element socket (ordered from Moto as a replacement part 
+or scavenged from a dead board) onto the foil side of the board with a dab 
+of <u>acid-free</u> clear RTV, add some jumpers (I'd use wire-wrap wire) 
+to parallel all the pins except pins 1 and 2 to the existing socket, clone 
+the choke and resistor combination that is on pins 12 and 15 onto pins 13 
+and 14, and slave the "code select" pin to PTT (in the stock form the pin is 
+grounded, just unplug the chip, bend pin 16 to clear the socket, and tack 
+a piece of wirewrap wire to it and run it to a 22k pullup resistor and a 
+.05uf cap to ground, and to your PTT) .... &nbsp; Look at the schematic 
+and trace what I have written above... &nbsp; I've not tested this but it 
+looks like it should work... just remember that your decoder will follow 
+your encoder tone.</p>
+
+<hr width="80%" color=black noshadow>
+
+<p align="left">The HLN-4181 reedless board can be set up in many unusual 
+ways... &nbsp; The normal jumpers are arranged like this...</p>
+
+<table border="1" cellpadding="7">
+<tr><td align="center" colspan="3"><font size "+2">HLN 4181 Reedless Mitrek 
+PL Board normal jumpers</font></td>
+</tr>
+<tr>
+  <td align="center" valign="bottom">Jumper<br>JU-</td>
+  <td align="center" valign="bottom">Normal<br>setup</td>
+  <td align="left" valign="bottom">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function</td>
+</tr>
+<tr>
+  <td align="center" valign="center">1</td>
+  <td align="center" valign="center">OUT</td>
+  <td align="left" valign="center">Used to couple internal PL tone encoder to outside options</td>
+</tr>
+<tr>
+  <td align="center" valign="center">2</td>
+  <td align="center" valign="center">OUT</td>
+  <td align="left" valign="center">Disables the internal encoder when installed</td>
+</tr>
+<tr>
+  <td align="center" valign="center">3</td>
+  <td align="center" valign="center">IN</td>
+  <td align="left" valign="center">In to couple internal encoder to the TX modulator (and remove JU7)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">4</td>
+  <td align="center" valign="center">IN</td>
+  <td align="left" valign="center">Install for "AND" squelch (and remove JU5)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">5</td>
+  <td align="center" valign="center">OUT</td>
+  <td align="left" valign="center">Install for "OR" squelch (and remove JU4)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">6</td>
+  <td align="center" valign="center">OUT</td>
+  <td align="left" valign="center">Install to disable PL decode (RX carrier squelch only mode)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">7</td>
+  <td align="center" valign="center">OUT</td>
+  <td align="left" valign="center">In to connect external encoder to TX modulator (and remove JU3)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">8</td>
+  <td align="center" valign="center">OUT</td>
+  <td align="left" valign="center">In to disable reverse burst</td>
+</tr>
+<tr>
+  <td align="center" valign="center">9</td>
+  <td align="center" valign="center">IN</td>
+  <td align="left" valign="center">When in couples RX audio into the PL decoder</td>
+</tr>
+<tr>
+  <td align="center" colspan="3">JU4 and 5 are redefined if the radio has the "Busy Light" <br>
+option &ndash; see the footnotes on the schematics in the manual.</td>
+</tr>
+<tr>
+  <td align="center" colspan="3">If your board has JU1, JU6 and/or JU7 in place, remove all of them.<br>If you want your PL decoder to work then JU9 must be in.<br>
+If you want your PL encoder to work then JU3 must be in and JU2 must be out.</td>
+</tr>
+</table>
+
+<p align="left">Until I found the tone element I needed at Telepath, a friend 
+of mine and I were reverse engineering the HLN-4181 PL board and the 
+associated TRN4224 tone element because we couldn't find a 127.3hz 
+element in the junk boxes of any of the usual suspects, and in our 
+application we absolutely had to have 127.3hz and we had to have 
+reverse burst (which precluded a Com-Spec TS-32). &nbsp; We were 90%-95% 
+done when another friend found out about our project and called and told me 
+about Telepath, gave me their phone number, said he had done a lot of 
+business with them and was very happy with them. &nbsp; I called them, they 
+had what I needed at a reasonable price, they had a couple of other items I 
+wanted and hadn't been able to find anywhere else, so I gave them my credit card 
+number... &nbsp; Yes, at that point I knew enough about the board's design 
+to make a 127.3hz element, but this was for a radio that was going to a 
+repeater site that I can't get to very often. &nbsp; We were also in a bit of a 
+rush, we had to get this unit in service in a couple of weeks - not much time 
+for a burn-in. &nbsp; All in all, for the cost of the element involved 
+(under $15) it wasn't worth risking a future middle-of-winter failure with a 
+homebrew element... &nbsp; and other parts of the project needed the time 
+we had left.</p>
+
+<p align="left">That caveat said, if you need to you can "roll your own" 
+element with nothing more than a bunch of 1/4 watt, 1/8 watt or 1/10 watt 100k 
+resistors (the smaller the physical size the better), some solder and some 
+electrical tape. &nbsp; The TLN4224 element is simply a variable number of 
+resistors (from 1 to 10 depending on the tone) that are used to program a 
+counter.</p>
+
+<p align="left">In the process of reverse engineering the HLN-4181 board 
+my friend and I discovered that the tone generator is based on a 10-bit 
+binary counter that is preloaded with a number that is held by the element 
+(see the schematic below) as two 5-bit nibbles. &nbsp; The nibbles are selected 
+by alternately strobing pin 1 or pin 2 of the element socket. &nbsp; Once the 
+10-bit number gets into the counter it counts up to overflow then reloads 
+the starting number and does it again... &nbsp; The higher the starting number 
+the more frequent the overflow resulting in a higher tone frequency generated.</p>
+
+<p align="left">The encoder audio output is smoothed and filtered before 
+injection into the transmitter. &nbsp; When the incoming PTT line goes inactive 
+the encoder generates the reverse burst, then drops the outgoing PTT line. &nbsp; This 
+takes care of the encoder function.</p>
+
+<p align="left">The decode function is accomplished by passing the RX audio 
+through a low-pass filter that passes only the PL frequencies and feeding it 
+to another part of the custom chip which uses the encoder as a frequency 
+reference and checks for a matching frequency from the receiver audio. &nbsp; If 
+there is a match it unmutes the receiver by way of JU-4 or JU-5.</p>
+
+<p align="left">There is also an audio notch filter on the board to remove the 
+received PL tone from the received audio. &nbsp; However you don't want to try 
+to use it in repeater service - just plan on using an external high-pass filter
+betweek the receiver and your repeater controller.</p>
+
+<p align="left">The HLN4181 board will encode and decode simulataneously (like 
+in a duplex radio) as long as you encode and decode the same tone. &nbsp; As I 
+described in the "However..." paragraph above you can modify the HLN4181 to do 
+split tones (one tone on TX the other on RX) if you want to. &nbsp; If you want 
+simultaneous split tones just use an HLN-4020 dual reed board with the appropriate 
+pair of reeds, or use a separate encoder. &nbsp; There is detailed info on how to 
+set up split tones using the HLN4181 and a separate encoder 
+on <a href="http://www.repeater-builder.com/mitrek/mitrekinterfacing.html">my 
+Mitrek Interfacing page</a>.</p>
+
+<table border="1" cellpadding="5" width="610">
+<tr>
+  <td align="center" colspan="2">Three images of the TRN4224 Mitrek reedless 
+PL tone element,<br>
+I don't have a digital camera, so I used a flatbed scanner.</td>
+</tr>
+<tr>
+  <td align="left" width="270"><img src="../pix/trn4224front.gif" 
+alt="Front view of the TRN4224 tone element"></td>
+  <td align="full">This scan is of the front of the TRN4224 
+element with a US ten-cent coin for size comparison. &nbsp; Pin&nbsp;1 is on 
+the right. &nbsp; The "114.8" is my own marking (done with an ultra-fine-tip 
+Sharpie pen) on the ceramic. &nbsp; Every element, no matter what the frequency, 
+has the same part number. &nbsp; If you find an element with a part number of 
+TRN6005 you have a DPL code plug, which is used in the HLN4011 digital PL 
+board.</td>
+</tr>
+<tr>
+  <td align="center" width="270">
+<img src="../pix/trn4224rear.gif" 
+alt="Rear view of the TRN4224 tone element"></td>
+  <td align="full" valign="top">This is the rear view of the same element, just 
+rotated 90 degrees and less the coin.<br>
+<br>
+In this photo pin one is at the top, and pin thirteen at the bottom.</td>
+</tr>
+<tr>
+  <td align="center" width="270">
+<img src="../pix/trn4224rear2.gif" 
+alt="Magnified rear view of the TRN4224 tone element"></td>
+  <td align="full" valign="top">This enlarged image shows how Motorola marks the 
+PL tone elements with the frequency and tone code. &nbsp; If you look very 
+carefully at the top dark stripe you can see the vertical numbers 114(dot)8 in 
+grey ink on a black background. &nbsp; The short dark stripe at the bottom says 
+(vertically) "2A". &nbsp; I had to play with the brightness, contrast and gamma 
+adjustments of the scanner software to get the printing in this image to show up 
+at all, and even then it's not too visible. &nbsp; On 
+some of the elements the grey color of the ink blends into the dark epoxy stripe 
+on the back of the element. &nbsp; It takes better eyes than I have to read them 
+without a magnifying glass, which is why once I know what the frequency is I 
+label the front side of my elements with an ultra-fine-tip Sharpie pen or in a 
+pinch, a pencil.</td>
+</tr>
+</table>
+
+<p align="left">Note that on the TRN4224 tone element that there is no physical 
+pin in location 4. &nbsp; In fact the socket has a plastic block there - it's used 
+as a key to prevent people from inserting the element backwards. &nbsp; And while 
+there is a pin in location 3 it is not actively used in the TRN4224 tone element 
+(but it's grounded on the PL board). &nbsp; I assume that it's connected to the 
+substrate inside the tone element.</p>
+
+<p align="left">Internally the element and it's socket is set up like this
+(Each "Rx" is a position for either an open or a 100k resistor):</p>
+
+<p align="left">Here's an ASCII attempt at a schematic.<br>
+<b>You will need a monospaced font (like Courier) to view it properly.</b></p>
+
+<pre>
+  +---------------------------------+--+----+----+----+
+  !                                 !  !    !    !    !
+  !   +-----------+---+---+---+-+   !  !    !    !    !
+  !   !           !   !   !   ! !   !  !    !    !    !
+  !   !          RA  RB  RC  RD RE  RF RG   RH   RI   RJ &lt;-- 100k resistors
+  !   !           !   !   !   ! !   !  !    !    !    !
+  !   !           !   !   !   ! +-+-+  !    !    !    !
+  !   !           !   !   !   !   !    !    !    !    !
++---+---+---+---+---+---+---+---+---+----+----+----+----+
+! 1 ! 2 ! 3 ! X ! 5 ! 6 ! 7 ! 8 ! 9 ! 10 ! 11 ! 12 ! 13 ! &lt;-- Mitrek socket pins
++---+---+---+---+---+---+---+---+---+----+----+----+----+
+  !   !   !   !   !   !   !   !   !    !    !    !    ! &lt;-- Mitrek PC board
+  !   !  GND  !   !   !   !   !   W    !    !    !    !
+  !   !       !   !   !   !   !        !    !    !    ! W=data bits 0 and 1, chip pin 22
+  ! strobe B  !   !   !   !   +--------+-X  !    !    ! X=data bits 8 and 9, chip pin 23
+  !           !   !   !   +-----------------+-Y  !    ! Y=data bits 4 and 5, chip pin 24
+strobe A      !   !   +--------------------------+-Z  ! Z=data bits 2 and 3, chip pin 21
+              !   +-----------------------------------!-- data bits 6 and 7, chip pin 18
+              !
+              +---- blocked pin in socket</pre>
+
+<p align="left">The RA-RJ references are not in the Moto manual, I assigned 
+them just for simplifying this writeup.</p>
+
+<p align="left">As you can see you can make your own element by inserting
+resistor leads into the socket and bussing the top leads of the two sets of 
+resistors together and inserting the busses into pin 1 and pin 2.</p>
+
+<p align="left">My friend and I started with elements for the three different 
+frequencies we had in stock, and determined the resistor pattern inside each 
+element with a VOM (every resistor was about 100k, ranging from 85k to 115k), 
+and created a table of tone frequencies versus data bits. &nbsp; We also 
+determined that with no element inserted the encoder produced 273.3hz when 
+the TX is keyed.</p>
+
+<p align="left">As another source of information in the reverse-engineering attempt 
+we also used a single 100k resistor and inserted it in the socket pins - i.e. from 
+pin 2 to pin 5 for resistor A, and noted the frequency that was generated when PTT 
+was keyed, then from 2 to 6 for resistor B and remeasure, then from 2 to 7 for 
+resistor C, all the way to resistor J from pins 1 to 13. &nbsp; We noted the 
+frequency change that each pin produced by itself:</p>
+
+<table border="0" cellpadding="0">
+<tr><td align="left" colspan="3">
+    <table border="1" cellpadding="5" align="center">
+      <tr>
+        <td align="center"><font size "+2">&nbsp;&nbsp;Change in Frequency vs. data 
+bit position&nbsp;&nbsp;</font></td>
+      </tr>
+    </table>
+</td></tr>
+<tr><td height="1" colspan="3">&nbsp;</td></tr>
+<tr>
+  <td>
+    <table border="1" cellpadding="5">
+      <tr>
+        <td align="center" valign="bottom">Data<br>Bit</td>
+        <td align="center" valign="bottom">Frequency<br>Change<br>(Hz)</td>
+        <!-- <td align="center" valign="bottom">Pins</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">0</td>
+        <td align="center" valign="center">0.3</td>
+        <!-- <td align="center" valign="center">2 to 9</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">1</td>
+        <td align="center" valign="center">0.6</td>
+        <!-- <td align="center" valign="center">1 to 9</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">2</td>
+        <td align="center" valign="center">1.3</td>
+        <!-- <td align="center" valign="center">2 to 6</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">3</td>
+        <td align="center" valign="center">2.2</td>
+        <!-- <td align="center" valign="center">1 to 12</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">4</td>
+        <td align="center" valign="center">4.3</td>
+        <!-- <td align="center" valign="center">2 to 7</td> -->
+      </tr>
+    </table>
+  </td>
+  <td width="20">&nbsp;</td>
+  <td>
+    <table border="1" cellpadding="5">
+      <tr>
+        <td align="center" valign="bottom">Data<br>Bit</td>
+        <td align="center" valign="bottom">Frequency<br>Change<br>(Hz)</td>
+        <!-- <td align="center" valign="bottom">Pins</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">5</td>
+        <td align="center" valign="center">8.6</td>
+        <!-- <td align="center" valign="center">1 to 11</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">6</td>
+        <td align="center" valign="center">17.1</td>
+        <!-- <td align="center" valign="center">2 to 5</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">7</td>
+        <td align="center" valign="center">34.1</td>
+        <!-- <td align="center" valign="center">1 to 13</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">8</td>
+        <td align="center" valign="center">68.3</td>
+        <!-- <td align="center" valign="center">2 to 8</td> -->
+      </tr>
+      <tr>
+        <td align="center" valign="center">9</td>
+        <td align="center" valign="center">136.52</td>
+        <!-- <td align="center" valign="center">1 to 10</td> -->
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+
+<p align="left">So pick a frequency, figure out what the difference 
+between it and 273.3 is, then figure out the bits you need to activate 
+to get that difference, and program it in (or you can cheat and look 
+at the table at the end of this writeup).  Just plug the resistors 
+into pins 5 to 13 and buss the appropriate top ends to pins 1 or 2.  
+A flap of electrical tape over the strobe busses takes care of any 
+insulation requirements. For pin 9 (resistors E and F) solder the two 
+bottom leads together and clip one lead short &ndash; do <u>not</u> try 
+to plug both leads into the pin in the socket. &nbsp; If you want 
+some physical rigidity slop a big glob of some acid-free clear RTV 
+onto the resistors. &nbsp; If you want some shielding (usually not 
+required) just fold a flap of copper foil (available at model airplane 
+hobby shops) over the hardened RTV and solder a trimmed piece of a 
+resistor lead (or a short piece of #24 wire) to it and plug the wire 
+tail into pin 3 (ground). &nbsp; If you chose to use RTV, make sure you 
+get the <i>acid-free</i> clear RTV &ndash; check the label! &ndash; most 
+of the common brands give off acetic acid fumes as they cure and that 
+will eat up your solder connections - and the damage will be hidden 
+inside the hardened RTV! (This <u>is</u> the voice of experience 
+with Permatex #66...)</p>
+
+<p align="left">One advantage to the HLN4181 - you can have a Mitrek 
+on each end with NO tone element installed (i.e. set to 273.3hz) and 
+they can talk to each other. &nbsp; The higher frequency tone also 
+means minimum pickup delay. &nbsp; This is ideal on point-to-point 
+links (and it saves having to make up any elements). &nbsp; Yes, the 
+273hz tone is harder to filter out than a lower frequency,  but it 
+can be done with an active filter.</p>
+
+<p align="left">The HLN-4181 PL board also allows you to pick weird 
+or non-standard tones in 0.3hz steps from 273.3 on down, but to make
+them workable you need these PL boards on both ends... &nbsp; this 
+trick can be handy on point-to-point links that you want to keep 
+the riff-raff out of (if you don't mind the PL pick-up delay - a 
+lot of links use carrier squelch to minimize the delay that comes 
+from cascaded links). Maybe 199.2 hz anybody? &nbsp; Or 235.0 
+hz? &nbsp; However, you have to remember that PL (or Digital PL) 
+doesn't solve interference issues, it just covers them up. &nbsp; Sure, 
+the RX won't unsquelch if it is requiring a weird tone and the idiot 
+only has the standard tones but the idiot can still sit there and 
+transmit on the channel causing a heterodyne or capturing / blocking 
+the receiver, so what real security (or increase in usability) have 
+you really gained? &nbsp; And what prevents a determined and 
+resourceful idiot from listening to you on the input with an 
+OptoElectronics tone grabber and finding your weird magic 
+tone ? &nbsp; (it only takes maybe 5 seconds of signal). &nbsp; But if 
+you feel like playing around with this concept you can also build up 
+a test jig by taking ten resistors, a ten-position DIP switch and some 
+wire and hooking them up as follows:
+
+<pre>
++-----------------------------------+--+---+---+---+
+!                                   !  !   !   !   !        !
+!   +-----------+---+---+---+--+    !  !   !   !   !        O
+!   !           !   !   !   !  !    !  !   !   !   !         \
+!   !           O   O   O   O  O    O  O   O   O   O        O  is one pole
+!   !            \   \   \   \  \    \  \   \   \   \       !  of a DIP switch
+!   !           O   O   O   O  O    O  O   O   O   O
+!   !           !   !   !   !  !    !  !   !   !   !
+!   !          RA  RB  RC  RD  RE   RF RG  RH  RI  RJ &lt;-Tone element
+!   !           !   !   !   !  !    !  !   !   !   !    resistors
+!   !           !   !   !   !  +-+--+  !   !   !   !
+!   !           !   !   !   !    !     !   !   !   !
+--+---+---+---+---+---+---+---+-----+---+---+---+---+
+1 ! 2 ! 3 ! X ! 5 ! 6 ! 7 ! 8 !  9  ! 10! 11! 12! 13! &lt;--PL tone element socket pins</pre>
+<!-- Data bit        6   2   4   8   -->
+
+
+<p align="left">Here's a table&nbsp;/&nbsp;drawing that might make it 
+easier. &nbsp; Verify the tone generated after you plug the resistors 
+into the socket. &nbsp; You can juggle the tone frequency in 3-tenths-
+of-a-cycle steps... (see the frequency difference table above).</p>
+
+<p align="left"><b>You will need a monospaced font (like Courier) to view 
+this diagram and table.</b></p>
+
+<pre>
++-----------------------------------+---+---+---+---+
+!                                   !   !   !   !   !
+!   +-----------+---+---+---+--+    !   !   !   !   !
+!   !           !   !   !   !  !    !   !   !   !   !
+!   !          RA  RB  RC  RD  RE   RF  RG  RH  RI  RJ &lt;-Tone element
+!   !           !   !   !   !  !    !   !   !   !   !    resistors
+!   !           !   !   !   !  +-+--+   !   !   !   !
+!   !           !   !   !   !    !      !   !   !   !
+--+---+---+---+---+---+---+---+-----+-----+--+---+---+
+1 ! 2 ! 3 ! X ! 5 ! 6 ! 7 ! 8 !  9  !  10 !11! 12! 13! &lt;--PL socket pins</pre>
+
+<pre>
+FREQ   CODE    RA  RB  RC  RD  RE  RF  RG  RH  RI  RJ
+67.0    XZ      -   X   -   X   -   X   X   -   -   -
+71.9    XA      X   -   X   -   X   X   X   X   -   X
+74.4    WA      X   -   -   -   -   X   X   X   X   X
+77.0    XB      X   -   -   -   -   -   X   X   -   X
+79.7    WB      X   X   X   -   -   X   X   -   -   X
+82.5    YZ      X   X   -   -   -   -   X   -   X   X
+85.4    YA      X   -   -   -   X   -   X   -   -   X
+88.5    YB      -   X   X   -   X   -   X   X   -   X
+91.5    ZZ      -   -   -   -   -   X   X   X   X   X
+94.8    ZA      -   X   X   -   X   -   X   -   X   X
+97.4    ZB      -   X   X   -   -   -   X   -   -   X
+100.0   1Z      -   -   -   -   -   X   X   -   X   X
+103.5   1A      X   X   X   -   X   -   X   X   X   -
+107.2   1B      X   X   -   -   X   X   X   X   X   -
+110.9   2Z      X   -   -   -   X   -   X   X   -   -
+114.8   2A      X   -   X   -   -   X   X   -   -   -
+118.8   2B      X   -   -   -   X   X   X   -   -   -
+123.0   3Z      -   X   X   -   -   -   X   X   -   -
+127.3   3A      -   X   -   -   -   -   X   X   -   -
+131.8   3B      -   -   X   -   X   X   X   -   -   -
+136.5   4Z      -   -   -   -   X   -   X   -   -   -
+141.3   4A      X   X   -   X   X   X   -   X   X   X
+146.2   4B      X   X   X   X   X   -   -   -   X   X
+151.4   5Z      X   -   -   X   X   -   -   -   X   X
+156.7   5A      -   X   X   X   X   -   -   X   -   X
+162.2   5B      -   -   -   X   X   -   -   X   -   X
+167.9   6Z      -   -   -   X   X   X   -   -   X   X
+173.8   6A      X   X   X   X   X   -   -   X   -   -
+179.9   6B      X   X   X   X   -   X   -   -   X   -
+186.2   7Z      X   X   -   X   X   X   -   -   -   -
+192.8   7A      -   X   -   X   -   X   -   X   X   -
+203.5   M1      -   X   -   X   -   X   -   -   -   -
+206.5   8Z      X   -   X   -   -   X   -   X   X   X
+210.7   M2      X   -   -   -   X   X   -   X   X   X
+218.1   M3      X   X   -   -   X   X   -   -   X   X
+225.7   M4      -   -   X   -   -   X   -   X   -   X
+229.1   9Z      X   -   -   -   -   -   -   -   -   -
+229.1   9Z      X   -   -   -   -   -   -   -   -   -
+
+   Socket Pin   5   6   7   8   9   9  10  11  12  13
+       Strobe   1   1   1   1   1   2   2   2   2   2
+    Resistors  RA  RB  RC  RD  RE  RF  RG  RH  RI  RJ
+
+233.6   M5   ???     If anybody figures out these last four 
+241.8   M6   ???     tones please let the author know.  I 
+250.3   M7   ???     dismantled my test bench in preparation 
+254.1   0Z*  ???     for my first household move since 1965.
+
+0Z*= the "zero-Zee" tone.</pre>
+
+<!-- 
+233.6   M5      -   -   X   -   X   -   -   X   -   - **
+241.8   M6      X   X   X   X   -   -   X   -   -   - **
+250.3   M7      X   -   X   -   X   -   X   -   -   - **
+254.1   0Z*     X   X   X   X   X   X   -   -   -   - **
+
+   Socket Pin   5   6   7   8   9   9  10  11  12  13
+       Strobe   1   1   1   1   1   2   2   2   2   2
+    Resistors  RA  RB  RC  RD  RE  RF  RG  RH  RI  RJ
+</pre>
+<p>Notes:<br>
+&nbsp;* 0Z= the "zero-Zee" tone.<br>
+** The last four are courtesy of James Nelson KE4GWW (callsign@arrl.net)</p>
+-->
+    
+<hr width="80%" color=black noshadow>
+
+<p align="left">Good luck and after you get your Mitrek going please drop me 
+an email and let me know how things went. &nbsp; I've spent a lot of time on 
+this web page and the revisions and updates (over a dozen of them), and sometimes 
+I'm wondering if anybody reads these missives to the masses...</p>
+
+<p>
+<a href="mitrek-hln4181.html#top">Back to the top of the page</a><br>
+<!--
+<a href="http://www.repeater-builder.com/rbtip/mitrek-index.html">Up one level</a><br>
+<a href="http://www.repeater-builder.com/rbtip/index.html#main-index">Back to Home</a>--></p>
+
+<hr width="80%" color=black noshadow>
+
+<p>If you see something above that is vague, missing (or outright wrong), 
+please let me know! &nbsp; It's input from the readers that make these 
+writeups better - I've probably either totally missed or shortchanged 
+topics and /or subtopics that really need to be covered. &nbsp; I can be 
+reached at <script language="JavaScript"><!--
+ document.write ('<a href=')
+ document.write ('"mai')
+ document.write ('lto:')
+ document.write ('wa6il')
+ document.write ('q@a')
+ document.write ('rr')
+ document.write ('l.n')
+ document.write ('et')
+ document.write ('">')
+ document.write ('my permanent email address')
+ document.write ('</a>')
+ // --></script> or <a href="http://www.qrz.com/callsign/wa6ilq">my snail mail address</a> available at <a href="http://www.qrz.com">www.qrz.com</a>.
+</p>
+
+<blockquote>
+(I've included the QRZ link above instead of my real snail mail address 
+since my first household move in over 35 years is coming up, and modifying 
+all the web pages at my leisure saves having to update a lot of web pages 
+at once right in the middle of moving).
+</blockquote>
+
+<p align="left">Copyright &copy; Michael R. Morris WA6ILQ 2002, 2003, 2004<br>
+Last modified 29 October 2004 (fixed a couple of typos)
+</body>
+</html>

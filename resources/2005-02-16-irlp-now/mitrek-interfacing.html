@@ -1,0 +1,2948 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html lang="en"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Notepad">
+<META NAME="Author" CONTENT="Mike Morris WA6ILQ">
+  <title>Interfacing a Motorola Mitrek to a generic repeater controller</title>
+  <META NAME="Description" CONTENT="The nuts-and-bolts of interfacing a Mitrek to a repeater controller - with photos">
+  <META NAME="Keywords" CONTENT="Morris, WA6ILQ, radio, interfacing, Motorola, Mitrek, repeater, controller">
+</head>
+
+<body lang=EN-US bgcolor="#FFFFFF" text="#000000" topmargin="15" leftmargin="15" rightmargin="15" bottommargin="15" marginwidth="15" marginheight="15">
+<!-- Netscape specific: marginheight is the top margin, marginwidth=left margin -->
+
+<!-- top marker --><a name="top">
+<font face="Times New Roman, Times, serif" >
+
+<p>
+<table border=0 width=100% align=full>
+<tr>
+  <td align=left width=200><!--<font color="#000000"><a href="http://www.repeater-builder.com/rbtip/mojoindex.html">Up one level</a><br>
+<a href="http://www.repeater-builder.com/rbtip/index.html#main-index">Back to Home</a>
+  </font>-->&nbsp;</td>
+
+  <td align=center><font color="#FF0000" size=+2><b>Interfacing the Motorola Mitrek mobile radio <br>
+to a repeater controller - Ver 2</b></font><br>
+By <script language="JavaScript"><!--
+ document.write ('<a href="')
+ document.write ('mai')
+ document.write ('lto:w')
+ document.write ('a6il')
+ document.write ('q@a')
+ document.write ('rr')
+ document.write ('l.n')
+ document.write ('et')
+ document.write ('">')
+ document.write ('Mike Morris WA6ILQ')
+ document.write ('</a>')
+ // --></script>
+  </font></td>
+
+  <td align=left width=200>&nbsp;</td>
+</tr>
+</table>
+</p>
+
+<p align="center"><b>Comments and additional material are welcome</b><br>
+(even "Hey - you've got a typo at..." messages...</center>
+
+<blockquote><b>Note:</b> If you decide to print this file to put 
+in your Mitrek manual make sure that the circuit diagrams below 
+show up in a monospaced font (like Courier) if you want to see 
+them properly. &nbsp; I used an exclamation point as a vertical 
+line since the actual vertical line character (upper-case backslash 
+on many keyboards) is one of the first ones replaced by a local 
+language character in non-USA keyboards and as a rule I make my 
+writeups as international-compatible as possible.
+</blockquote>
+
+<p align="left">This writeup discusses how to modify any common 
+Motorola Mitrek mobile two-way radio to add connections for a repeater 
+controller. &nbsp; These modifications are frequency independent - all 
+they affect are audio and controls (push-to-talk, etc) and were 
+originally developed for a dual UHF radio configuration (one for 
+receive, the other for transmit) that implemented one end of a full 
+duplex point-to-point link, but will work on any regular single Mitrek 
+radio, a duplexed Mitrek, a tabletop base (Motorola calls it a "Super 
+Consolette"), a tabletop base converted into a repeater or dual Mitrek 
+configuration, even in mobile extender usage.</p>
+
+<p>I started this mod writeup as a set of handwritten notes on 
+ruled paper in the back of my Mitrek binder as I read through 
+the Mitrek manual. &nbsp; Then I got my hands on some surplus 
+Mitreks, and Googled every mention of "Mitrek" and "modify" or 
+"modification" or "repeater" or "remote base" on the internet 
+and printed the articles. &nbsp; Then I reverse engineered every 
+mod to see what it did, and on some I tried them out - for example 
+audio mods were tested using a HP-200CD generator swept from 100hz 
+to 5khz and a Heathkit distortion analyzer. &nbsp; This writeup 
+is the result of my experiments and experiences.</p>
+
+<p>All of this work was done in a negative ground environment. &nbsp; The 
+Mitrek mobile radio itself can be cabled for either positive or negative 
+ground, but if you are using this info to help you build a mobile extender 
+in a positve ground environment please realize that you are plowing a new 
+field and are on your own. &nbsp; In all my years of working on commercial 
+two-way radios I can count the number of positive ground installations 
+I've been involved with on one hand and have multiple fingers left over.</p>
+
+<p align="left">The reason I used Mitreks in my system was that the Mitrek 
+is an excellent performer, readily available, inexpensive (because everybody 
+wants synthesized radios like Maxtracs where the Mitrek uses crystals - in 
+fact it was the last crystal controlled mobile that Motorola made), and it 
+is easy to work on (it uses pin and hole components instead of surface mount).</p>
+
+<p align="left">I used dual radios since you can't duplex 406-420mhz Mitreks 
+and keep them clean, so my initial implementation used two 450 Mitreks tuned 
+to the regular user input and output frequencies of the far-end repeater (443 
+and 448mhz), later replaced by 420mhz Mitreks on real link frequencies.</p>
+
+<p align="left">This is a "cafeteria collection" of modifications - no 
+one mod is dependent on any other mod - you can pick and chose which 
+ones you want to implement. &nbsp; If you are going to use two radios 
+to implement a repeater or a duplex link, I suggest you make the mods 
+to both radios leaving half of each radio idle so that if something 
+dies and you are in a pinch you can simply swap the radios and be back 
+on the air, then at your leisure swap out the half dead radio with a 
+good spare. &nbsp; Note that this means that to implement your first 
+one-way point-to-point link you need to buy at least four radios... one 
+for TX at site #1, one for RX at site #2, one for a shelf spare, and 
+one to blow up while getting familiar with the Mitrek (and then to use 
+for spare parts to keep the other three running). &nbsp; You can also 
+make the same four radios a duplex link, as long as they aren't 406-420 
+radios. &nbsp; If you are implementing your first Mitrek-based 420mhz 
+full duplex link you will need six... (a pair at the near end, a pair at the 
+far end, a shelf spare and the sacrificial lamb...).</p>
+
+<p align="left">There is some deliberate repetition in this text - please 
+excuse that as you read it, but since I wrote this document as a cafeteria 
+collection a few things need to be mentioned in each relevant section. &nbsp; Even 
+with this separation into individual mods I recommend that you read this entire 
+document all the way through at least once before you heat up the soldering 
+iron.</p>
+
+<p>Make sure that you have a correctly working radio, on the frequency 
+of interest before you start the mods. &nbsp; You don't want to start 
+modifying a radio, and when it's done dicover it's not working, and 
+you don't know if it's the radio or the mods that are messed up.</p>
+
+<p align="left">I guarantee that you will also find typos, and at no 
+extra charge. &nbsp; A lot of these 43 pages were done late at night 
+after everyone else had gone to bed. &nbsp; I don't mind emails pointing 
+them out, either. &nbsp; And to update one of my dad's old jokes, 
+the new PC keyboard can't spell any better than the old one (he was 6AAU 
+at age 14, let it lapse when he moved to Toronto, then relicensed in the 
+late 1970s as WB6SOX... was an old time newspaperman and a professional 
+photographer... the original joke referred to when he upgraded his office 
+from an <a href="http://www.officemuseum.com/Underwood_No._5_OM.JPG">Underwood 
+mechanical typewriter</a> to a Smith-Corona portable typewriter in about 
+1967-1968 and then to a dual-pitch IBM Selectric in 1981 or so).</p>
+
+<p align="left">The modifications described in this document are generic 
+and nothing in the repeater controller needs to be adapted to the radio, 
+with one exception: if you plan on using the the stock Mitrek carrier 
+squelch to drive the COR / COS / carrier detect line (the signal to the 
+controller) then the controller has to be able to mute the receiver audio 
+which some of the ACC controllers couldn't do (they relied on the receiver 
+audio muting). &nbsp; There was a mod for the ACC that used the fact that 
+driving the reset line of the audio delay board chip with the COR signal 
+would mute the audio, but that wasn't well documented or distributed. &nbsp; If 
+you use the Link-Comm RLC-MOT board to add a Micor squelch to the radio then 
+even this concern is eliminated.</p>
+
+<p align="left">The dual radio setup described here has been personally tested 
+by me on three different controllers, one was home-brew Z80-based, the second 
+was a home-brew PIC processor, and the third was an Scom 7K. &nbsp; Emails 
+have reported that this information has been used on several single simplex 
+and duplexed mobiles (used as remote bases), several more dual radio 
+combinations (used as point-to-point links), and at least two full 
+duplex tabletop base stations, and with controllers by Creative Control, 
+Computer Automation ("CAT"), Link (RLC-series), Pacific Research and NHRC, 
+so I am confident that there are no hidden problems in this procedure.</p>
+
+<p align="left">Note that everyone who plans on using a UHF Mitrek in 
+repeater or link service should read (and then re-read) the excellent 
+Cactus Radio writeup on these radios located at 
+<a href="http://www.cactus-intertie.org/LA/tec_not5.pdf">http://
+www.cactus-intertie.org/LA/tec_not5.pdf</a>.</p>
+
+<p align="left">I keep my Mitrek manuals in a large 3-ring binder and also 
+included are doc sheets on my mods plus printouts of various Mitrek related 
+web pages. &nbsp; <u>You should print the Cactus Radio writeup, read it, 
+3-hole punch it, and put it in >>your<< Mitrek book - it is a very well 
+done writeup and is full of excellent technical info</u>. &nbsp; There is 
+one conflict between Cactus's writeup and this one, they bring repeat audio 
+out on the connector pin that I use for the PL decode logic level, but please 
+read both sets of info and make your own choice on signal routing. &nbsp; I 
+especially call your attention to page 4 of the Cactus writeup concerning 
+the transmitter tuneup precedure and capacitor C-800L (that's C-eight 
+hundred-L). &nbsp; I lost two UHF transmitters before I discovered that 
+quirk...</p>
+
+<p align="left">If you have already read through this and are returning to 
+reference a certain section you can jump ahead to any section using these 
+jump links:
+
+<ul compact>
+<li><a href="mitrek-interfacing.html#Manuals">Get a Manual!</A>&nbsp; &nbsp;(where and how)</li>
+<li><a href="mitrek-interfacing.html#Elements">Which channel elments do you need?</A></li>
+<li><a href="mitrek-interfacing.html#Control_Cable">Mitrek Control Cable Pinout</A>&nbsp; &nbsp;(with 
+interconnect board jumper info) plus notes about operating the Mitrek without a 
+control head.</li>
+<li><a href="mitrek-interfacing.html#PL_encode">PL encoder disable</A>&nbsp; &nbsp;(logic signal to the 
+radio from the controller)</li>
+<li><a href="mitrek-interfacing.html#PL_decode">PL decode output</A>&nbsp; &nbsp;(logic signal to 
+the controller from the receiver)</li>
+<li><a href="mitrek-interfacing.html#Separate_PL_encode">How to add a separate PL encoder</a> and 
+when you want to</li>
+<li><a href="mitrek-interfacing.html#Audio_In">Repeat Audio Input</A>&nbsp; &nbsp;(Audio from the 
+controller to the transmitter)</li>
+<li><a href="mitrek-interfacing.html#COS/COR">Carrier detect / Channel Busy / COS / COR output</A>&nbsp; 
+&nbsp;(logic signal to the controller from the receiver)</li>
+<li><a href="mitrek-interfacing.html#Audio_Out">Repeat Audio Output</A>&nbsp; &nbsp;(Audio to the 
+controller from the receiver)</li>
+<li><a href="mitrek-interfacing.html#Carrier_Squelch">Notes on the Mitrek Carrier Squelch</a>&nbsp; 
+&nbsp;(hint: don't use it). Plus some notes about the Link Comm RLC-MOT board 
+that adds a Micor squelch to the Mitrek.</li>
+<li><a href="mitrek-interfacing.html#Duplexing">Duplexing / Dual Radios / Interconnections / Control 
+heads, etc.</a></li>
+<li><a href="mitrek-interfacing.html#Duplex_Mods">Duplex Modifications</a>&nbsp; &nbsp;Changes inside 
+the radio itself to allow duplex operation</li>
+<li><a href="mitrek-interfacing.html#Indicators">Status Indicators</A>&nbsp; &nbsp;(on a control head, 
+for example)</li>
+<li><a href="mitrek-interfacing.html#Second_RX">Second Receiver Concerns</A>&nbsp; &nbsp;(what to do 
+with a second Mitrek RX (or any other RX with a 10.7mhz IF) in the same rack 
+or cabinet)</li>
+<li><a href="mitrek-interfacing.html#Mounting">Mounting In A Rack</a></li>
+<li><a href="mitrek-interfacing.html#Closing">In Closing...</a></li>
+</ul>
+</p>
+
+<p align="left">These mods were developed using a pair of T34JJA 30w UHF 
+Mitrek radios as test beds. &nbsp; The radios started out life as mobiles 
+on a 464mhz and 469mhz commercial community repeater frequency pair (chassis 
+numbers HUE1074C and HUE1082C). &nbsp; For a model and chassis number lookup 
+list see the web page at <a 
+href="mitrek-modnum.html">http://www.repeater-builder.com/mitrek/mitrekmodnum.html</a>. &nbsp; If you have a Mitrek 
+chasssis number that is not listed there please send me full information 
+so I can add it. &nbsp; <u>Please don't email me asking about any chassis 
+number not listed</u> - all the info I have is already up on the web 
+page. &nbsp; Note that many of the Mitrek chassis are very similar - for 
+example, the same high power chassis can have any of 8 different chassis 
+numbers depending on if the receiver preamp was factory installed or not, 
+and if the output power control variable resistor was set to 60, 75, 90 or 
+100 watts.</p>
+
+<p align="left">I have low band, UHF and consolette manuals, and before 
+web-ifying this writeup I compared them to a friend's high band manual, 
+mainly to make sure the component designators for the resistors, 
+capacitors, jumpers, etcetera that I mention here did not change between 
+manuals. &nbsp; Since these mods only affect the audio and squelch circuits 
+they should transfer over with no problems, but they have not been tried on 
+actual low band or high band hardware (yet) &nbsp; (June 2003 update: I have 
+since received emails from four different folks that have converted low band 
+and high band radios using this information and they state that everything 
+matches). &nbsp; And there is now a highband manual in the file cabinet.</p>
+
+<A NAME="Manuals">
+<p align="left"><b>Get the manual!</b> This document is complete as I can 
+make it as far as how to connect a Mitrek to a repeater controller, but 
+is not a substitute for a real manual - and you will need one anyway to 
+tune up the radio.  &nbsp; You can call Motorola Parts at 800-422-4210 
+and they will be happy to take your credit card or ATM card info and ship 
+you a manual. &nbsp; You can also watch ebay and the other auction web sites 
+for Mitrek manuals... <a href="http://search.ebay.com/ws/search/SaleSearch?sokeywordredirect=1&ht=1&sosortproperty=1&satitle=mitrek">Click here for an ebay search on 
+"Mitrek"</a>. &nbsp; New manuals from Motorola are about US$30 each and 
+the part numbers are: &nbsp; (note the trailing letter chassis version...)
+<ul compact>
+<li>UHF 406-512mhz) - T34/44/54/64/74JJA-nnnnB (B-or-later chassis, all power levels):  68-81045E75</li>
+<li>UHF 406-512mhz) - T64/74JJA-nnnnA (A-chassis, high power):  68-81039E80</li>
+<li>UHF 406-512mhz) - T34/44JJA-nnnnA (A-chassis, low power):  68-81037E75</li>
+<li>High Band (136-174mhz) - T43/53/63/73/83JJA-nnnnB (B-or-later chassis, all power levels): 68-81045E70</li>
+<li>High Band (136-174mhz) - T63/73/83JJA-nnnnA (A-chassis, high power): 68-81039E75</li>
+<li>High Band (136-174mhz) - T43/53JJA-nnnnA (A-chassis, low power): 68-81037E70</li>
+<li>Low Band (25-50mhz) - T51/61/71/81JJA-nnnnB (B-or-later chassis, all power levels): 68-81045E65</li>
+<li>Low Band (25-50mhz) - T71/81JJA-nnnnA (A-chassis, high power): 68-81045E65</li>
+<li>Low Band (25-50mhz) - T51JJA-nnnnA (A-chassis, low power): 68-81039E70</li>
+</ul>
+
+The Mitrek "Super Consolette" tabletop base radio has it's own supplement 
+manual: 68-81040E80. &nbsp; You <u>don't</u> need this manual to do any 
+of the mods listed here, but if you end up with a tabletop Mitrek base it's 
+very, very nice to have, especially if your unit has any options like 
+DC (or AC) wireline remote control, VU meter, battery back up or channel 
+scan (yes, Moto offered a scanning base station). &nbsp; Note that you 
+need the appropriate mobile manual (low band, high band, UHF, 800mhz) 
+to go along with it as the Mitrek tabletop base is simply a pretty box 
+that contains the power supply, the volume and squelch controls, the 
+frequency switch, a speaker, a 1:1 audio transformer (between the 
+Mitrek chassis and the speaker) and a mobile radio chassis. &nbsp; And 
+if you end up with the high power (i.e. the larger) power supply then 
+you can run a low power tabletop repeater. &nbsp; The chassis even has 
+a hole for a second antenna jack pre-punched (then hidden behind a label).</p>
+
+<p align="left">As long as your are ordering manuals, you will want to 
+order the Mitrek tuning tool set, part number 66-82977K01 (unless you 
+have a huge collection of diddle sticks - I have the standard 20-year 
+collection that fills a wooden cigar box.... even a piano tuner's wand 
+for doing the old solenoid-tuned wide-spaced UHF Motracs). &nbsp; The 
+real Mitrek tool is only $2.92 (as of May 2004) and breaking a slug with 
+the wrong tool is not worth it.</p>
+
+<p align="left">The Mitrek Plus supplement is 68-81046E05 and is definitely 
+worth getting if you can get one... &nbsp; the last time I called they 
+were out of them and not planning to reprint them.</p>
+
+<p align="left">For more information on manuals and how to order them, see 
+the <a href="http://www.repeater-builder.com/rbtip/motparts.html">"How to 
+order manuals or parts from Motorola"</a> web page that can be reached 
+from the main Motorola page. &nbsp; The <a href="http://www.repeater-builder.com/motorola/motorola-suffixes.html">"Figuring out what you have"</a> 
+page can also be useful.<p>
+
+<p align="left">Another note... the UHF book that I have (68-81045E75-A) is 
+the only Mitrek manual I have in my collection that has documentation on 
+all three PL and DPL boards&nbsp;-&nbsp;the HLN-4020 reed-type PL board, 
+the HLN-4181 "reedless" (also known as the "tone-element") PL board and 
+the HLN-4011 DPL board. &nbsp; And the late UHF book - the 68-81045E75-B 
+does not have the HLN-4181 board in it!</p>
+
+<p align="left">The -A revision highband book I looked at does not 
+have a HLN-4020 reed-type board schematic. &nbsp; There may be a 
+newer rev out there.</p>
+
+<p align="left">The -O original low-band book I have does not have the 
+HLN4181 reedless PL board or the DPL board documentation. &nbsp; There 
+may be a newer rev out there.</p>
+
+<p align="left">Note also that the Mitrek is an all-metric radio - don't 
+casually mix the leftover screws into your parts bin.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<p align="left">
+<b>Now I'm going to define some terms that I'll use in the rest 
+of this writeup:</b>
+<ul>
+<li>The "main board" is the big unified RX-TX board in the radio.</li>
+
+<li>The "control connector" is the radio front panel connector 
+that the control cable plugs into, and on the other end of the 
+control cable is the control head, speaker, microphone and microphone 
+hang-up clip (which has a switch in it to disable the PL decoder 
+when the mic is removed from the clip).</li>
+
+<li>The "interconnect board" is the PC board that sits behind the front 
+panel of the radio at a right angle to the main board. &nbsp; This 
+board plugs into the main board and the control connector is 
+soldered onto it.<br>
+Note: &nbsp; Sometimes the main-board-to-interconnect-board 
+contacts get dirty and strange things happen - if your radio 
+starts to act weird one day just power it off, then unplug 
+and plug in the interconnect board a dozen times and power 
+it up. &nbsp; The symptoms will probably go away for a year 
+or two.</li>
+</ul></p>
+
+<p>Lastly, be aware that the same jumper number can appear in 
+multiple places - there can be a JU3, for example, on the main 
+board, another JU3 on the interconnect board, a third JU3 on 
+the PL board and maybe a fourth JU3 in the control head. &nbsp; I've 
+made a point of specifying where a specific jumper is when I mention 
+it, but keep this in mind, especially if you are reading someone 
+elses writeup.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<p align="left">
+Since a repeater or a point-to-point link is a single frequency 
+beast the four frequency select leads plus the "SP" (spare) 
+lead in the cable (pin 18 - the middle big pin) are available 
+for reuse as input and output pins. &nbsp; Note that there is 
+a 0.01uf capacitor between the F1 lead (pin 7) and ground (at 
+C602). &nbsp; If you are going to reuse that pin, you might 
+want to remove C602, depending in how you use it. &nbsp; If 
+yes, it's right next to the Frequency #1 transmit channel 
+element.</p>
+
+<p align="left">
+There are two versions of the Mitrek: the early "Mitrek" and 
+the later "Mitrek Plus", however you can't tell which one you 
+have without looking at the radio's interior or looking at the 
+chassis number. &nbsp; The differences are fully documented in 
+the Mitrek Plus supplement manual I mentioned above and among 
+other things the "Plus" radios have extra IF filtering and some 
+filtering chokes on the control cable pins. &nbsp; The Mitrek 
+Plus really is the preferred radio when you go hunting for 
+Mitreks. &nbsp; Not that the regular Mitrek isn't a fine radio, 
+just if you have the opportunity to paw through a pile of radios 
+it makes no sense not to pick the better ones...</p>
+
+<p align="left">To determine which version you have you will have 
+to do one of the following: 
+<ol compact>
+<li>Look at the chassis number (the 
+<a href="mitrek-modnum.html">Mitrek 
+Chassis and Model Numbers web page</a> lists all the ones that 
+I know of)<br>
+<br>
+<table border=1 cellpadding=4 cellspacing=2 align=full width=520>
+<tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-model-and-chassis-numbers.jpg" 
+width=501 height=350></center><br>
+Photo 1: In this photo you can see the HUE1082CPR chassis number 
+stamped on the chassis lip. &nbsp; On this particular radio the 
+"U" looks strange in the photo because it has a screwdriver 
+scratch through it.</td>
+</tr>
+</table><br>
+</li>
+
+<li>Look for Y204 - the extra receiver IF crystal filter:<br>
+
+<table border=1 cellpadding=4 cellspacing=2 align=full width=420>
+<tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-missing-IF-filter.jpg"></center><br>
+Photo 2: This is a Mitrek - the pen points to 
+the jumper that replaces the filter (this is 
+a carrier squelch radio - no PL board - note 
+the red connector at the bottom left - this 
+is where the PL board plugs in.)</td>
+</tr>
+
+<tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-extra-IF-filter.jpg"></center><br>
+Photo 3: This is a Mitrek Plus - the black pen points to the 
+extra filter - (yes, this radio has a HLN 4020 dual reed 
+PL board in it). &nbsp; If you need to add Y204 to a 
+radio it's Moto part number 48-84396K02.</td>
+</tr></table><br>
+</li>
+ 
+<li>Look the back side of the interconnect board around the 
+back of control connector for several RF chokes. &nbsp; In a 
+number of places where the interconnect board silk screen has 
+JU (for jumper) the Mitrek has a wire jumper and the Mitrek 
+Plus has a choke - but not always. &nbsp; The later interconnect 
+boards had the "L" designation in the silk-screened labeling, the 
+earlier boards had the "JU". &nbsp; There were Mitrek Pluses made 
+with L-designations and jumpers in place.  &nbsp; Finding a radio 
+with chokes  is nice, but a later board (with L-designations) is 
+better (chokes are easy to make and can be added).<br>
+<br>
+<table border=1 cellpadding=4 cellspacing=2 align=full width=420>
+<tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-interconnect-board-with-L-markings.jpg" 
+width=400 height=300></center>
+Photo 4: This is the back side of a later interconnect board. Note 
+the "L" markings in white ink at the top. &nbsp; Early boards had 
+"JU" markings.</td>
+</tr><tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-interconnect-board-with-jumpers.jpg" 
+width=400 height=300></center>
+Photo 5: This is the front side of the same interconnect board - but 
+it has jumpers (the wires with white sleeving) in place of the chokes.</td>
+</tr>
+<tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-interconnect-board-with-zero-ohm-resistors.jpg" 
+width=400></center>
+Photo 5A: This is the front side of a later interconnect board - when 
+Moto switched to automated assembly the hand-installed wire jumpers 
+were replaced with zero ohm resistors which could be inserted by the 
+automated component insertion machines. &nbsp; These jumper replacements 
+can be identified by a single black band in the middle of the resistor 
+body.</td>
+</tr></table><br>
+</li>
+
+<li>Another artifact to look for the two large tubular electrolytic 
+capacitors on the left side of the interconnect board - the book 
+says that they are 500uf in the Mitrek, and are 1,000uf in the Mitrek 
+Plus - but I have found 1,000uf capacitors in the radios that don't 
+have Y204... almost if the parts list used to stuff the interconnect 
+boards during manufacture was updated and a large number of boards 
+produced before Y204 was added to the main board. &nbsp; Note that 
+you may have to remove the interconnect board from the radio to 
+verify the value of the capacitors. &nbsp; If you can't, note the 
+body length and lead bending angle. &nbsp; But realize that the 
+larger caps only indicate a later production run of the interconnect 
+board and in our use (repeater or link service) are totally irrelevant 
+(they only affect the speaker audio).<br>
+
+<br>
+
+<table border=1 cellpadding=4 cellspacing=2 align=full width=420>
+<tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-interconnect-board-500uf-cap.jpg" 
+width=400 height=300></center>
+Photo 6: This is the interconnect board in a Mitrek - the pen points 
+to the upper 500uf capacitor (there are two identical caps, one above 
+the other)</td>
+</tr><tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-interconnect-board-1000uf-cap.jpg" 
+width=400 height=300></center>
+Photo 7: The capacitors in a Mitrek Plus are 1000uf</td>
+</tr></table><br>
+</li>
+
+<li>This is the most important item in link or repater duty - look 
+for the RCA connectors. &nbsp; Trace the two coaxes from the 
+antenna relay. &nbsp; One of them will go to the middle of 
+the tuned lines right in front of the PA deck. &nbsp; The early 
+radios had the coax wired into the front end, the later ones had 
+RCA plugs. &nbsp; <u>You want the ones with the plugs</u>.<br>
+<br>
+<table border=1 cellpadding=4 cellspacing=2 align=full width=420>
+<tr>
+<td align=left valign=top><center><img src="pix/mitrek-wired-in-coax.jpg" 
+width=400 height=300></center>
+Photo 8: The silver braid cable on the left in this picture comes from 
+the antenna relay and connects to the RX front end - note that it is 
+wired in to the tuned circuit casting. &nbsp; The white teflon cable 
+on the right couples the exciter output to the PA deck.</td>
+</tr>
+<tr>
+<td align=left valign=top><center>
+<img src="pix/mitrek-rca-plug.jpg" width=400 height=300></center>
+Photo 9: In a Mitrek Plus the same coax has RCA plugs. &nbsp; The big 
+screw on the left ("L1") is the first RX RF helical, the 4 screws on 
+the right ("L12", "L11", "L10" and "L9") are the exciter filter.</td>
+</tr></table><br>
+</li>
+
+</ol></p>
+
+<A NAME="Elements">
+<p align="left"><b>The Bottom Line:</b> &nbsp; If you have a choice 
+when you select a radio, pick a Plus radio by the chassis numbers 
+that are on the 
+<a href="mitrek-modnum.html">Mitrek 
+Chassis and Model Numbers</a> 
+web page, but if you don't have that list with you (I have it in 
+my Palm Pilot) by all means pick the radios first with the the RCA 
+connectors on the front end / exciter filter assembly. The second 
+item to look for is the Y204 extra IF crystal filter - but if it's 
+not there is can be added easily. &nbsp; Third, try and get at least one 
+set of channel elements per radio - and really try and get the original 
+elements with the radio - and then test it using a dummy load and a sig 
+generator before you make <u>any</u> modifications. &nbsp; You don't 
+want to convert a radio then find out it's dead, and you can't tell 
+if the problem is in the original radio or the conversion. &nbsp; If 
+you can't get the original elements, then get ones that you can recrystal 
+to your needs. &nbsp; Make sure that the elements you do get are the 
+proper ones... one of my 6 meter radios came with UHF elements in 
+it - and the seller obviously knew they were the wrong ones because 
+he had carefully removed the model number&nbsp;/&nbsp;frequency 
+stickers from the elements).</p>
+
+<table border="1" width=575 align="center">
+<tr>
+  <td align="center" colspan="3">Mitrek Channel Elements</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td align="center">Receive</td>
+  <td align="center">Transmit</td>
+</tr>
+<tr>
+  <td align="left">Low band (0.0005%)</td>
+  <td align="center">KXN1085</td>
+  <td align="center">KXN1087</td>
+</tr>
+<tr>
+  <td align="left">High band and UHF (0.0005%)</td>
+  <td align="center">KXN1086</td>
+  <td align="center">KXN1088</td>
+</tr>
+<tr>
+  <td align="left">High band and UHF (0.0002%)<br>These 
+are designed for the MSR-2000 repeater but will work just 
+fine in the Mitrek mobile.</td>
+  <td align="center" valign="top">KXN1112</td>
+  <td align="center" valign="top">KXN1095</td>
+</tr>
+<tr>
+  <td align="left" colspan="3">The second receiver of a 2-receiver 
+MSR-2000 base station or repeater uses a 10.8mhz IF and uses a KXN1086BA 
+element. &nbsp; This is a normal element internally, the "BA" part number 
+just clues the rock-chippers to offset the local oscillator frequency by 
+100khz to compensate for the shifted receiver IF frequency (the primary 
+RX uses a normal 10.7mhz IF).</td>
+</tr>
+</table>
+
+<p align="left">If you are picking radios and heads out of a pile to 
+build a repeater or a single frequency link pick a single-frequency head 
+with the monitor switch and be sure to pick out a multifrequency 
+cable. &nbsp; Moto supplied two cables with the Mitrek, one without 
+pins 6, 8, 9 and 10 and the other with them. &nbsp; Look for white, 
+grey, blue and black wires (labeled on the control head end with the 
+numbers). &nbsp; Also make sure that you have a pin 18 - it is a 
+black-grey wire.</p>
+
+<A NAME="Control_Cable">
+<p align="left">
+<table border=1 cellpadding=4 align=full>
+<tr>
+  <td width=590><center><img src="../pix/mitrekfrontpanel.jpg" 
+alt="Mitrek front panel with missing handle" width=579 height=127></center><br>
+Photo 10: The front panel of a Mitrek mobile. &nbsp; Visible is the antenna connector, 
+the mounting tray lock, the model/serial number tag and the control connector. &nbsp; Above 
+the number tag is the spring-loaded top cover release, it looks like a nut 
+driver would be used to turn it, but in reality it's a pushbutton. &nbsp; The 
+key is the standard Moto mobile key - a Chicago Lock and Key H2135. &nbsp; For 
+more info on two-way radio keys visit <a href="http://www.repeater-builder.com/rbtip/keyspage.html">the keys page</a>. &nbsp; On the particular 
+radio shown in the photo the fold-down handle is missing.
+  </td>
+<td align=left valign=top width=170><img src="pix/mitrek-control-connector-rubber-gasket.jpg" alt="Foam rubber gasket" width=170 height=128><br>
+Photo 11: Don't be surprised if some radios have a foam gasket on the control connector.</td>
+</tr>
+</table>
+
+<p align="left">By the way, you will want to print the jumper table below 
+and stuff it into your Mitrek manual as I've never seen anything listing 
+the interconnect board jumpers in ANY of the Mitrek manuals I've seen, 
+even on Moto's schematic of the interconnect board (the ones I have show 
+no jumpers or chokes, just direct connections). &nbsp; I put this list 
+of jumpers together as I traced out the interconnect board as I modified 
+my link radios.</p>
+
+<table border=1 cellpadding=2 cellspacing=2 align=full width=630>
+  <tr>
+    <td align="center" colspan="5"><font size="+2">Mitrek Control Cable 
+Pinout</font></td>
+  </tr>
+  <tr>
+    <td align=left colspan=5>
+<center>The view below from front of the radio or back (wire side) of control cable 
+plug.</center>
+<pre>
+   +-----------------------------------------+
+   !                                         !
+   !  16   15   14   13   12   11   10    9  ! -------------
+   !                                         ! The cabling (to the vehicle
+   !     19        18       (T)       17     ! battery and the control cable
+   !                                         ! to the head) comes out this side
+   !   8    7    6    5    4    3    2    1  ! -------------
+   !                                         !
+   +-----------------------------------------+
+</pre>
+<center>The "(T)" in the drawing above represents the large thumbscrew that 
+mounts the control cable connector into the radio.</center>
+</td>
+</tr>
+<tr>
+  <td align="center" valign="bottom">Control<br>connector<br>pin</td>
+  <td align="center" valign="bottom">Cable<br>lead<br>color</td>
+  <td align="center" valign="bottom">Early<br>Interconnect<br>Board<br>Jumper</td>
+  <td align="center" valign="bottom">Later<br>Interconnect<br>Board<br>Jumper or<br>Inductor</td>
+  <td align="left" valign="bottom">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pin function in radio</td>
+</tr>
+<tr>
+  <td align="center" valign="center">1</td>
+  <td align="center" valign="center">Brn</td>
+  <td align="center" valign="center">JU5</td>
+  <td align="center" valign="center">L1</td>
+  <td align="left" valign="center">Mic hot</td>
+</tr>
+<tr>
+  <td align="center" valign="center">2</td>
+  <td align="center" valign="center">Shield</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="left" valign="center">Mic gnd</td>
+</tr>
+<tr>
+  <td align="center" valign="center">3</td>
+  <td align="center" valign="center">Orange</td>
+  <td align="center" valign="center">X</td>
+  <td align="center" valign="center">(trace cut)</td>
+  <td align="left" valign="center">Speaker (floating !)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">4</td>
+  <td align="center" valign="center">Yellow</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="left" valign="center">Switched and fused +12 from control head (RX power)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">5</td>
+  <td align="center" valign="center">Green</td>
+  <td align="center" valign="center">X</td>
+  <td align="center" valign="center">(trace cut)</td>
+  <td align="left" valign="center">Speaker (floating !)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">6</td>
+  <td align="center" valign="center">Blue</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="left" valign="center">Frequency select switch wiper<br>
+If operating with out a control head connect this pin to pin 17.</td>
+</tr>
+<tr>
+  <td align="center" valign="center">7</td>
+  <td align="center" valign="center">Violet</td>
+  <td align="center" valign="center">JU6</td>
+  <td align="center" valign="center">L7</td>
+  <td align="left" valign="center">Frequency 1 select<br>
+used for PL encoder control in this collection of mods</td>
+</tr>
+<tr>
+  <td align="center" valign="center">8</td>
+  <td align="center" valign="center">Grey</td>
+  <td align="center" valign="center">JU7</td>
+  <td align="center" valign="center">L8</td>
+  <td align="left" valign="center">Frequency 3 select<br>
+used for COR&nbsp;/&nbsp;COS (carrier sense) to the repeater controller</td>
+</tr>
+<tr>
+  <td align="center" valign="center">9</td>
+  <td align="center" valign="center">White</td>
+  <td align="center" valign="center">JU8</td>
+  <td align="center" valign="center">L9</td>
+  <td align="left" valign="center">Frequency 2 select<br>
+used for repeat audio out (audio out - from the RX to the repeater controller)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">10</td>
+  <td align="center" valign="center">Blk</td>
+  <td align="center" valign="center">JU9</td>
+  <td align="center" valign="center">L10</td>
+  <td align="left" valign="center">Frequency 4 select<br>
+used for repeat audio in (audio in - to the TX from the repeater controller)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">11</td>
+  <td align="center" valign="center">Blk/Brn</td>
+  <td align="center" valign="center">JU10</td>
+  <td align="center" valign="center">L11</td>
+  <td align="left" valign="center">Audio to control head Vol&nbsp;/&nbsp;Sq pots</td>
+</tr>
+<tr>
+  <td align="center" valign="center">12</td>
+  <td align="center" valign="center">Blk/Red</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="center" valign="center">&nbsp;</td>
+  <td align="left" valign="center">Jumper this pin to pin 4 (TX enable)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">13</td>
+  <td align="center" valign="center">Blk/Orn</td>
+  <td align="center" valign="center">JU11</td>
+  <td align="center" valign="center">L13</td>
+  <td align="left" valign="center">PTT in (gnd to TX)</td>
+</tr>
+<tr>
+  <td align="center" valign="center">14</td>
+  <td align="center" valign="center">Blk/Yel</td>
+  <td align="center" valign="center">JU12</td>
+  <td align="center" valign="center">L14</td>
+  <td align="left" valign="center">Sq pot wiper</td>
+</tr>
+<tr>
+  <td align="center" valign="center">15</td>
+  <td align="center" valign="center">Blk/Grn</td>
+  <td align="center" valign="center">JU13</td>
+  <td align="center" valign="center">L15</td>
+  <td align="left" valign="center">Vol pot wiper</td>
+</tr>
+<tr>
+  <td align="center" valign="center">16</td>
+  <td align="center" valign="center">Blk/Blu</td>
+  <td align="center" valign="center">JU14</td>
+  <td align="center" valign="center">L16</td>
+  <td align="left" valign="center">Ground to put RX into PL mode - normally hooked to control head and then to the microphone hang-up box. &nbsp; In our use this wire will not be connected.</td>
+</tr>
+<tr>
+  <td align="center" valign="center">17</td>
+  <td align="center" valign="center">Big&nbsp;Black</td>
+  <td align="center" valign="center">JU1</td>
+  <td align="center" valign="center">JU1</td>
+  <td align="left" valign="center">(big pin) Ground - DO NOT CUT JU1</td>
+</tr>
+<tr>
+  <td align="center" valign="center">18</td>
+  <td align="center" valign="center">Blk/Gry</td>
+  <td align="center" valign="center">JU15</td>
+  <td align="center" valign="center">L18</td>
+  <td align="left" valign="center">(big pin) connects 
+through JU15 and then to one side of both JU3A and JU3B on the interconnect
+ board. &nbsp; Used here for PL decoder logic level output (PL sense) to the repeater controller</td>
+</tr>
+<tr>
+  <td align="center" valign="center">19</td>
+  <td align="center" valign="center">Big&nbsp;Red</td>
+  <td align="center" valign="center">JU16</td>
+  <td align="center" valign="center">L19</td>
+  <td align="left" valign="center">(big pin) +12v (supplies power to the 
+PA deck directly, and via JU16&nbsp;/&nbsp;L19 to the rest of the radio)</td>
+</tr>
+<tr><td align=left colspan=5>
+Note: "X" in the jumper column above signifies that there is an unlabeled 
+jumper on the early interconnect boards - if you want to use it you'll have 
+to trace it to find it. &nbsp; The later boards (with silk-screened "L" 
+designators) have traces that can be cut to accomplish the same functionality.</td>
+</tr>
+</table>
+
+<p align="left">If you are going to use a Mitrek that does not have the 
+chokes on the interconnect board in a repeater system consider replacing 
+the jumpers with chokes in the leads that you use as interface connections 
+to the outside world. &nbsp; Just take common carbon resistors and use them 
+as coil forms, wrap them in 22,24 or 26 gauge enameled wire and solder the 
+wire end to the resistor lead close to the resistor body. &nbsp; Stretching 
+the wire slightly before you wind it helps it lie flat, and a drop of varnish, 
+hot-melt glue, or even clear fingernail polish on the starting end helps hold 
+it in place while you wind the rest of the coil, then another drop on the tail 
+end holds it in place while you solder the end. &nbsp; Some clear heat-shrink 
+tubing will finish the job. &nbsp; As long as the resistor value is over 
+40-50 ohms the actual value doesn't matter as the choke will short it 
+out. &nbsp; A free source of enameled wire is the deflection yoke or the 
+high voltage transformer from a old TV set. &nbsp; Stretch it by clamping one 
+end in a bench vise (or a fence post) and string off 6 to 10 feet and lean 
+back with your whole body weight. &nbsp Then wind the choke with the stretched 
+wire.</p>
+
+<p align="left">If you decide to improve the RF filtering of a radio 
+and you intend to do all of the mods listed here you will need to replace 
+the jumpers with chokes at pin 7, 8, 9, 10, and 18. &nbsp; If you want 
+to go overboard you can also add one more choke on pin 1 (which handles 
+local microphone audio). &nbsp; The simplest way to add them is to cut 
+the jumper on the connector side of the board, melt the solder and remove 
+the two wire ends, suck the remaining solder out, and install the choke 
+into the same holes but on the the side of the board facing inside the 
+radio. &nbsp; Note that three of the jumpers (at JU6/L7, JU7/L8 and 
+JU16/L19) are buried under a large coupling capacitor - you will need  
+to lift one end of the cap to remove the jumpers.</p>
+
+<p align="left">As long as you are inside the radio lift off the PA deck 
+cover and do a visual check the tantalum electrolytic bypass capacitors 
+on the positive 13.8 volt supply rails - and use a good magnifying 
+glass. &nbsp; Replace any that look suspicious. &nbsp; The failure mode 
+is that they go down in value or open up, and either can allow 
+spurs... &nbsp; A second problem is that some radios didn't have enough 
+driver stage bypassing. &nbsp; If you still have spurs (rare) add a large 
+value cap on the driver stage +12v lead. &nbsp; Another Mitrek failure mode
+is intermittent connections in the preselectors, and the Cactus writeup 
+mentioned above has the cure for it, as well as WB4HFN's web page... see 
+<a href="http://www.wb4hfn.com/Modifications/MT2311">
+http://www.wb4hfn.com/Modifications/MT2311</a>.</p>
+
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<p align="left">In a normal mobile installation pin 19 is hooked to the 
+positive side of the vehicle battery through a big fuse. &nbsp; Constant 
+and ignition switched power is run to the control head via relatively 
+small wires (#20). &nbsp; In a normal mobile installation the RX can be 
+run with the ignition key off, and the key must be on for the TX to be 
+enabled.</p>
+
+<pre>Normal mobile installation:
+                                                                         Control connector
+                                     thick wire                          on radio
+Pos --- Big Fuse ------------------------------------------------------- Pin 19
+12v     Amperage depends                                                 (PA deck) 
+        on the TX power 
+        level of the radio.
+
+                                     thick wire
+Gnd -------------------------------------------------------------------- Pin 17
+
+
+                                     thin wire          control head
+           Gnd ---------------------------------------- Pin 17
+     (under dashboard)
+
+                                       inside the control head
+                                       !---------------------!
+                                       !                     !
+                                                   /
+constant +12 from                   control       /         control      control 
+underdash fuse box                  head         /!         head         connector
+(e.g. the battery  ---- 7A fuse ----pin 19 -----O !  O------Pin 4 -------Pin 4
+side of the clock                                 !                      (RX power)
+fuse)                                             !
+                                                  !/
+switched +12 from                   control       /         control      control 
+underdash fuse box                  head         /          head         connector
+(e.g. the battery  ---- 7A fuse ----pin 20 -----O    O------Pin 12 ------Pin 12
+side of the broadcast                        double pole                 (TX enable)
+radio fuse)                                  power switch
+                                        (part of the control 
+                                         head volume control)
+</pre>
+
+<p align="left">If you are not going to use a control head (for example, 
+mounting the radio on a rack panel, with the controls mounted to the rack 
+panel or in in the lid of the radio), or if you want very simple wiring, 
+we can consolidate and simplify the power wiring as per the schematic 
+below (using the power switch on the power supply as the on/off switch):</p>
+
+<pre>
+                        thick wire       Control connector
+Pos --+-- Big Fuse ----------------------Pin 19 (PA deck + TX) 
+12v   !
+      !
+      +-- 7A fuse --------------------+--Pin 4 (RX power)
+                        thin wire     !
+                                      +--Pin 12 (TX enable)
+
+
+                                      +--Pin 6 (frequency select logic)
+     thick power wire    thin wire--> !
+Gnd ----------------------------------+--Pin 17 (radio ground)
+
+The size (amperage) of the big fuse depends on the band and power 
+level of the radio.</pre>
+
+<p align="left">Some folk run the hot side of the 7a fuse to pin 19... &nbsp; I 
+don't like to do that because if the big fuse blows for some reason it 
+will kill the RX as well. &nbsp; You can run the 7a fuse either to the 
+positive 12v directly or through the big fuse, whatever works easier 
+for you. &nbsp; In my case I was dedicating an Astron power supply to 
+the dual link radio assembly plus I was using a control head so I added 
+a large in-line fuseholder for the transmit pin 19 plus a small fuseholder 
+for everything else. &nbsp; I put both of them in the cable harness that 
+coupled both radios to the control head and the power supply. &nbsp; A 
+diagram of the power wiring is later on in this writeup.</p>
+
+<p align="left">If you are not using a control head you can connect 
+your own speaker, volume and squelch controls as follows (don't forget 
+to ground the Frequency 1 channel element pin - read further on for 
+notes on JU611):
+
+<pre>
+         interconnect board    ! control !
+         and control connector ! cable   ! control head
+       !-----------------------!---------+----------------+
+       !                       !         !                !
+        +!!C1                 
+radio ---!!----------Pin 3 ----------------pin 3---Pin 29----
+main     !!                                (in)      or       \ 
+board                          !         !         Pin 31    speaker - note that
+                               !         !          (out)    both sides are hot!
+        +!!C2                                                 /
+radio ---!!----------Pin 5 ----------------Pin 5---Pin 32----  
+main     !!                                 (in)    (out)
+board                          !         !
+                                          
+radio---------JU13---Pin 15 ---!-----------Pin 15-------------------+
+main          L15    Volume                on head                  !
+board                wiper     !         !                          !
+                               !         !                          !
+        +!!C3                                                       !
+radio----!!---JU10---Pin 11 ---------------Pin 11---+-----+         !
+main     !!   L11    Buffered              on head  !     !         !
+board                audio out !         !          !     !         !
+                               !         !          \     \         !
+                               !         !    3.3k  /     / 10k     !
+                               !         !    1/4w  \     \ 1/4w    !
+                               !         !          /     /         !
+                               !         !          !     !         !
+                               !         !          !     !         !
+                               !         !          !     !         !
+                               !         ! 25k pot  \     \ 25k pot !
+                               !         ! Squelch  /     / Volume  !
+                                                    \     \         !
+radio---------JU12---Pin 14 ---!-----------Pin 14-> /     / <-------+
+main          L14    Squelch               on head  \     \
+board                wiper     !         !          !     !
+                                                    !     !
+radio----------------Pin 2-----!-----------Pin 21---+-----+------Pin 27--+
+main                 Audio                 on head              on head  !
+board                ground    !         !                               O  /
+                               !         !                    Hangup box   /
+                               !         !                    (mic clip)  /
+                               !         !               /               O
+         1.8k                                           /                !
+radio--+--R---JU14---Pin 16 ---!-----------Pin 16------O  O------Pin 24--+
+main   !      L16    PL/Carrier            on head  "Monitor"    on head
+board  !             Squelch   !         !          switch on
+       !             select    !         !         control head
+PL     !                       !         !        (PL/CS select)
+board--+</pre>
+
+<p align="left">The actual Monitor switch in the head is DPDT, and the 
+second pole is used with other options like channel scan, 2-tone decode, 
+or PAC-RT remote extender (mobile repeater).</p>
+
+<p align="left">Capacitors C1, C2 and C3 are located on the interconnect 
+board. &nbsp; C1 and C2 are 500uf in the Mitrek, 1,000uf in the Mitrek 
+Plus. &nbsp; C3 is either 4.7uf or 10uf depending on the vintage of the 
+radio. &nbsp; If you find a 4.7uf cap in your radio as C3 I suggest you 
+change it (or just parallel another one across it) as the higher value 
+improves the RX audio.</p>
+
+<p align="left">The lead for pin 16 is not required in 99% of the amateur 
+applications - most repeater controllers use separate carrier and PL 
+decode lines rather than one line and a carrier squelch&nbsp;/&nbsp;PL 
+select line. &nbsp; Most radios in amateur radio repeater service usually 
+sit in carrier squelch mode forever, and the repeater controller does all 
+the work in selecting PL or Carrier squelch mode by selecting either 
+the carrier squelch or PL decode line, or ANDing them together. &nbsp; If 
+you end up needing an extra wire in the control connector you can cut the 
+JU14&nbsp;/&nbsp;L16 jumper (disabling the carrier&nbsp;/&nbsp;PL 
+switch on the control head) and solder to the pad on the interconnect 
+board that connects to pin 16. &nbsp; Then tie into pin 16 by the head.</p>
+
+<p align="left">You could mount the volume and squelch pots inside the 
+radio and tie them to the radio side of JU10&nbsp;/&nbsp;L11, 
+JU12&nbsp;/&nbsp;L14, JU13&nbsp;/&nbsp;L15 and 
+to ground, but it's a bit cramped inside. &nbsp; Doing so, however would 
+free up pins 14 and 15 which could be used for other things, at the possible 
+expense of not being able to bench test the radio with a standard cable and 
+head. &nbsp; If you are going to mount the volume and squelch controls any 
+distance from the radio remember that Moto uses a braided shield around 
+the conductors connected to pins 11, 14 and 15 on the control cable 
+connector, with the shield hooked to pin 2 on the radio end (audio ground) 
+and pin 21 on the control head end.</p>
+
+<p align="left">The Mitrek volume and squelch pots are 25k ohms which 
+is not a common value in the electronic component world (especially in 
+the surplus world) - the common ones are 10K and 50K. &nbsp; The Mitrek 
+"clamshell" control head uses PC board mount pots with shafts and knobs, 
+and the "ACM" - short for "Alternate Control Module" - head uses PC board 
+mount thumbwheel pots. &nbsp; If you are going to mount the controls on 
+a rack panel you need to locate an old Motrac, Motran or Mocom-70 mobile 
+control head to scavenge the regular panel-mount pots from. &nbsp; DO NOT 
+try to use the earlier radio's head directly on the Mitrek without modification 
+as the older radios used a speaker connection that had one side grounded, 
+where the Mitrek uses both sides of the speaker hot (the mod is a simple 
+one). &nbsp; If your old head came with the palm microphone you can 
+scavenge it and the mic jack and use it on the rack panel as well.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<p align="left">In the rest of this writeup I am going to assume 
+that you are either modifying a Mitrek Plus radio (with the factory 
+inductors on the interconnect board) or you have replaced the above 
+mentioned JU6&nbsp;/&nbsp;L7, JU7&nbsp;/&nbsp;L8, JU8&nbsp;/&nbsp;L9, 
+JU9&nbsp;/&nbsp;L10, JU15&nbsp;/&nbsp;L18 and maybe JU5&nbsp;/&nbsp;L1 
+jumpers with homebrew inductors... in other words from here on I'm 
+going to use L-designators when referring to the interconnect board 
+jumper&nbsp;/&nbsp;inductor positions as the later boards are silk-screened 
+that way. &nbsp; I'm also going to assume that you have a factory 
+PL board in the radio. &nbsp; Frankly, a used HLN-4181 is much cheaper 
+than a TS-64 and besides it was made for the job. &nbsp; If you don't 
+have one, either buy one from a used equipment vendor like Telepath 
+or C. W. Wolfe or dig a Com-Spec TS-32 or a TS-64 out of the junk 
+box... <a href="http://www.repeater-builder.com/mitrek/com-spec-ts-64-to-mitrek.pdf">here's the Com-Spec 
+TS-64 instructions for the Mitrek</a>. &nbsp; I have another web 
+page at www.repeater-builder.com that shows how to make your own 
+PL elements for the HLN-4181.</p>
+
+<p>Don't forget to jumper the F1 channel elements to ground or you 
+will have a very dead receiver. &nbsp; The easiest way to do this is 
+to remove (if present) JU601, 602, 604, 605, 606, 607, 609 and 610 
+and insert JU611 (it's near the RX channel elements). &nbsp; Note 
+that this grounds the F1 lead on the front panel connector (pin 7) that 
+we will be using for something else in the next step, but we can fix 
+that very easily.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="PL_encode">
+<p align="left"><font size=+2><b>PL Encoder control</b></font><br>
+This mod works on both the reedless and the reed board. &nbsp; Lift 
+the radio side of L6 on the interconnect board. &nbsp; The radio 
+side is grounded by JU611 so lifting it is necessary. &nbsp; This 
+disconnects the main board which disconnects the aforementioned 
+C602 0.01uf capacitor. &nbsp; Install a 12v reed relay with the 
+contacts across JU2 of the HLN-4181 or JU3 of the HLN-4020 PL 
+board, and the coil hooked between +12 and the now-floating 
+JU6/L7 end. &nbsp; Ground pin 7, the F1 pin, to close the 
+relay. &nbsp; Select the normally open or normally closed contacts 
+depending on what the normal state of your encoder will be...
+ &nbsp; On both of the PL boards shorting the jumper kills the 
+encoder tone, and in my case I used the normally open contacts since 
+I wanted the relay's idle state to be the PL encoder on. &nbsp; I did 
+not use an open collector transistor instead of the relay contacts for 
+this because using a reed relay was easier, faster, simpler, provided 
+an absolute zero-ohm ground (the less resistance you have, the better 
+the tone cutoff) and in my case the encoder off fuction is only used 
+for a few hours once or twice a year (so I definitely wasn't going to 
+wear out the relay). &nbsp; I was also doing this conversion on a 
+deadline. &nbsp; Note that if your controller does not have a back-EMF 
+snubbing diode on the digital output make sure you add one.<br>
+If I was going to do it all over again, I'd use a FET instead of the 
+reed relay and that would allow me to key the PL encoder with the main 
+channel RX COS signal. &nbsp; You'd need a FET with low "on" resistance, 
+and the source and drain leads would go in place of JU2, with the gate 
+lead through a resistor to the F1 pin. &nbsp; Or I might use an 
+opto-isolator between the F1 pin and the FET.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="PL_decode">
+<p align="left"><font size=+2><b>PL Decode</b></font><br>
+
+<table border=1 cellpadding=5 width=610>
+<tr>
+  <td align=left colspan="3"><center><b>Photos of the three types of 
+Mitrek PL / DPL boards.</b></center><br>
+All connections to the board are made through the 9-pin connector header 
+which looks like a vertical brown line in right edge of the photos 
+below. &nbsp; The holes in the board provide access to tuning adjustments 
+in the receiver. &nbsp; The three boards are completely interchangeable 
+except for adjusting the encoder level pot on the board.</td>
+</tr>
+<tr>
+  <td valign=top align=left>
+    <center><img src="pix/hln-4020.jpg" alt="The reed-type Mitrek PL 
+board HLN-4020"><br>
+The HLN-4020 reed-type board.</center>
+In this photo the 9-pin connector is in the center of the right edge of 
+the board. &nbsp; The two reed sockets are at lower center, with the black 
+plastic hold down arm above them. &nbsp; The KLN-6210 encode reed is on the 
+left, the KLN-6209 decode reed on the right.
+  </td>
+</tr>
+
+<tr>
+  <td valign=top align=left>
+    <center><img src="pix/hln-4181.jpg" alt="The reedless Mitrek PL 
+board HLN-4181"><br>
+The HLN-4181 reedless board.</center>
+The long thin horizontal component at the bottom left is a TRN-4224 tone 
+element that is plugged into the black socket under it.</td>
+</tr>
+
+<tr>
+  <td valign=top align=left>
+    <center><img src="pix/hln-4011.jpg" alt="The Mitrek DPL board 
+HLN-4011"><br>
+The HLN-4011 DPL board.</center>
+The long thin white horizontal component in the lower middle of the board 
+is a TRN-6005 DPL code element that is plugged into the black socket under 
+it. &nbsp; Note that the TRN-6005 element is shorter than the TRN-4224 tone
+element and does not occupy all the pins of the socket.
+  </td>
+</tr>
+</table>
+
+<p align="left">In perusing the schematic of the HLN-4020 reed board I 
+did notice one nice feature: it can be jumpered to use one reed for common 
+encode/decode or two reeds for split tones. &nbsp; I've not seen that feature 
+in any other reed-based PL board. &nbsp; When two reeds are used the encode 
+reed is on the left of the hold-down bracket in the above picture with the 
+decode reed on the right, when one reed is used it goes in the encoder socket 
+and two jumpers are added. &nbsp; The necessary jumpers are documented in the 
+later schematics of the board (they are not included in the board revision D 
+schematic but they are there are on the revision F schematic). &nbsp; An early 
+board can be jumpered for a single reed using the info from the later schmatic.</p>
+
+<p align="left">The rest of this section is focused on the HLN-4181 
+"reedless" PL board since I had six radios with five HLN-4181s, and 
+only one of the HLN-4020 reed board. &nbsp; Working for NASA for 6 
+years taught me that you don't put equipment into mission-critical 
+service (i.e. on a mountaintop) that you do not have known good and 
+ready-to-go spares for on the shelf. &nbsp; In my opinion service trips 
+should be limited to swapping entire units out, not fixing them on site 
+(unless thatis the absolute last resort). &nbsp; Especially if it takes 
+you a couple of hours to get to the start of the dirt road, and another 
+hour in 4-wheel-drive to get up to the radio site... and that's in good 
+weather.</p>
+
+<p align="left">For more information on the HLN-4020 dual-reed board, the 
+HLN-4181 reedless board and the tricks they can do, plus information on how 
+to build your own TRN4224 tone elements please see my web page at 
+<a href="mitrek-hln4181.html">
+http://www.repeater-builder.com/mitrek/mitrek-hln4181.html</a>.</p>
+
+<p align="left">The HLN-4181 reedless board can be set up in several 
+ways...  The normal configuration of jumpers (and the most useful one) 
+is listed in the table below... The board can run simultaneous encode 
+and decode - the encode portion generates the PL tone continuously 
+while the other half is able to decode PL at the same time.</p>
+
+<table border="1" width=630>
+<tr><td align="center" colspan="3"><font size "+2">
+HLN 4181 Reedless Mitrek PL Board Factory Jumpers</font></td>
+</tr>
+<tr>
+  <td valign="bottom" align="center">Jumper<br>JU-</td>
+  <td valign="bottom" align="center">Normal<br>setup</td>
+  <td valign="bottom" align="left">Function</td>
+</tr>
+<tr>
+  <td align="center">1</td>
+  <td align="center">OUT</td>
+  <td align="left" valign="center">Normally used to couple the internal 
+PL tone encoder to equipment outside the radio</td>
+</tr>
+<tr>
+  <td align="center" width=50>2</td>
+  <td align="center" width=50>OUT</td>
+  <td align="left" valign="center">Disables the internal encoder when 
+in place</td>
+</tr>
+<tr>
+  <td align="center" width=50>3</td>
+  <td align="center" width=50>IN</td>
+  <td align="left" valign="center">In to couple internal encoder to the 
+TX modulator (and remove JU7)</td>
+</tr>
+<tr>
+  <td align="center" width=50>4</td>
+  <td align="center" width=50>IN</td>
+  <td align="left" valign="center">Install for "AND" squelch (and remove 
+JU5)</td>
+</tr>
+<tr>
+  <td align="center" width=50>5</td>
+  <td align="center" width=50>OUT</td>
+  <td align="left" valign="center">Install for "OR" squelch (and remove JU4)</td>
+</tr>
+<tr>
+  <td align="center" width=50>6</td>
+  <td align="center" width=50>OUT</td>
+  <td align="left" valign="center">Install to disable PL decode (RX carrier 
+squelch only mode)</td>
+</tr>
+<tr>
+  <td align="center" width=50>7</td>
+  <td align="center" width=50>OUT</td>
+  <td align="left" valign="center">In to connect external encoder (fed from 
+control connector pin 18) <br>to TX modulator (and remove JU3)</td>
+</tr>
+<tr>
+  <td align="center" width=50>8</td>
+  <td align="center" width=50>OUT</td>
+  <td align="left" valign="center">In to disable reverse burst</td>
+</tr>
+<tr>
+  <td align="center" width=50>9</td>
+  <td align="center" width=50>IN</td>
+  <td align="left" valign="center">When installed couples RX audio into 
+the PL decoder</td>
+</tr>
+<tr>
+  <td align="left" colspan="3">If your HLN4181 board has JU1, JU6 and/or JU7 in place, 
+remove all of them. &nbsp; If you want your PL decoder to work then JU9 <u>must</u> be installed. &nbsp; If you want the PL encoder to work then JU3 must be installed and 
+JU2 must be removed.<br>
+<br>
+JU4 and 5 are redefined if the radio has the HLN4119 "Busy Light" option (very 
+rare)... for more information see the footnotes on the receiver and control head 
+schematics in the manual. &nbsp; The radios that do have the busy light option 
+have to be paired with matching control heads ("busy light" heads have an 8-pin 
+IC installed into the only IC position on the circuit board inside the head).</td>
+</tr>
+</table>
+
+<p align="left">A PL decode signal is available at the collector of Q1 
+of the HLN-4181 PL board, which is available at one end of the JU6 
+jumper. &nbsp; This transistor takes the PL decode signal from the 
+custom chip and inverts it before sending it to the audio mute transistor 
+(located on the main board). &nbsp; I used a length of insulated wire 
+to run that signal over to the end of the JU1 jumper that feeds pin 1 of 
+the 9-pin connector that connects the PL board to the interconnect board 
+of the Mitrek. &nbsp; The connections are pretty obvious when examining the 
+schematic, and are easily traceable when looking at the actual circuit 
+board.</p>
+
+<p align="left"><b>You will need a monospaced font (like Courier) 
+to view this diagram properly.</b></p>
+
+<pre>    +12v
+     !           add this jumper
+     R 94k   +----------------------------+
+     !       !                            !
+     +-------O -JU6- O--        --O -JU1- O---+------+ 
+     !         (out)                (out)     !      !
+ Q1  C                                        !      !
+ --B                  to other  --O -JU7- O---+      !
+     E                circuitry     (out)            !
+     !                                               !
+    gnd                                              !
+              HLN-4181 PL board                      !
+                                                     !
+                                                     !
++--------------------&lt;&lt;------------------------------+
+!                 9-pin PL Board
+!               connector P3 pin 1
+!
+!                      L18
++---O -Ju3A- O------O -JU15- O---Pin 18 of the control connector
+     (added)           (in)     
+
+             Interconnect board
+</pre>
+
+<center><table border=01 align=full>
+<tr>
+  <td align=center><img src="pix/hln-4181-JU1-JU6-jumper.jpg" alt="PL 
+decode jumper" width=350 height=146><br>
+This is what the JU1 to JU6 jumper looks like.<br>
+You can also install it on the component side.</td>
+</tr>
+</table></center>
+
+
+<p align="left"><b>Note:</b> On the interconnect board make sure that 
+jumper JU3A is installed, and that JU3B and JU3C are out..  This connects 
+the PL decode indication on pin 1 of the PL board connector to pin 18 of 
+the control connector - requiring nothing more than a funny jumper on the 
+PL board and a short jumper on the interconnect board. &nbsp; Normally pin 
+18 is used to bring an external PL tone encoder (mounted in the control head) 
+into the PL board - here we're using it to route the PL decoder logic level 
+output to the controller by the same path. &nbsp; I've seen other Mitrek 
+modification web pages that use pin 18 for other things such as TX audio 
+or COR, but I much prefer using it for the PL decode logic level -- it's 
+just a "cleaner" mod (and besides there are four more pins to use).</p>
+
+<p align=center>
+
+<table border=1 cellpadding=6 cellspacing=3 align=full width=630>
+<tr>
+  <td align=center valign="top"><img src="pix/mitrek-interconnect-ju-3clip.jpg" alt="WRONG!" width=301 height=276><br>
+<b><font size=+3>WRONG !</font></td>
+  <td align=center valign="top"><img src="pix/mitrek-interconnect-ju-3solder.jpg" alt="RIGHT!" width=300 height=300></font></td>
+</tr>
+<tr>
+  <td valign=top>Above is a picture of JU3A and how the designer at Moto expected 
+you to jumper it. &nbsp; It's a cute, inventive and resourceful idea but those 
+1/4 inch tab connectors fall off in mobile service, even if you squeeze them very 
+tightly and push them on.</td>
+  <td valign=top>Personally, I bend up a piece of bare copper wire into a 
+hairpin and solder one end to one side of the board and the other end to the 
+other side. &nbsp; I leave an air gap under each loop so I can clip an 
+EZ-Hook&#153;-style test lead to it. &nbsp; I install a wire on the left side 
+simply as a handy ground point (one side of JU3C is ground) for a VOM or 
+an oscilloscope probe (as shown), the right side wire in this picture is 
+the actual JU3A PL decode jumper.</td></tr>
+</table></p>
+   
+<p align="left">Note that this voltage from the collector of Q1 is not a true 
+logic level - it will drive the PL decode input of most repeater controllers 
+just fine, but if you need a signal that goes all the way to ground - for 
+example to drive a LED (perhaps in a control head) you'll need to add a driver 
+transistor. &nbsp; The version below provides an open collector output for 
+the PL decode signal. &nbsp; If the upper transistor has enough gain the 
+lower transistor may not be needed (see above for the rest of the details).</p>
+
+<pre>    +12v
+     !                     --O -JU1- O--------->>--- 
+     !                         (out) !      P3 pin 1
+     !                               !
+     !                          +----+
+     !                          !    !
+     !               100k       C    !
+     R 94k    +--------R----- B      !
+     !        !                 E    !
+     +--------O -JU6- O--       !    !
+     !         (out)            !    C
+ Q1  C                          +--B    two 2N4401, 2N3904, 2N2222, etc
+ --B                                 E
+     E                               !
+     !                              gnd
+    gnd              (available at several locations, one of which 
+                      is one side of JU2, another is test point E3, 
+                      a third is pin 9 of the PL board connector)
+
+              HLN-4181 PL board</pre>
+
+<p>My first version of this setup used the plain jumper above, and drove an 
+Scom 7K directly (which has a 2v threshold between the inactive and active 
+states). &nbsp; I added the transistor driver for the PL decode LED inside 
+the control head. &nbsp; My second version (above with the two transistors) 
+was used on a home-brew controller that needed a PL decode signal that went 
+all the way to ground. &nbsp; The two transistors drove the controller and
+a LED just fine.</p>
+
+<pre>    +12v
+     !
+     +-----R-------+                --O -JU1- O--------->>----
+     !    see      !                    (out) !      P3 pin 1
+     !    text     !                          !
+     !         +---------------------------------+
+     !         !                                 !
+     !         ! LED                     photo-  !  Opto-isolator
+     !         ! emmitter             transistor !  with open 
+     !         ! side                     side   !  collector
+     !         !                                 !  output
+     R 94k     +---------------------------------+
+     !             !                          !
+     !             !                          !
+     +-------------O -JU6- O--               gnd
+     !               (out)
+ Q1  C
+ --B 
+     E
+     !
+    gnd              HLN-4181 PL board</pre>
+
+<p align="left">If I were to do this over today I'd use the circuit 
+above - I'd use the existing transistor on the PL board to drive 
+the LED side of an open-collector optoisolator (effectively 
+shunting the 94k resistor to the point that it pretty-much 
+drops out of the circuit). &nbsp; The resistor in series with 
+the LED side (the one shown without a value) would have to be 
+selected to pass enough current to turn on the opto-isolator's 
+LED fully without going into overcurrent (check the spec sheet 
+for the optoisolators LED). &nbsp; The use of the optoisolator 
+makes this circuit pretty universal.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="separate_PL_encode">
+<p align="left"><font size=+2><b>Using a separate PL encoder with the 
+HLN-4181</b></font><br>
+The design of the reedless board uses the encoder as the frequency 
+reference for the decoder function, and as such it can't run split 
+tones (i.e. different encode and decode tones). &nbsp; If you need 
+to run simultaneous split tones in a single duplexed radio you will 
+have to add a second device, either a PL encoder or decoder. &nbsp; Having 
+done both, I can tell you that it's much easier to add an encoder. &nbsp; I've 
+used home-brew twin-T oscillators, Cetec-Vega 188's, Com-Spec SS-32s, TS-32s, 
+SS-64s, and TS-64s (the SS-nn is the encode-only version of the equivalent 
+TS-nn product). &nbsp; The TS-32 series does not have reverse-burst (unless 
+you use an RB-1), the TS-64 does. &nbsp; There is more information on the 
+<a href="http://www.repeater-builder.com/rbtip/com-spec-index.html">Com-Spec web page here at 
+Repeater-Builder</a>.</p>
+
+<p align="left"><b>You will need a monospaced font (like Courier) 
+to view this diagram properly.</b></p>
+
+<p align="left">The hookup is fairly simple:</p>
+
+<pre>
+Connect the audio output of
+the separate encoder here ---------------------------+
+                                                     !
+gnd to here, -----------------------------------+    !
+or or to one side of R2                         !    ! 
+or to test point E3                             !    !
+or to P3 pin 9                                  V    !
+                                               gnd   ! 
+Control                              P3              !   R27 
+connector    L18                    Pin 1            V   22K
+Pin 18 ---O -JU15- O-----O -JU3A- O--<<---+--O -JU7- O----R--+
+            (both jumpers are on          !    (out)         !
+            the interconnect board)       !                  !
+                                          !                  !
+                                          !                  !
+      +----------------------------+      !                  ! 
+      !                            !      !                  !
+      V                            V      !                  !
+  ----O -JU6- O--        --O -JU1- O------+                  !
+        (out)                (out)                           !
+     PL decode from previous section                         !
+                                                             ! 
+                                                             ! 
+   alternate insertion point for PL encoder ---+             ! 
+                                               !             ! 
+                                               !             ! 
+         R25 4.3K      R25 4.3K                V             !     C24
+ -----------R------+------R------------O -JU3- O-------------+------C----- to filtering 
+audio from         !               (normally in but          !    1.0uf    then to TX 
+internal PL        !               but remove it when        !             modulator
+encoder        Thermistor          using a separate          !
+                   !               encoder - see text)       O <-- Test point E1
+                   !
+                   R  R29
+                   !  6.2k
+                   !
+                   +-----O <-- Test point E3
+                   !
+                   +-----O <-- Pin 9 of PL board connector P3
+                   !
+                  gnd</pre>
+
+<p align="left">Note that JU3A is on the interconnect board and 
+JU3 is on the PL board. &nbsp; JU7 is normally used with external 
+PL encoders built into the control head - these feed the PL tone 
+in via control connector pin 18 and JU3A and JU7 must not be in 
+place in a duplexed radio if you are routing the PL decode signal 
+out via Control connector pin 18 and JU1.</p>
+
+<p align="left">Before connecting the new encoder leave JU3 on the PL board 
+in place and make sure JU7 is out. &nbsp; Then key the TX and measure the 
+existing encoder's audio level (AC voltage) at test point E1 and write it 
+down. &nbsp; Now remove JU3 and connect the new encoder's audio output 
+to the R27 side of JU7. &nbsp; Ground can be acquired from one side of R2 
+nearby, from one side of JU2, from test point E3 or from pin 9 of P3 
+(the 9-pin connector to the interconnect board). &nbsp; Depending on what 
+DC supply voltage your new encoder requires you can find filtered +12v on 
+the wide trace that connects L3, C43 and R45, or you can get regulated 
++9.1v from the trace that ties pins 31 and 6 of the 40-pin chip together, 
+or from the solder pad shown in the photo below. &nbsp; With the AC voltmeter 
+back on E1 you can now set the level of the replacement encoder to match the 
+original AC voltage. &nbsp; If you are running separate TX and RX radios you 
+can also locate the external encoder outside the radio and use the interconnect 
+board JU3 and PL board JU1 and JU6 and JU7 jumpers in the TX radio like they 
+were intended...  &nbsp; Note that the above implementation will not have 
+reverse burst, as that is generated inside the HLN-4181 board's custom 
+chip. &nbsp; If you need reverse burst you can use the external PL encoder 
+that was designed for the Mitrek or Micor "System's 90" control head setup, 
+or a Communications Specialists TS-64. &nbsp; Here's 
+<a href="http://www.repeater-builder.com/mitrek/com-spec-ts-64-to-mitrek.pdf">Com-Spec's own writeup on the TS-64 
+for the Mitrek</a>. &nbsp; It's not oriented to using it as an encoder-only, 
+but the encoder and reverse-burst hookup is quite relevant.</p>
+
+<center><table border=01 cellpadding=0 align=full width=508>
+<tr>
+  <td align=center><img src="pix/hln-4181-pos9v.jpg" 
+alt="+9.1v DC on the HLN-4181 board" width=500 height=297><br>
+You can find +9.1v DC to power the external PL encoder in the 
+empty solder-filled hole just above the pen (which slipped just 
+as the flash fired...)</td>
+</tr>
+</table></center>
+
+<br>
+
+<center><table border=01 align=full width=508>
+<tr>
+  <td align=center><img src="pix/hln4181-e2-e3.jpg" 
+alt="Test point E3 on the HLN-4181 board" width=500 height=301><br>
+Test point E3, pointed to by the pen, can be used as the ground 
+connection for your PL encoder.</td>
+</tr>
+</table></center>
+
+<br>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="Audio_In">
+<p align="left"><font size=+2><b>Repeat Audio In</b></font><br>
+Bringing TX audio (i.e. repeat audio) in from the outside world into 
+the radio is simple because the Mitrek is a true FM radio and the 
+actual modulation is done inside the channel element. &nbsp; All we 
+have to do is to tap and insert audio into the modulation line going 
+to the element. &nbsp; There is an easy way and a right way... Both 
+take a 10uf audio coupling capacitor and connect it from the control 
+connector's frequency 4 select pin through the RF protection choke 
+to the modulation line of the transmitter channel elements. &nbsp; The 
+difference is where we tap into that modulation line.</p>
+
+<p align="left"><center><table border=01 align=full width=501>
+<tr>
+  <td align=center><img src="pix/mitrek-repeat-audio-in-plate-through-hole.jpg" 
+alt="TX Audio Test Point B" width=500 height=516><br>
+The easy way is to just patch a 10uf capacitor onto the interconnect board 
+between JU9&nbsp;/&nbsp;L10 and this plated through hole.</td>
+</tr>
+</table></center></p>
+
+<p align="left"><pre>
+&gt;----------------------------------------O -JU3A- O--+--O -JU15- O---Pin 18 of 
+9-pin PL Board                              (in)     !     L18       the control 
+connector pin 1                                      !               connector
+                                      +--O -Ju3B- O--+
+               JU9/L10        10uf    !     (out)
+TX audio in     choke        -! !+    !
+&gt;-------------()()()()--------! !-----O &lt-- plated-through hole 
+control head               ^  ! !     !      on interconnect board
+connector pin 10           !          !      right below and in between 
+                           !          !      JU3B and JU3C.
+                           !          !
+(Frequency 4 select)       !          +--O -JU3C- O <--- this is where I grab my VOM
+lift the main-board side --+          !     (out) !      or oscilloscope ground
+of the choke and connect              !           !
+the new capacitor to it)              !          gnd
+                                      !
+                   interconnect board !
+                                 ==========
+                           main board !
+                                      !      O "Point B"
+                                      !      !
+                                      +------+---- to TX modulator</pre>
+</p>
+
+<p align="left">The better way is to run one end of that same 
+capacitor to the main board. &nbsp; Find "Point "B" on the schematic 
+and then on the main board near the mic audio circuit, look around 
+Q1004, R514  and R501, it can be a little hard to find... &nbsp; The 
+"Point B" is preferred as connecting the capacitor there bypasses the 
+connection beteween the interconnect board and the main board, which 
+according to the Cactus writeup mentioned above "has been found to be 
+the cause of intermittent and high resistance connections". &nbsp; They 
+aren't kidding.<br>
+<b>Note:</b> do not use a tantalum cap for the 10uf one mentioned above, 
+they are bad news when used as audio coupling capacitors.</p>
+
+<p align="left"><center><table border=1 align=full width=501>
+<tr>
+  <td align=center><img src="pix/mitrek-point-b.jpg" alt="TX Audio Test Point B" 
+width=500 height=500><br>
+The right way is to inject it into test point B, pointed to by the 
+pen. &nbsp; Don't be surprised that the hole in the PC board is big, 
+it's sized for a push-on-pin.</td>
+</tr>
+</table></center></p>
+
+<p align="left">This is the right way:<br>
+<pre>
+               JU9 / L10        10 uf
+TX audio in    choke            -! !+
+&gt;-------------()()()()-----------! !-------- connect to 
+control head               ^     ! !         "Point B" on
+connector pin 10           !                 main board
+(Frequency 4 select)       !                 (see text)
+                           !
+lift the main-board side --+
+of the choke and connect the 
+new capacitor to it</pre></p>
+
+<p align="left">Note that the TX audio injected at the modulation 
+line by either method shown above is NOT pre-emphasized by the TX 
+audio circuits before modulating the radio. &nbsp; If you need 
+pre-emphasis you need to do it to the audio before it hits the 
+radio.</p>
+
+<p align="left">
+In my case when the radio's dev pot is set properly and the repeat 
+TX audio level out of the controller is adjusted properly the local 
+mic audio is a little low - however if the local person "close talks" 
+the microphone (with the lips just barely clearing the mic grille) 
+and speaks at a level just a little above normal conversation level 
+it is perfectly acceptable for test use. &nbsp; As often as I go to 
+a hilltop site and need to use the link radio's local microphone I 
+can live with having to close-talk and "speak up" a little.</p>
+
+<p align="left">It is the authors opinion that having the repeat 
+audio level be independent of the RX volume control, plus having 
+a working local speaker and permanently installed local microphone 
+jack on every radio in the system is very useful - it allows a local 
+user to simply walk up to the rack, turn up the volume on any 
+radio and monitor the frequency. &nbsp; If needed he can pick up 
+the appropriate microphone (or plug in a microphone) and talk just 
+as he would expect to.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="COS/COR">
+<p align="left"><font size=+2><b>Carrier Operated Relay (COR)<br>
+Carrier Operated Switch (COS)<br>
+Carrier Detect (CD)<br>
+Channel Busy</b></font>&nbsp; &nbsp;(you choose the term you prefer)<br>
+<br>
+I seriously suggest you use the Link-Comm RLC-MOT board (as 
+described below) to generate the COR and repeat audio outputs, 
+but if you chose not to, then generating a logic-level signal 
+that indicates open squelch isn't hard, but it does need one NPN 
+transistor, maybe two, depending on your preferences.</p>
+
+<p align="left">To bring the COS signal outside (from either the 
+RLC-MOT or from the added switching transistor) I lifted the radio 
+end of JU7/L8 on the interconnect board leaving the choke between 
+control connector pin 8 and the COS signal source. </p>
+
+<pre>
+   Original !  Added carrier
+    Mitrek  !  detect circuitry
+   --------------------------------      JU7 / L8 
+            !                             choke         pin 8
+            !         control        +---()()()()-----------<
+            !        connector       !                  F3 select
+            !          pin 4         !
+            !           +12v         ! <--lift this end of the
+            !            !           !    choke in the radio from 
+            !            !           !    the existing circuitry
+            !            !           !    and hook to new     
+            !            !           !    transistor collector
+            !       10k  R           !
+audio    !  !            !           ! <--open collector COS out...
+mute     !  !            !           !    low with squelch open&nbsp;/&nbsp;signal present
+switch   !  !            !           C
+Q406     C  !            +-------- B
+    -- B    !            !           E
+         E  !            !           !
+         !  !            C           !  New transistors are almost
+         +-------R----- B            !  any NPN silcon - 2N4401s,
+         !  !   10K      E           !  2N3904s, 2N2222s, etc.
+  R414   R  !            !           !
+150 ohm  !  !            +-----------+
+         !  !            !
+        gnd !            !       pin 6 or 17 of the control 
+                        gnd  <-- connector, or another 
+                                 internal ground</pre>
+
+<p align="left">
+Yes, the second transistor inverts the first and is not really 
+needed, but I prefer open collector outputs from radios, and I 
+prefer active-low signals between the radios and any external 
+circuitry, especially repeater controllers. &nbsp; Why? well, 
+I prefer open collectors since most controllers have their own 
+internal pull-up resistors, and a open collector output is 
+therefore universal - it will work with a +5v logic system, a +12v 
+logic system, relays, a LED (for testing), anything, and all with 
+no modifications. &nbsp; I prefer active low signals becasue if 
+a radio loses power or otherwise fails, the controller doesn't 
+"pull up" the dead signal to a false positive, resulting in the 
+system being keyed until the timeout timer disables the system 
+TX (you DO have a separate backup timeout timer, don't you?), 
+thereby rendering the entire system unusable. &nbsp; Also when 
+you are working on the system you can do a large amount of testing 
+with nothing more than a clip lead shorting the open collector 
+outputs to ground without worrying that you're going to blow 
+something up (picture a site visit some day... PL decode not 
+working? gound the PL decode lead and see if the PL indicator 
+on the controller front panel lights up. &nbsp; yes? the problem's 
+gotta be inside the receiver chassis!). &nbsp; Also with open 
+collector interfacing you can shut off the system, disconnect or 
+un-cable the bad radio/device/etc. and then turn the power back 
+on and everything else in the system still works because the 
+unplugged open circuit looks like the idle open collector...</p>
+
+<p align="left">If you absolutely have to use a high going signal 
+just leave off the second transistor and use this:
+
+<pre align="left">
+
+   Original    !  Added
+   Circuitry   !  Circuitry      JU7/L8
+               !                 choke         pin 8
+               !            +---()()()()-----------<
+               !            !                  F3 select
+               !            ! 
+               !            ! <--lift this end of the choke
+               !            !    in the radio from the
+               !            !    existing circuitry and hook
+               !            !    to the new transistor collector    
+audio     !    !            !
+ mute     !    !            !
+switch    C    !            ! <--open collector COS output...
+Q406 -- B      !            !    high when squelch open / signal present
+          E    !            !
+          !    !            C
+          +---------R---- B
+          !    !   10K      E
+    R414  !    !            !
+ 150 ohm  R    !            !
+          !    !            !
+         gnd   !            !
+                          gnd</pre>
+
+<p align="left">
+<b>Note that the above COS circuit is in reality an open squelch 
+detector and only works as a COS if you leave the radio's squelch 
+circuit in carrier squelch mode.</b> &nbsp; We are deriving our 
+COS signal from the audio mute transistor and for it to be valid we have 
+to leave the RX in carrier squelch mode. &nbsp; The PL board mod above 
+brings the PL decode indicator to the outside world, but leaves it hooked 
+to the main board audio mute circuit (I wanted to avoid as many radio mods 
+as possible - to make the radio as "serviceable&nbsp;/&nbsp;testable" on a 
+standard-wired test bench as possible). &nbsp; This means that if you place 
+the receiver into PL mode the audio mute transistor will be controlled by 
+the combined COS and the PL decode signals (remember the "AND" and "OR" 
+jumpers on the PL board?), which we don't want. &nbsp; It is very desirable 
+to be able to deliver separate COS and PL decode lines to your repeater 
+controller, and depending on the capabilities of your controller you can 
+run the system in carrier only mode, PL only mode, carrier AND PL mode, 
+or in Carrier OR PL mode. &nbsp; As a bonus some controllers (one is the 
+Scom 7K) allow you to run the repeater in carrier mode while requiring 
+all commands (touchtone) to have a PL tone - and if you want, you can 
+have a command or two that doesn't require PL...</p>
+
+<p align="left">So leaving your Mitrek local speaker in carrier mode is a 
+"So what?" type of a problem... &nbsp; You are going to leave the radio 
+volume control turned down to zero, and at a mountaintop repeater site 
+nobody will be there to hear it anyway. &nbsp; Forcing the receiver into 
+permanent carrier squelch mode is easily done in several ways:
+
+<ul compact>
+<li>leave the control head "Monitor" switch (a push-in / push-out button) 
+in carrier mode</li>
+
+<li>unplug control cable lead #16 from the back of the control head and 
+tape it off (this disables the monitor switch)</li>
+
+<li>leave pin 16 on the RX control connector floating (i.e. don't solder a 
+wire to it when you build your custom control cable). &nbsp; Or leave the 
+pin open AND put a short length of heat shrink on it (a trick I learned at 
+NASA&nbsp;/&nbsp;JPL in the 1970s - it tells you and the next guy to check 
+the documentation, i.e. "No, I didn't forget this pin, it's not connected 
+for a reason!").</li>
+
+<li>cut JU14&nbsp;/&nbsp;L16 on the interconnect board. &nbsp; No matter WHAT 
+you do to pin 16 on the outside of the radio, it's going to stay in carrier 
+squelch mode.</li>
+</ul>
+
+<p align="left">Personally, I do not like option 1 - it's not idiot proof from 
+someone opening the rack and accidentally bumping a switch while doing something 
+else. &nbsp; I've used option 2 when I'm using stock cables, or option 3 when I'm 
+building custom cables. &nbsp; I leave JU14&nbsp;/&nbsp;L16 alone so that the 
+radio still works properly on the test bench.</p>
+
+<p align="left">If you use the RLC-MOT board to create your repeat audio out 
+the discusion above is irrelevant as the Mitrek stock carrier squelch and RX 
+audio circuits are completely bypassed.</p>
+
+<p align="left"><font size=+2><b>Alternative Carrier Operated Relay circuits 
+and points</b></font><br>
+Quite a few of the other Mitrek modification web pages tell you to use test 
+point 'E' in the radio, or to take a COS signal from U401, pin&nbsp;4, or 
+from the PL board.<br>
+I'll describe those here...
+
+<ul compact>
+<li>Point 'E' is a test point on the RX schematic and is the collector 
+of Q406 (I used the emitter of the same transistor). &nbsp; Physically 
+it can be found near the pin 8 corner of U403, between CR404 and 
+L401. &nbsp; Motorola uses this 
+point in their consolette (tabletop base station) carrier indicator 
+option board. &nbsp; Point 'E' sits at about +2.8 volts when squelched 
+and drops to about +0.1 to 0.2v with the squelch open. &nbsp; One reason 
+that this point is so attractive is that it's the "official Motorola" way 
+to do it, especially when turning a consolette Mitrek into a tabletop 
+repeater. &nbsp; When I tried using it, however, the carrier squelch 
+action changed with the circuit connected and reverted back to normal 
+with it removed. &nbsp; I didn't like that "feature" - the squelch 
+action should be consistent with or without the open collector transistor 
+driver connected. &nbsp; Maybe I screwed up in the breadboarding, (I probably 
+did), I don't know.</li><br>
+<br>
+<li>You can also take COS from U401, pin 4. &nbsp; This point is low 
+with the squelch closed, rising to about +6 volts when the squelch 
+opens. &nbsp; This spot is nice because it is very simple to get to: it's 
+one of the speaker leads, right off of the speaker driver IC, however as a 
+COS output it fails if you turn up the volume... the speaker audio rides 
+on top of the DC voltage and the low going half of the audio sinewave can 
+dip below the COS threshold causing the COS function to get very ragged 
+and very unusable very quickly...</li><br>
+<br>
+<li>You can also take COS from pin 5 (the audio mute signal) on the 
+PL board connector (this is accessible at a jumper, and the jumper number 
+varies with which PL board you have, so check the schematic of your PL 
+or DPL board). &nbsp; Since this is not a true COS, but just the audio 
+mute signal, this again only works if you leave the radio in carrier 
+squelch. &nbsp; The COS voltage will swing from about 1.5 volts (with 
+the squelch open) to somewhere between 6v and 12v with the squelch 
+closed (the value depends on which of the three Moto PL / DPL boards 
+you have installed, if any). &nbsp; This is a high impedance signal, 
+so you can't put too much load on it or you will start to affect the 
+squelch action.</li>
+</ul>
+
+<p align="left">All in all, if you are going to use the internal carrier 
+squelch simply taking the DC voltage off the emitter lead of Q406 with a 
+transistor inverter works the best for me. &nbsp; It's simple, reliable, 
+is guaranteed to work with any of the three PL&nbsp;/&nbsp;DPL boards, 
+and the rest of the radio has no idea it's there.</p>
+
+<p align="left">After this web page went up I received an email from a 
+friend that basically stated "Point 'E' works just fine for me. &nbsp; Just 
+connect a 15k ohm resistor to point E and use it like this:" &nbsp; (his 
+schematic below, you can add the extra transistor as above to generate a 
+low going output signal):
+
+<pre align="left">
+ Original       !  Added
+ circuitry      !  circuitry
+----------------------------------
+                !
+         +9.5v  !
+           !    !
+           +-----------------+
+           !    !            !
+      R430 !    !        10K R
+      82K  R    !            !          COS signal to 
+           !    !            +--------- controller (9.5v high 
+Motorola's !    !            !          with squelch open / signal present... 
+point 'E'  !    !            C          You can leave out the 10k resistor 
+    -----> +---------R----- B           for an open collector)
+           !    !   15K      E
+     Q406  C    !            !
+     ----B      !            !    Transistor is almost any 
+           E    !            !    NPN Silicon as listed above
+           !    !           gnd
+           !    !
+           !
+           !
+           ! <------I picked my COS signal above from here
+           !
+     R414  !
+     150   R
+     ohms  ! 
+           ! 
+          gnd
+</pre>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="Audio_Out">
+<p align="left"><font size=+2><b>Repeat Audio Out</b></font><br>
+I do NOT like methods that take audio out of the repeater receiver in 
+such a way that the repeat audio level varies as the receiver's local 
+volume control is adjusted. &nbsp; It is my personal opinion that the 
+repeater receiver volume control should be used for the local speaker 
+volume, period. &nbsp; This rule adds one more level of "idiot-proofness". &nbsp; The 
+method described below does just that.</p>
+
+<p align="left">Repeat audio out is actually pretty easy - just use a 
+Link-Comm RLC-MOT board (described in the squelch&nbsp;/&nbsp;COS section). &nbsp; But 
+if you decide to "roll your own", it is a simple process as long as 
+your repeater controller can mute the receive audio. &nbsp; Just 
+add a 10uf cap inside the radio between the discriminator to pin 9 
+of the control connector. &nbsp; Note: do not use a tantalum cap here, 
+they are bad news when used as audio coupling capacitors. &nbsp; If 
+your controller does <u>not</u> do the audio muting for you, like 
+the ACC RC-85 and RC-96 models, you will have to add a series FET 
+audio switch controlled by the COS, or use Link's RLC-MOT (which 
+has it's own audio muting).</p>
+
+<p><b>Here's the quick way</b> - all of it is on the interconnect board:</p>
+
+<pre align="left">
+From audio             +!!        choke     Pin 11    (Buffered audio out
+circuitry -----------+--!!--------()()()-----< <----- to control head volume 
+inside radio         !  !!      JU10 / L11            and squelch controls)
+                     !  C3 
+          (see text) ! 
+                     ! Existing radio circuitry (C3 is located on the interconnect board)
+      - - - - - - - -!- - - - - - - - - -
+                     !
+                     !  Added circuitry
+                     !
+                    +!
+               10uf ---  <-- add this cap inside the radio
+              at at ---
+          least 15v  !
+                     !
+                     !     choke        Pin 9
+lift this side ----> +----()()()---------< <------ audio to the
+of the choke             JU8 / L9       Freq 2     controller 
+from the radio                          select
+circuitry</pre>
+
+<p align="left"><b>Here's the right way</b> (which bypasses the 
+main-board-to-interconnect-board connector): &nbsp; Take the 
+audio from pin 1 of U403A (which is an 8-pin opamp). &nbsp; If 
+you want to use shielded cable (I would) you can find ground on 
+pin 4 of the same chip. &nbsp; Note that this pin has about 
+600mv of audio on top of about 5.5v of DC on it. </p>
+
+<pre align="left">
+>From U403 Pin 1 ----+
+                     !  Existing radio circuitry (main board)
+      - - - - - - - -!- - - - - - - - - -
+                     !
+                     !  Added circuitry
+                     !
+                    +!
+               10uf --- <--- add this cap inside the radio
+              at at ---
+          least 15v  !
+                     !
+                     !     choke        Pin 9
+lift this side ----> +----()()()---------< <------ audio to the
+of the choke             JU8 / L9       Freq 2    controller 
+from the radio                          select
+circuitry</pre>
+
+<p align="left">Note that in the two diagrams above the audio to the 
+controller IS NOT de-emphasized, but in most cases it is not a problem 
+as many controllers offer de-emphasis internally. &nbsp; If yours 
+does not, we can fix that:</p>
+
+<pre align="left">
+                   !
+                   !  Existing radio circuitry as above
+                   !
+      - - - - - - -!- - - - - - - - - -
+                   !
+             10uf --- <--- add this cap inside the radio
+            at at ---
+        least 15v  !
+                   !
+                   \
+                   /
+                   \  15K ohms, a magic value, do not substitute
+                   /
+                   \
+                   !
+                   !     choke         Pin 9
+                   +----()()()----------< <------ audio to controller 
+                   !   JU8 / L9        Freq 2     (must be a high-
+                   !                   select      impedance input)
+                   !
+                  ---  0.1uf, a magic value, do not substitute
+                  ---  and do not use a tantalum cap
+                   !
+                   !
+                  gnd  <---  pin 2 of the control connector (audio ground)
+                             or pins 6 or 17 some other internal ground</pre>
+
+<p align="left">On the other hand, in the diagram above the audio to 
+the controller <u>IS</u> de-emphasized. &nbsp; The overall audio level 
+will also be lower than without the de-emphasis circuitry. &nbsp; For 
+more information on the "magic values" in the schematic above and how 
+to calculate them, see the excellent article by Matt Lechliter W6KGB 
+at <a href="http://www.repeater-builder.com/rbtip/pdemph.html">
+http://www.repeater-builder.com/rbtip/pdemph.html</a>. &nbsp; In the
+above diagram the repeater controller must have an input impedance
+greater than 150k (calculated as 10x the 15K resistor above). &nbsp; 
+High impedance inputs can be RF sensitive, make sure you use shielded
+audio cable for this connection - I use RG-174 as audio cabling in my 
+repeaters. &nbsp; It's regular 50 ohm coax, and while it is lossy at 
+VHF and UHF frequencies it's perfectly OK at audio.  Besides it's not 
+expensive, it's readily available, small, has a tight shield and is 
+very flexible.</p>
+
+<p align="left">Note that the Mitrek has a PL filter on the PL decoder 
+board, unfortunately it is positioned in the RX audio stream after the 
+volume control and it is a notch-type filter. &nbsp; Ideally it would 
+be a high-pass filter located before the volume control so that the 
+repeat audio would have the PL filtered out, but it's not. &nbsp; Several 
+folks have tried to use the internal filter in repeat or link service, and 
+the performance leaves a LOT to be desired. &nbsp; The overall consensus 
+is that it's not worth even trying. &nbsp; Some folk disable the on-board 
+PL filter to eliminate any modification of the received audio - just remove 
+C38 on the PL board (if you are careful as you remove it you can reuse it 
+in the audio de-emphasis circuit above). &nbsp; If you need a high-pass 
+PL filter it's easy to add an outboard PL filter between the Mitrek RX 
+and the controller. &nbsp; An excellent one can be found at <a href="http://www.ka9fur.net/w9hhx-io-pg4.jpg">http://www.ka9fur.net/w9hhx-io-pg4.jpg</a>. &nbsp; Leave out the ID notch filter unless you need it. &nbsp; There are two more at 
+<a href="http://www.repeater-builder.com/pl-filter">http://www.repeater-builder.com/pl-filter</a>. &nbsp; If 
+you want to you can place the filter in the audio line in place of JU10&nbsp;/&nbsp;L11 
+on the interconnect board, or externally between the radio and the repeater 
+controller. &nbsp; If you place the PL filter at the JU10&nbsp;/&nbsp;L11 point 
+you will want to relocate the repeat audio output pickoff point to after 
+the filter.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="Carrier_Squelch">
+<p align="left"><font size=+2><b>Comments on the Mitrek Carrier Squelch</b></font><br>
+Modern FM radios utilize a noise operated squelch which works by 
+measuring the amplitude of the discriminator white noise at the 
+audio frequelcies above the frequency range used by the human 
+voice. &nbsp; Speech lives in the range from 300hz to a certain point, 
+above that is all noise. &nbsp; The cutoff frequency between what is 
+considered voice and what is considered squelch noise is critical: too 
+low and the squelch will chop on higher pitched voices, too high and 
+there won't be enough high frequency noise to work with (the top 
+frequency of the available noise is controlled by the IF bandwidth).</p>
+
+<p align="left">Imagine a RF generator connected to the RX, the 
+squelch is wide open, and an AC voltmeter connected to an audio dummy 
+load hooked across the the speaker leads is showing a volt or two of 
+noise.  &nbsp; As you slowly increase the level of an on-channel dead 
+carrier, the level of squelch noise quickly lowers with just a little 
+bit of signal. &nbsp; If you reduce the carrier level the noise comes 
+back up. &nbsp; Receiver sensitivity is measured this way, look for the 
+"20db quieting" measurment in a radio specification sheet (and some 
+point-to-point links - especially voting RX links - need 30, 35 or even 
+40db of quieting). &nbsp; The noise operated squelch circuit takes this 
+high frequency AC noise and amplifies it and rectifies it into a DC 
+voltage that varies with the noise level. &nbsp; When this DC voltage 
+drops below a specific threshold (set by the squelch control) the speaker 
+unmutes, and as it rises above the threshold the speaker mutes. &nbsp; Most 
+modern radios use two different thresholds (the difference is called the 
+<i>squelch hysteresis</i> amount), one level for squelch open, and a 
+slightly lower one for squelch close. &nbsp; This improves how the user 
+preceives the squelch action: once the squelch opens the signal can drop 
+back past the squelch-open threshold level and then drop a a little more 
+before it closes.</p>
+
+<p align="left">Many people are dissatisfied with the stock Mitrek 
+squelch, especially if thy have ever been exposed to a Micor or a GE 
+Mastr-II. &nbsp; The typical complaint is that that the squelch threshold 
+level (to stop the white noise in the speaker) is much lower than the 
+level required to eliminate the random "cracklies" caused by on-channel 
+noise spikes. &nbsp; In other words to get a totally quiet receiver the 
+Mitrek squelch control has to be set much higher than the initial 
+squelch-closing threshold - in some cases turning the squelch control 
+all the way to the top isn't enough.</p>
+
+<p align="left">The reason for the poor performance of the Mitrek 
+carrier squelch circuit is inherent in it's overall design. &nbsp; The 
+entire circuit uses only only five transistors. &nbsp; The Mitrek came into 
+being in a era where the use of PL or DPL was universal, and carrier squelch had 
+gone by the wayside. &nbsp; Motorola installed a simple noise operated squelch, and 
+it almost seems to have been included as an after thought. &nbsp; The designer didn't 
+put much time or thought into it, knowing that it wouldn't be used 
+much... </p>
+
+<p align="left">In contrast, Motorola put a great deal of effort 
+into the Micor's noise squelch circuit since the use of PL and DPL 
+had not become universal at the time of the Micor's design. &nbsp; In 
+short, the Micor was the high water mark for carrier squelch circuit 
+development - the heart of the Micor carrier squelch circuit is a single 
+custom IC chip which contains over a hundred transistors. &nbsp; Unfortunately 
+this part is obtainable only as a spare part from Motorola or by 
+carefully scavenging it off of a Micor audio-squelch board (and it 
+was not socketed). &nbsp; The Micor squelch chip is a complete bi-level 
+or switched hysteresis squelch system on a single chip. &nbsp; Simply, 
+the Micor bi-level squelch works better than anything else on the 
+air. &nbsp; Note that the circuit could be added to any model radio - even 
+the Metrum-II. &nbsp; In fact, it's not hard to hook an inexpensive Micor 
+mobile Audio-Squelch card (available for $5 or so) to almost any radio that 
+has raw discriminator audio and positive 9.6v DC voltage available. &nbsp; A 
+25k squelch pot completes the circuit.</p>
+
+<p align="left">Naturally, when a need shows up, somebody fills it for a 
+price. &nbsp; Link-Comm makes a line of repeater controllers and they have 
+an accessory board called the "RLC-MOT" that will add a Micor squelch into 
+any receiver that provides raw discriminator audio. &nbsp; The board will 
+fit inside <u>any</u> mobile radio and is much smaller than the actual 
+Micor audio-squelch board, works great and makes the squelch action a lot 
+more pleasing, and eliminating the squelch tail the stock Mitrek creates.</p>
+
+<p align=center><table border=01 align=full width=308>
+<tr>
+  <td align=center><img src="pix/rlc-mot.gif" 
+alt="The Link-Comm RLC-MOT module" width=300 height=127><br>
+The Link-Comm RLC-MOT module is small, <br> only 2.5 inches by 1 inch</td>
+</tr>
+</table></p>
+
+<p align="left">The RLC-MOT interfaces with a single six pin connector (pin 6 is nearest the corner of the board):<br>
+<blockquote>
+<table border="1" cellspacing="1" cellpadding="6">
+<tr><td align="center" colspan="2"><b>RLC-MOT pinout</b></td></tr>
+<tr><td align="center">Pin</td><td>Function</td></tr>
+<tr><td align="center">1</td><td>+11 to 15vDC at about 35ma</td></tr>
+<tr><td align="center">2</td><td>Discriminator audio in</td></tr>
+<tr><td align="center">3</td><td>Buffered and muted audio out</td></tr>
+<tr><td align="center">4</td><td>Active low COS</td></tr>
+<tr><td align="center">5</td><td>Active high COS</td></tr>
+<tr><td align="center">6</td><td>Ground</td></tr>
+</table>
+</blockquote></p>
+
+<p align="left">The RLC-MOT uses a trimpot for an on-board squelch control 
+(a 20 turn!), has a LED that lights when the squelch is open, and and has 
+an audio level pot on board.</p>
+
+<p align="left">If you are using an RLC-MOT module and need a de-emphasized 
+repeat audio output you can take advantage of the fact that the option of 
+de-emphasizing the audio was designed into it from the start - just add 
+a capacitor across R9 on the module itself. &nbsp;  There are solder pads 
+for it already in place (labeled C18). &nbsp; They are small and you will 
+have to use a very small cap and a very small soldering iron, and work quickly 
+and carefully but they are there. &nbsp; Depending upon the audio response 
+you'd like to see, the cap should be somewhere between .0075uf (breakpoint 
+at about 200hz) to .022uf (breakpoint at about 75hz). &nbsp; While you can 
+tailor it to suit your desires of low-frequency response the lower you go in 
+frequency the less "effective gain" you will achieve due to the modification 
+of the buffer/amp circuit's frequency response. A 0.01 cap will give you a 
+breakpoint of 150hz,which is likely the best compromise. &nbsp; The 
+RLC-MOT is available from <a href="http://www.link-comm.com">Link Comm</a> 
+at 800-610-4085 for about US$60. &nbsp; Yes, I know, you spent less on the 
+entire radio.</p>
+
+<p align="left">A quick-and-dirty hookup of the RLC-MOT to a Mitrek - <b>NOT 
+RECOMMENDED:</b></p>
+
+<pre>
++-------------------+
+!     Function  Pin !
+!                   !
+!          +12   1  !------ +12v
+!                   !
+!     Audio in   2  !------ See text below
+!                   !                       choke
+!    Audio out   3  !---------------------()()()()------< <--- repeat audio out to controller 
+!                   !                      JU8/L9      Pin 9 - Freq 2 select
+!  Low COS out   4  !---------------+                
+!                   !               !      choke
+! High COS out   5  ! unused        +-----()()()()------< <--- Active-low COS out to controller 
+!                   !                      JU7/L8      Pin 8 - Freq 3 select
+!          GND   6  !--+
++-------------------+  !
+                       gnd  <-- pin 6 or 17 of the control connector, or
+                                any other internal audio ground</pre>
+
+<p align="left">Audio to feed the RLC-Mot can be derived from two 
+places: purists can take if from pin 1 of U403A in the receiver, bypassing 
+the main-board-to-interconnect-board junction (suggested) or from the radio 
+side of JU10/L11 (which feeds pin 11 of the control connector).</p>
+
+<p align="left">When you mount the RLC-MOT make sure you do it so that the 
+on-board LED is visible. &nbsp; Double-sided foam tape works fine. You will 
+need to get to the squelch adjust pot (labeled R3), the audio level pot 
+(R14) and to see the squelch LED (D1).</p>
+
+<p><b>Here's the right way to do it</b>:<br>
+I really suggest that you use the "High COS Out" signal to drive an open 
+collector transistor as shown below, with the collector going to the outside 
+world via JU7/L8/pin 8. &nbsp; Doing this will protect the RLC-MOT module 
+from any errors in hookup outside the radio - I'd much rather toast a 25 
+cent transistor than a $60 module... the transistor takes the heat, so 
+to speak. &nbsp; If I were to do it over today I'd use the RLC-MOT to 
+drive an open collector opto-isolator instead of the open collector 
+transistor.</p>
+
+<pre align="left">
+                                          choke         pin 8
+     pin 2 ! audio in                +---()()()()-----------<
+           !                         !    JU7/L8        F3 select
+     pin 3 ! audio out               ! 
+           !                         ! <--open collector COS output...
+     pin 4 ! Low COS out             !    low when squelch open / signal present
+           !                         C
+     pin 5 !-----------R---------- B
+           !         4.7K            E
+           !                         !
+           !                         !
+                                    gnd</pre>
+
+<p align="left">More info on the Micor squelch is at:<ul compact> 
+<li><a href="http://www.repeater-builder.com/rbtip/micorsquelch.html">http://www.repeater-builder.com/rbtip/micorsquelch.html</a>&nbsp; Another writeup on the Micor squelch by 
+Kevin Custer W3KKC</li>
+<li><a href="http://www.link-comm.com/squelch.html">http://www.link-comm.com/squelch.html</a>&nbsp; The LinkComm RLC-MOT info page (from their web site)</li>
+<li><a href="http://www.repeater-builder.com/pdf/rlc_mot_rev_c.pdf">Link-Comm RLC-MOT 
+board layout and schematic</a> &nbsp; 39kb &nbsp; (in PDF format, courtesy of Link-Comm, 
+used with permission)</li>
+</ul></p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="Duplexing">
+<p align="left"><font size=+2><b>Duplexing / Dual Radios / Interconnections</b></font><br>
+Duplexing a UHF Mitrek can be tricky, and in many cases is frequency dependent 
+(i.e. it will work on some frequencies and not on others). &nbsp; <u>The 
+406-420mhz models will spur if duplexed</u> (please read the entire Cactus 
+Radio document mentioned at the top of this writeup) and since I had two 
+Mitreks and four Mitrek Plus radios on hand for the project I elected to 
+just use two of the Plus radios for my full duplex point-to-point link. &nbsp; Using 
+two radios also meant that I didn't have to do the standard "duplex mod" (see 
+below). &nbsp; As my long-term plans were to replace the two 440mhz Mitreks 
+with 420mhz ones, I had to use two radios anyway.</p>
+
+<p align="left">One additional mod I made to the control head that 
+when first described makes people wonder why: <u>I shorted out the 
+double pole power switch on the control head volume control</u> with
+two individual jumpers and added a label to the front of the control 
+head that says "Control head power switch bypassed - Use power switch 
+on Astron to turn link radios on and off".  &nbsp; Why? &nbsp; I made 
+the change and added the label after I turned the volume down a little 
+too far as I was leaving the site on Sunday night and killed the 
+link... it was dead for a week until I could get back to the site and 
+turn the switch back on. &nbsp; It was very frustrating - a one and 
+one/half hour drive just to get to the start of the 4-wheel-drive 
+dirt road, then another hour to get to the radio site. &nbsp; Out of 
+the vehicle for long enough to open the building door, disable the 
+alarm, flip a switch, test the link, re-enable the alarm, lock the 
+door, then 2 and 1/2 more hours to get back home. &nbsp; On my next 
+visit I jumpered the switch out and added the label.... adding one 
+more layer of "idiot-proofness". &nbsp; Phil Lefever, KB&Oslash;NES 
+made the point quite well in an email when he said: "I hate driving 
+up the hill to fix something I could have done better the first time 
+around".</p>
+
+<p align="left">Here's a crude diagram of my dual radio cabling - it 
+makes two Mitreks look like one single full duplex radio:
+<pre>
+                            big wire                 big wire
+                 +--------------------Big Fuse------------------------+
+                 !                                                    !
+                 !          big wire                                  !
+                 !  +------------------------+                        !
+                 !  !                        !                        !
+ +--------+      !  !     +--------+         !   +----------------+   !
+ ! Pin 19-!------+  !     ! Pin 19-! open    !   !     Astron     !   !
+ ! Pin 17-!---------+     ! Pin 17-!---------+---!Neg  power   Pos!---+
+ !        !               !        !             !     supply     !   !
+ !        !               !        !             +--------------- +   ! 
+ !   TX   !               !   RX   !                                  !
+ !  plug  !               !  plug  !                               7a fuse
+ !        !               !        !                                  !
+ !        !               !        !                                  +---+
+ !  see   !               !  see   !                                  !   !
+ !  note  !               !  note  !                  +----------------------+
+ !  #10   !               !  #10   !                  !          pin 19   20 !
+ ! below  !===============!  below !==================!                      !
+ +--------+   control     +--------+  control         !  Mitrek single-freq  !
+              harness                 harness         !     control head     !
+                                                      ! with bypassed power  !
+            to                                        ! switch and LEDs for  !
+         repeater ------>>----------------------------!    COS, PL decode,   !
+         controller    DB15      Ribbon cable         !    power and PTT     !
+                                  (see text)          +----------------------+
+                                                        !         !
+                                                        +-- mic   +-- speaker
+</pre>
+
+<p align="left">To connect the two radios to a single control head I 
+took two old Motrac cables (Mitrek, Motrac, Mocom 70 and some of the 
+earlier all-tube vintage radios all used the same connector but with 
+different wiring). &nbsp; The control harness in the drawing above was 
+built up by starting with a control cable that had been cut during 
+removal (C. W. Wolfe sells these for a very reasonable price). &nbsp; I 
+took the control head end with the numbered pin connectors which gave me 
+some nice long leads and then scavenged the radio end connectors off of 
+both cables. &nbsp;  This gave me two connectors, two sets of connector 
+shells and a full set of pinned and numbered leads about 5 feet long.</p>
+
+<p align="left">The leads to the radio connectors were cut to length as I 
+added each wire to the harness. &nbsp; I wired everything up using the 
+recycled numbered leads so I had a RX radio and a TX radio on one single 
+frequency control head (i.e. no frequency switch)... see the detailed 
+diagram below.</p>
+
+<p align="left">To connect the dual radio assembly to the repeater controller 
+I cut a slot in the back of the control head to allow a piece of 15-conductor 
+flat ribbon cable to exit out of the head. &nbsp; The actual DB15 connector 
+and ribbon cable I used came off of a game port connector plate from an old 
+combination I/O card from an ISA vintage PC. &nbsp; I cut off the 16-pin 
+header connector and separated the individual leads for a few inches and 
+stripped the insulation off. &nbsp; To get the ribbon cable out of the head 
+I drilled two holes with a 1/8" drill bit just far apart to clear the cable 
+and used an old soldering iron with a long thin concial tip that just fit 
+into the 1/8"hole and dragged it sideways to melt the plastic between the 
+two holes. &nbsp; Moto used good thick plastic, it took a while to do 
+it and do it with good ventillation. &nbsp; I don't have access to a milling 
+machine but if you do then you could duplicate that slot much faster or even 
+mount a DB-15F into the top or front of the head itself... above the area 
+where the frequency switch would go is one good place....</p>
+
+<p align="left">The overall radio-control head harness consisted of all 
+the pinned cable leads that were required plus the two large power cables, 
+all tied together with a piece of 3/8 or 1/2" (I forget which) spiral wrap 
+(from the local auto parts store) that started with the power wiring and 
+the TX connector on one end, the RX connector in the middle, and the control 
+head and controller DB15 connector at the other. If you are not using a 
+control head then you could mount a pair of miniature volume and squelch 
+pots and a couple of LEDs in the connector shell itself.</p>
+
+<p><table align=full border="1" cellspacing="3" cellpadding="4" width=640>
+<tr><td align="left" colspan="3">
+The table below is the pinout of the DB15 that goes from my dual Mitrek 
+lashup and the controller. &nbsp; The first 7 pins are the same as a Link 
+Comm controller, pins 8, 9 and 10 are unused, the last 6 pins are my own 
+wiring. &nbsp; I relocated the audio grounds to pins adjacent 
+to the audio pins since the the overall construction was much cleaner.
+</td>
+<tr>
+  <td align="center">1</td>
+  <td align="center">Logic Gnd</td>
+  <td align="center" valign="center" rowspan="15" >
+DB-15 connector pinout<br>
+<pre>
+8   7   6   5   4   3   2   1
+-----------------------------------
+\  O   O   O   O   O   O   O   O  /
+\  O   O   O   O   O   O   O  /
+ -----------------------------
+ 15  14  13  12  11  10   9</pre>
+
+View from the surface of <br>
+the female connector that accepts <br>
+the male plug, or from the wiring <br>
+(back) side of the male connector.</td>
+</tr>
+
+<tr>
+  <td align="center">2</td>
+  <td align="center">PL decode output</td>
+</tr>
+<tr>
+  <td align="center">3</td>
+  <td align="center">TX PTT in</td>
+</tr>
+<tr>
+  <td align="center">4</td>
+  <td align="center">TX audio in (shield to pin 11,
+Link-Comm has shield to pin 8 of a DB-9)</td>
+</tr>
+<tr>
+  <td align="center">5</td>
+  <td align="center">RX audio out (shield to pin 12,
+Link-Comm has shield to pin 9 of a DB-9)</td>
+</tr>
+<tr>
+  <td align="center">6</td>
+  <td align="center">Logic Gnd (see note 9 below)</td>
+</tr>
+<tr>
+  <td align="center">7</td>
+  <td align="center">RX COS/COR out</td>
+</tr>
+<tr>
+  <td align="center">8</td>
+  <td align="center">Reserved for future use</td>
+</tr>
+<tr>
+  <td align="center">9</td>
+  <td align="center">Reserved for future use</td>
+</tr>
+<tr>
+  <td align="center">10</td>
+  <td align="center">Audio Gnd (TX audio shield)</td>
+</tr>
+<tr>
+  <td align="center">11</td>
+  <td align="center">Audio Gnd (RX audio shield)</td>
+</tr>
+<tr>
+  <td align="center">12</td>
+  <td align="center">Link RX power monitor (see note 6 below)</td>
+</tr>
+<tr>
+  <td align="center">13</td>
+  <td align="center">Link TX power monitor (see note 5 below)</td>
+</tr>
+<tr>
+  <td align="center">14</td>
+  <td align="center">PL encoder disable</td>
+</tr>
+<tr>
+  <td align="center">15</td>
+  <td align="center">Reserved for future use</td>
+</tr>
+</table>
+
+<p align="left">Here's a pin-by-pin detail on the wiring I used - but refer 
+to the manual so you completely understand it before trying to duplicate 
+this:
+<pre>
+                  TX         RX       Control
+             radio pin    radio pin   head pin
+                  1 ------------------- 1 see note 1
+     +----------- 2 --------- 2 ------- 2 see note 1 and note 12
+     !<--note 14A
+     !       +--- 3           3 ------- 3 speaker hot   8.2k  4.7k
+     !   +-->R    4 --------- 4 ------- 4 --------------R--+--R------gnd   see note 6
+     !   !   +--- 5           5 ------- 5 speaker hot      !                               
+     !   !        6 --------- 6 ------- 6 see note 10      +- DB15 pin 13 (link power on)
+     !   note     7 ------------------- 7 see note 7 -------- DB15 pin 15 (PL encode disable)
+     !   2 and                8 ------- 8 see note 7 -------- DB15 pin 7 (COS out)
+     !   14C                  9 ------- 9 see note 7 -------- DB15 pin 5 (RX audio out) note 9
+     !           10 ------------------ 10 see note 7 -------- DB15 pin 4 (TX audio in) note 9
+     !  note +-- 11          11 ------ 11 see note 3
+     !   14B !   12 ------------------ 12
+     !    -->!   13 ------------------ 13 ------------------- DB15 pin 3 (TX PTT)
+     !       +-- 14          14 ------ 14 see note 3
+     +---------- 15          15 ------ 15 see note 3
+                             16        16 see note 4
+Ground --------- 17 -------- 17 ------ 17 ------------------- DB15 pin 1 and 6 (Logic Ground)
+                             18 ------ 18 see note 8 -------- DB15 pin 2 (PL decode out)
++13.8vDC --+                       +-- 19 +12 from Astron
+           !                       !
+           +-- 7A fuse ------------+-- 20 +12 from Astron
+           !                           21 see note 3 -------- DB15 pin 11 and 12 (audio ground)
+          Big             +------------22 see note 5 -------- DB15 pin 14 (link TX power on)
+          fuse            !
+       (note 11)          !         +--24 \
+           !              !         !      See note 15
+           !              !         +--27 /
+           !              !
+           !      TX      !     +----- 29 or 31               DB15 pins 8, 9, and 10
+           +----- 19      !  RX spkr                          are reserved for future use
+           !              !     +----- 32
+          8.2k  Note 5    !
+           !              !
+           +--------------+     NOTE - all unreferenced or not shown pins on the RX, 
+           !                           TX and Control head connectors are not used 
+          4.7k  Note 5                  and are left floating.
+           !
+          gnd</pre>
+
+Notes:<ol> <!-- don't move the paragraphs or the numbering changes -->
+<li>&nbsp;TX pin 1 and 2 is a shielded cable with the shield connected to pin 2. &nbsp; Pin 1 is mic audio, 2 is audio ground.</li>
+
+<li>&nbsp;TX pins 3 and 5 have a 47 ohm 1 to 2 watt load resistor connected to them
+    (a dummy speaker load).</li>
+
+<li>&nbsp;RX pins 11, 14 and 15 are shielded with the shield hooked to pin 2 on 
+    the radio end and pin 21 on the control head end (audio ground).</li>
+
+<li>&nbsp;RX pin 16 normally connected to control head pin 16 to allow the control
+    head "Monitor" switch to set the RX into PL or carrier mode. By leaving the 
+    pin 16 unhooked the PL decoder can never accidentally be enabled.<br>
+    I personally do not solder a wire to the pin and in fact put a piece of 
+    heatshrink over the RX connector pin 16. &nbsp; This heat shrink on the bare 
+    pin is a memory-jog trick I learned at NASA in the 1970s - it tells you (and 
+    the next guy) to check the documentation before doing anything with that 
+    connector pin.</li>
+
+<li>&nbsp;These two resistors are optional... You could put them on the back of 
+    the TX connector from pins 19 to 17 and connect the center point to a lead 
+    plugged into pin 22 of the control head and from there to a DB15 pin tied 
+    to a spare digital input on the controller. &nbsp; Pin 22 of the control 
+    head is normally hooked to pin 6 of the PL switch (the one labeled "Monitor") 
+    and you can cut the trace behind the switch and use the adjacent plated-through 
+    hole to connect the DB15 cable lead. &nbsp; The two resistors divide the power 
+    supply voltage to a logic high, i.e. about 4.5 to 5v. If the big fuse blows 
+    the controller digital input will go low and the controller can announce "No 
+    power to link radio TX" when you switch on the link... &nbsp; (if you have a leftover 
+    digital input, you might as well use it for something interesting until you need 
+    it for something useful).</li>
+
+<li>&nbsp;If you have a second spare digital input just duplicate the two resistors 
+    but put them either inside the RX radio connector shell from pin 4 to ground 
+    (pin 6 or 17) or put them inside the control head from pin 4 to ground (pin 23) 
+    and either way run the center point to the the controller digital input, and 
+    program the controller to say "No power on link radio RX".</li>
+
+<li>&nbsp;Pins 7, 8, 9, 10 are normally hooked to the control head freqency switch. If
+    you use a single freq control head (without a switch) the virgin solder pads for 
+    the switch can be used as tie points for the leads from the DB-15 cable. &nbsp; Or 
+    you can take a multifreq head and remove the switch.</li>
+
+<li>&nbsp;Pin 18 is normally hooked to pin 4 of the PL switch and you can free it up by 
+    cutting the trace behind the switch and use the adjacent plated-through hole to 
+    connect the DB15 cable pin.</li>
+
+<li>&nbsp;Both DB15 pins 5 and 6 are hooked to audio coaxial cable (I used RG174 simply 
+    becuse I had a spool of it on the shelf - it's lousy UHF coax but great as audio 
+    cable) with the shields grounded to control head connector pin 2 on the head end 
+    and to DB15 pins 8 and 9 on the other.</li>
+
+<li>&nbsp;Pins 17 and 19 of the TX connector are the TX high current pins and should 
+    connect to the Astron with heavier gague wire. &nbsp; For a low power radio 
+    (T2xJJA, T3xJJA or T4xJJA model numbers) you want to use at least #12 wire, 
+    and #10 for any higher power radio (the T5xJJA, T6xJJA, T7xJJA, T8xJJA series).
+    Use the next larger size wire for any run over 10-12 feet. &nbsp; Pin 17 of 
+    the RX connector is tied to pin 17 of the TX connector and to pin 17 of the 
+    control head but that can be done with smaller gague wire to the RX-only 
+    radio. &nbsp; Make sure that you jumper pin 6 of the TX and RX connectors 
+    to pin 17 at each connector.</li>
+
+<li>&nbsp;The size (amperage) of the "big fuse" depends on both the TX power level and the frequency band. &nbsp; See the Motorola manual for your radio for the proper fuse rating.</li>
+
+<li>&nbsp;DB15 pin 11 and 12 (audio ground) can be connected to either pins 2 or 21 
+    in the control head, or pin 2 on the control connector on either radio - whichever 
+    is easier for you.</li>
+
+<li>&nbsp;The above drawing does not show the internal mods to the radios (like 
+    installing JU611 forcing the frequency 1 channel elements on).</li>
+
+<li>Inside the TX radio connector:
+  <ol compact type=A>
+<li> The volume control is replaced with a jumper from the 
+wiper pin (pin 15) to ground (pin 2) thereby setting a virtual 
+volume control at zero.</li>
+<li> The squelch control is replaced with a jumper from the 
+squelch wiper (pin 14) to the hot side (pin 11) thereby setting 
+a virtual squelch pot at maximum.</li>
+<li> Connect an 47 ohm 1w or 2w resistor across the speaker leads (pins 
+3 and 5) and <u>don't ground either of the speaker pins</u>!!! The Mitrek 
+runs both speaker leads hot and you <u>will</u> let the magic smoke out 
+of your radio if either speaker lead is grounded. &nbsp; If you are going 
+to recycle an older cable or control head just assume that they ran a gounded 
+speaker and trace both speaker leads from one end to the other and find 
+those grounding jumpers and remove them.  Better yet, strip both control 
+cable connectors of all wiring and start over.</li>
+  </ol>
+  <li> This jumper is required if you are using a factory Mitrek PL board 
+and want to use the PL decoder in the receiver.</li>
+</ol>
+</p>
+
+<p align="left">Note that some control cables have a wire on pin 7 but 
+do not have any on pins 6, 8, 9 and 10 (i.e. they are the "single 
+frequency" cables) so chose the cables that you intend to chop up 
+carefully. &nbsp; I first found this out the hard way, back when I 
+had a 4-freq 6m Motrac, a 6-freq 2m Motrac, a 4-freq 440mhz Motrac 
+and a 4-freq U43MSN Motran modified for 220mhz in my 1971 Ford Falcon 
+station wagon... the 2m Motrac cable ended up with a length of 10-conductor 
+stranded intercom cable taped to it... the conductors made up for 
+the missing ones in the control cable plus provided for frequency 5 
+and frequency 6 plus a couple of spares for TX PL tone selection.</p> 
+
+<A NAME="Duplex_Mods">
+<p align="left"><font size=+2><b>Duplex Mod For The Mitrek</b></font><br>
+If you chose to use one radio and duplex it, you'll need to 
+do these steps (<u><b>do not</b> duplex a 406-420mhz radio</u>, 
+especially if it will be going to a hilltop!!! For the reason read 
+the Cactus Radio writeup mentioned above):
+
+<ol compact type="A">
+<li>Jumper the F1 elements to run full time using JU611 as mentioned above.</li>
+
+<li>Clip one side of CR403 (in front of L208). &nbsp; This prevents the 
+receiver's audio amplifier (i.e. the speaker) from muting when PTT is keyed.</li>
+
+<li>Clip one side of CR1 (near Q1004, in front of L702). &nbsp; This 
+prevents the RX channel element from shutting down when PTT is keyed.</li>
+
+<li>Give the RX and TX their own RF ports.
+<ul type=1>
+   <li>The mechanically simplest method I've seen is to disconnect the 
+antenna relay coil wires from the motherboard and leave them floating, 
+thereby using the front panel antenna port as the permanent receive 
+antenna connection. &nbsp; If you want optimum performance you can 
+replace the front antenna connection with a female-to-female type N 
+bulkhead connector (which will require enlarging the hole in the front 
+panel) and then using double-shielded cable to the RCA connector on the 
+RX chassis (scavenge the old RCA plug for reuse unless you have some 
+of the short-center-pin plugs in your junk box). &nbsp; I've also 
+seen a female-N-to-female-SMA bulkhead connector mounted in the front 
+of the radio with a male-SMA-to-male-RCA cable used to connect to the 
+RX. &nbsp; Either way, you will want to use high grade double shielded 
+coax on the RX port (I prefer RG-400). &nbsp; I've even seen a scrap of 
+small diameter Superflex used here.</li>
+
+   <li>Next, you have to give the TX it's own port. &nbsp; One way 
+is to mount a double-female-BNC bulkhead connector in the sidewall 
+of the radio. &nbsp; Then cut the transmit coax at the back side of 
+the antenna relay and solder or crimp a BNC male to it, then plug 
+it into the new connector.</li>
+
+  <li>Probably the prettiest dual antenna jack mod I've seen is shown 
+below this paragraph. &nbsp; Not visible is the back side of the plate 
+that replaces the stock antenna connector. &nbsp; This plate mounts 
+two female-to-female SMA bulkhead connectors, and the two new cables 
+that run from the RF decks to the front panel have SMA male plugs to 
+connect to that plate. &nbsp; This makes for the best shielding and 
+minimum RF leakage. &nbsp; Unfortuntely this method requires enlarging 
+the hole in the front panel to clear the two SMA connectors, and 
+milling machines are not in the workshops of most hams.<br>
+<img src="pix/mitrek-full-duplex.jpg" border=0></li>
+
+<li>Motorola made some Mitrek-based high band mobile extenders by 
+leaving the final transistor out of the PA deck, and below are 
+four photos of how Moto modified the PA deck and how they did the 
+TX antenna jack... they mounted a SO-239 into the low power heat 
+sink (looking at the heat sink end of the radio it's on the right 
+side). &nbsp; This mod would not be hard to duplicate, but again, 
+milling machines are not in the workshops of most hams.<br>
+
+<img src="pix/mitrek-mobile-extender-tx-pa-deck.jpg"><br>
+Inside the PA deck. &nbsp; You can see the driver transistor under 
+the red capacitor, and that the final transistor to the right of 
+the driver has been replaced with a metal strap jumper.<br>
+<br>
+<img src="pix/mitrek-mobile-extender-tx-connector-outside.jpg"><br>
+The right side of the back of the full duplex Mitrek radio showing the TX antenna jack<br>
+<br>
+<img src="pix/mitrek-mobile-extender-tx-connector-inside-longshot.jpg"><br>
+A long shot of the inside of the PA deck showing the back of the TX antenna jack<br>
+<br>
+<img src="pix/mitrek-mobile-extender-tx-connector-inside-closeup.jpg"><br>
+A closeup of the inside of the PA deck showing the back of the TX antenna jack<br>
+</li>
+</ul>
+</ol>
+
+An addition to step "D-1" above that also adds a PTT indicator 
+to the front of the Mitrek (for those folk that don't use a control 
+head) is to cut the two coil wires at the antenna relay (instead 
+of disconnecting them from the main board), and then hook them 
+to a red LED and current-limiting resistor in series, and push 
+the LED into a snug fitting hole drilled into the front panel 
+of the radio. &nbsp; The top right corner of the serial number tag 
+is a good place for the LED - there's just enough room inside the 
+chassis for two or even three LEDs vertically along the right side of 
+the handle... One could be  a green LED for a power indicator, a red 
+one for PTT... (or a single two-color-three-lead LED for both). &nbsp; To
+locate the LED holes just latch the handle up and in place (as if the lid 
+was on and the radio was in it's tray) and drill the top hole in the 
+pocket formed by the top right corner of the handle. &nbsp; Watch where 
+the metal chips go, a good start is to drill the radio front panel with 
+the radio upside down on the bench.</p>
+
+<p align="left">Another take on duplexing by N3EUA can be found at the TAPR 
+website at <a href="http://www.tapr.org/~n3eua/hw/mitrek.html">http://
+www.tapr.org/~n3eua/hw/mitrek.html</a>. &nbsp; It's oriented towards packet 
+but it's still relevant.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="Indicators">
+<p align="left"><font size=+2><b>Status Indicators</b></font><br>
+I used a single freq control head, and for status indication I mounted 
+LEDs in the top of the head for COS and PL decode. &nbsp; I replaced 
+the two incandescent bulbs in the head with red and green LEDs just 
+for consistency. &nbsp; This gives me 3 LEDs in the top of the 
+head: green for power, red for TX PTT, and a three-wire red/green 
+for COS and PL decode. &nbsp; Someday I may add a blue LED for PL 
+encoder disable (that feature was added to the radio after the control 
+head work was complete). &nbsp; On an incoming signal without PL the 
+dual LED glows green, and if PL is present it momentarily glows green 
+showing the presence of the carrier, and when the PL decodes the red 
+comes on with the green making amber to make it evident that both are 
+present. &nbsp; There is no reason I used a 3-wire 2-color LED except 
+that I had a few in the junk box. &nbsp; Two individual LEDs for COS 
+and PL decode are just as easy. &nbsp; The PL decode signal from the 
+one-jumper mod above (JU6 to JU1) is a logic level as opposed to an 
+open collector, I added an open collector driver transistor in the 
+head to drive the PL decode LED. &nbsp; I showed the open collector 
+transistor in the PL decode section above as that's how the most 
+recent radio was done.</p>
+
+<p align="left">
+The resistance rule of thumb for a 10ma led is 100 ohms per volt, 
+so a 1.2k resistor in series with each LED is just about right for 
+12-13v, but the value is not critical - a 1k or 1.5k will work just 
+as well. &nbsp; For 20ma leds (the most common) use 50 ohms per volt, 
+so 560 or 620 ohms is appropriate. &nbsp; For 2ma LEDs I use 4.7k or 
+5.1K... &nbsp; Whatever value you pick, use that value on all the LEDs 
+so the light intensity is the same - except on the blue LED. &nbsp; One 
+characteristic of blue LEDs is that most of them take a little more 
+current for the same intensity (they are not as efficient) so if you 
+use blue you may have to use a little less resistance to get it to 
+look right. &nbsp; This is one place where an old Heathkit resistance 
+substitution box comes in handy.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="Mounting">
+<p align="left"><font size=+2><b>Mounting</b></font><br>
+To mount the radios in the system rack cabinet I bolted together a 
+"sandwich" of two Mitrek mobile mounting trays and a thick steel rack 
+shelf we found in surplus. &nbsp; On the top of the shelf is the TX 
+radio, under the shelf is the RX radio upside down.  An Astron SS-25 
+is mounted adjacent to the TX Mitrek, and a control head bracket is 
+bolted below to complete the assembly. &nbsp; The sizing is perfect, 
+you'd think that Astron designed the SS-25 specifically to fill the 
+leftover space in the rack shelf. &nbsp; When lifting the assembly 
+by the ends the shelf started to "bow" in the middle due to the weight, 
+so I added two pieces of right-angle steel stock, one at the front and 
+the other at the rear of the shelf, both running the full width of the 
+shelf. &nbsp; The spacers in the drawing below are 1" long pieces of 
+half-inch EMT conduit (only because I had a short length left over 
+from a remodeling project) - lengths of a dowel with a hole drilled in 
+the center or even stacks of washers would work just as well and are 
+there only to allow the front of the lower radio to clear the front 
+right-angle steel bracing when inserting it into or removing it from 
+the mounting tray, and to allow access to reach the control head knobs 
+and to see the LEDs.</p>
+
+<p>The Astron is mounted to the shelf with long ty-wraps that extend 
+through two holes drilled in the tray (at the "X" in the diagram below), 
+across the bottom of the shelf, around and up the right side and back 
+across the top of the supply. &nbsp; Yes, I could have opened the Astron 
+and drilled a couple of holes in the bottom to mount it, but I 
+didn't want to affect the warranty, and I wanted to be able to swap it 
+out without having to pull the rack shelf out of the cabinet. &nbsp; The 
+rack shelf I used is the exact height of the Astron, and the long ty-wraps 
+(I used a couple of leftover riot handcuffs) work just fine. &nbsp; A speaker 
+bracket is mounted to the bottom of the rack shelf behind the control 
+head. &nbsp; The speaker lies flat against the bottom of the shelf with 
+the speaker facing downwards.</p>
+
+<pre align="left">
+  +------ rack mount shelf ears and mounting holes -------------+
+  !                                                             !
++---+ +------------------------------------+ +--------------+ +---+
+! O ! !                                    ! !   Astron     ! ! O !
+!   ! !       TX Mitrek                    ! !    SS-25     ! !   !
+!   ! !                                    ! ! power supply ! !   !
+! O ! +----+--------------------------+----+ +--------------+ ! O !
++---+------!--------------------------!-----X---!----------!--+---+
+        spacer - see text          spacer     spacer    spacer
+      +----+--------------------------+----+ +--+----------+--+
+      !                                    ! !     Mitrek     !
+      !    RX Mitrek                       ! !  Control head  !
+      !    (mounted upside down)           ! +----------------+
+      +------------------------------------+    with speaker 
+                                               mounted behind 
+                                              the control head 
+                                              facing downward</pre>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A NAME="Second_RX">
+<p align="left"><font size=+2><b>Second Receiver Concerns</b></font><br>
+There may be times when you want to put a second Mitrek-based link into your 
+system, or perhaps you already have an existing radio with a 10.7mhz IF in 
+your rack. Well, Motorola has come to the rescue with the MSR-2000 
+repeater. &nbsp; The Motorola MSR2000 and the Mitrek share a common 
+history. &nbsp; In fact you could really stretch and say that the MSR is 
+a base station version of a cross between the Mitrek and the Micor. &nbsp; While 
+the Mitrek is a single-board "unified chassis" design, the MSR uses separate 
+RX and TX boards, a control shelf, and other non-mobile features. &nbsp; Despite 
+this there are many common components. &nbsp; One of these is the receiver 
+IF crystal filters. &nbsp; The normal Mitrek and MSR-2000 IF frequency is 
+10.7mhz. &nbsp; When there is a second receiver in the same cabinet the second 
+receiver IF needs to be moved to a different frequency to avoid in-cabinet 
+interference. &nbsp; If you put a second Mitrek based link in a system cabinet 
+and have an interference problem you can move the IF of the second RX by 
+re-ordering the channel element crystal for a 10.8mhz IF, installing the 
+10.8mhz IF filters and realigning the RX. &nbsp; The part numbers for the 
+10.8mhz filters are (thanks to WA6KLA for the information): Y201 is a 
+48-84396K07 and Y202, Y203, Y204, Y205, Y206 are all 48-84396K06. &nbsp; If 
+you do convert a mobile to a 10.8mhz IF <u>PLEASE leave a note inside the 
+radio and on the front of the radio</u> - maybe use a big Sharpie pen on 
+the sides of every IF can and write "10.8 IF". &nbsp; The next guy who 
+gets to recrystal that radio will appreciate it!</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<A Name="Closing">
+<p align="left"><font size=+2><b>Closing notes</b></font><br>
+The dual Mitrek assembly described above is currently used as a single
+channel full duplex UHF point-to-point link in our UHF repeater 
+system. &nbsp; The main repeater is on controller channel 1 and the 
+dual Mitrek is on channel 2. &nbsp; The reason for the use of dual radios 
+is that the initial implementation used 450 Mitreks tuned to the regular
+user input and output frequencies of the far-end repeater, later 
+replaced by 420 Mitreks on real link frequencies. </p>
+
+<p align="left">Setting the receiver frequency can be a bit tricky as 
+the Mitrek uses a quadrature detector rather than a ratio detector or 
+a crystal discriminator, therefore there is no "Motorola standard Metering 
+Point #4" zero-center test point. &nbsp; The Mitrek designers added 
+a circuit to help tune with a zero-center meter, but I've found that using 
+a SinAdder gives me better results. &nbsp; If you don't have one, sometimes 
+the simplest way is to use a frequency counter with the hot side of the test 
+probe hooked to pin two of the channel element socket. &nbsp; Just remember 
+to compensate for the 10.7mhz IF frequency. &nbsp; Then start looking for a 
+Sinadder - maybe on eBay - they aren't that expensive and are a valuable 
+addition to your test equipment collection. </p>
+
+<p>Remember that the Mitrek mobile transmitter was not designed to be a 100% duty cycle transmitter. &nbsp; In fact, Motorola states in the manual that <u>the Mitrek is a 20-25% duty cycle radio</u>. &nbsp; Mobile radios are built small and inherently have undersized heat sinks, so to keep the heat rise down make sure you keep the output power at no more than half of the rated output (the lower the better, but they get dirty and squirrely if run too low). &nbsp; Obviously the lower the power on the same sized heat sink means the low power ones are preferred for repeat&nbsp;/&nbsp;link service - even a low power radio at half power is enough to drive an external amplifier to whatever power level you can afford. &nbsp; And pont-to-point links can use directional antennas... 15w into a 10db yagi gives the same performance as 150w into an omni with a lot less duplexer required...</p>
+
+<p align="left">Consider doing the TX tuning with a eye on a spectrum 
+analyzer - remember that a dummy load accepts all manner of frequencies 
+without complaint, being non-resonant by design, while a tuned circuit 
+(like an antenna or duplexer cavity) will complain about harmonic content 
+and spurious output. &nbsp; To quote WB6VYX's comment on spectrum
+analyzers "a picture tube is worth at least 20db of clean..." &nbsp; A 
+transmitter that is not producing clean output will not behave on a hill 
+and sooner or later WILL cost you your site and give amateur radio yet 
+another black eye.</p>
+
+<p align="left">Cooling of the RF power amp is critical if you want it to 
+last. &nbsp; One trick is to remove the silver shield covering the PA and 
+use a hole saw to cut the top cover of the radio so that a cooling fan can 
+blow cool air directly onto the PA output transistors:
+<pre>
+                              ===finger guard===
+                              +----------------+
+                              !      fan       !
+                              +----------------+                ===finger guard===
+  +------------------------------!          !---------------------!            !-------+
+  !  Top cover plate             ! fan hole !                     ! air outlet !       !
+  +------------------------------!     !    !---------------------!            !-------+
+  !!                                   !                                ^             !!
+  !!                                   !                                !             !!
+  !!                         air flow  +-------->----->----->----->--->-+             !!
+  !!                                              PA transistors                      !!
+  !+----------------------------------------------------------------------------------+!
+  +------------------------------------------------------------------------------------+
+</pre>
+
+<p align="left">Use one hole to mount the fan and finger guard and another hole 
+(with a second guard) for the air outlet. &nbsp; Finger guards in a variety of 
+sizes are available at your local PC hardware shop. &nbsp; Cheap fans use 
+brass or bronze bushings, good fans use ball bearings and are worth the extra 
+money. &nbsp; Fans with needle bearings are even better but not too common.</p>
+
+<p align="left">Design your rack mounting assembly with an eye to allowing air 
+flow to and from the PA fans mentioned above and to keeping the rear heatsink 
+cool... a rear fan and good air flow is mandatory. &nbsp; Personally I use 
+two thermostat-controlled fans on the heat sink, one set 10 to 15 degrees higher 
+than the other, and if the hotter one turns on it also turns on a digital input 
+on the controller, which announces  "over temp on south link transmitter" and 
+changes the pitch on the system MCW ID. &nbsp; If the users miss the voice 
+announcement then the change in IDer pitch gets people's attention within the 
+first 10 minutes of dialing up the channel.</p>
+
+
+<pre>The hookup:                                 Hook this to +5 or +12, depending on 
+                                                 your controller's pull up voltage
++12v ----------+-------+----+--------+           + V ---+---------+
+               !       !    !        !                  !         !
+               !       !    !        !                  \         \
+               !     first  !     second                / 1.2k    / 10k 
+               !     rear   !      rear                 \         \ (this resistor is just for
+            PA deck  heat   !      heat                red        /  for insurance in case the
+              fan    sink   !      sink            overheating    \  LED opens up. It may not 
+             motor    fan   !       fan             indication    /  even be necessary if the
+               !     motor  !      motor               LED        \  controller has it's own 
+          /    !       !    !        !                  !         /  pull-up resistors... Some
+         /     !       !    !        !                  !         \  do, some don't, some pull 
+        /!     !       !    !        !                  !         /  up to +5v, some to +12v...
+     +-O ! O---+       !    !        !                  !         !
+     !   !             !    \        !                  +---------+------- to controller
+    gnd  !             !    /        !  200v 1a         !                  logic input
+         !             !    \       --- diode or       --- 50v 100ma       (active low)
+    -----)             !    /       \ / at least       \ / is overkill
+         )             !    !        V  twice as        V  here
+  reed   )             !    !       --- large as       ---
+  relay  )             !  green      !  necessary       ! 
+         )             !   LED       !  to carry        !
+   ------)             !    !        !  fan motor       !
+                       !    !        !  current         !
+ Connect               +----+        +------------------+
+ reed relay            !             !
+ in place              !             !
+ of antenna       thermostatic     thermostatic switch #2 
+ relay so            switch #1     (10-20 degrees higher)
+ fan runs              !             !
+ while                 !             !
+ transmitting          +------+------+
+ (a low current               !
+ fan can be run               !
+ directly)                  ground
+</pre>
+
+<p align="left">Onther method of fan control is to use a CMOS 555 timer 
+chip trigerred by the PTT, and staying on for a time period after 
+unkey. &nbsp; This idea can be extended by adding a thermistor on the 
+heat sink and incorporating it into the 555's timing capacitor charging 
+circuit so that as the heat sink gets hotter the timer takes longer to 
+shut off the fan.</p>
+
+<p align="left">An alternate way of controlling the PA deck fan is provided 
+by some repeater controllers: a digital output can be programmed to turn 
+on withthe first keyup and stay on for a programmed time period after
+the last transmission. &nbsp; In fact, the Scom 7K programming manual 
+gives this fan control function as one of their programming examples.</p>
+
+<p>Or use <a href="http://www.repeater-builder.com/tech-info/simple-repeater-fan-controller.pdf">a 
+repeater fan control circuit</a> such as <a href="http://www.repeater-builder.com/tech-info/simple-repeater-fan-controller.pdf">this one</a>, designed by Robert Shepard KA9FLX.</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<p align="left">Be a good RF neighbor! &nbsp; After you install your 
+radio in the system rack make sure you check the output with a spectrum 
+analyzer - make sure that the transmitter is clean and by all means use 
+a circulator followed by a good quality commercial pass cavity. &nbsp; The web 
+page at <a href="http://www.ham-radio.com/n6ca/appnotes/repeaters/repeaters.html">N6CA's Repeater Application Note page</a> is <u>well worth reading</u>. &nbsp; RF 
+neighborliness is one place where the UHF Micor mobile has it over the UHF 
+Mitrek: every UHF Micor mobile has an internal 100w circulator, even the 
+25watt models.... and I have seen some Micor UHF mobile circulators attached 
+to some definitely non-Micor radios...</p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<p align="left">Good luck and after you get your Mitrek going please drop me 
+an email and let me know how things went. &nbsp; I've spent a lot of time on 
+this web page and it's twenty-five-plus revisions, and sometimes I'm wondering 
+if anybody reads these missives to the masses...</p>
+
+<p>
+<a href="mitrek-interfacing.html#top">Back to the top of the page</a><br>
+<!--
+<a href="http://www.repeater-builder.com/rbtip/mitrek-index.html">Up one level</a><br>
+<a href="http://www.repeater-builder.com/rbtip/index.html#main-index">Back to Home</a>--></p>
+
+<hr width=80% height=15 noshade noshadow color=black>
+
+<p>If you see something above that is vague, missing (or outright wrong), 
+please let me know! &nbsp; It's input from the readers that make these 
+writeups better - I've probably either totally missed or shortchanged 
+topics and /or subtopics that really need to be covered. &nbsp; I can be 
+reached via <script language="JavaScript"><!--
+ document.write ('<a href="')
+ document.write ('mai')
+ document.write ('lto:w')
+ document.write ('a6il')
+ document.write ('q@a')
+ document.write ('rr')
+ document.write ('l.ne')
+ document.write ('t">')
+ document.write ('my permanent email address')
+ document.write ('</a>')
+ // --></script> or by way of <a href="http://www.qrz.com/callsign/wa6ilq">my snail mail address</a> available at <a href="http://www.qrz.com">www.qrz.com</a>.
+
+<blockquote>
+(I've included the QRZ link above instead of my real snail mail address 
+since my first household move in over 35 years is coming up, and modifying 
+all the web pages at my own schedule over six months saves having to update 
+a lot of web pages at once).
+</blockquote></p>
+
+<p align="left">Text, photos and hand-coded HTML are all Copyright &copy; Michael R. Morris WA6ILQ 2002, 2003, 2004<br>
+Last modified 26-Nov-2004 (added more photos)</p>
+</body>
+</html>
