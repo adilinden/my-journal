@@ -533,3 +533,18 @@ blockquote {
     width: calc(100% - (30px / 2));
   }
 }
+
+/**
+ * Home
+ */
+
+.home {
+  text-align: center;
+  vertical-align: middle;
+  .dot {
+    margin-top: 35px;  // whitespace above title
+    padding: 5px;
+    border: 1px solid #e8e8e8;
+    border-radius: 50%;
+  }
+}

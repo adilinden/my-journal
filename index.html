@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <header class="post-header">
+    <img src="{{ site.author.thumb | prepend: site.baseurl }}" alt="author thumb" class="dot">
+    <h1 class="post-title">{{ site.description }}</h1>
+  </header>
+
+  <div class="post-content">
+    <a href="{{ '/about/' | prepend: site.baseurl }}">about</a>
+    &#8226;
+    <a href="{{ '/archives/' | prepend: site.baseurl }}">archives</a>
+    &#8226;
+    <a href="{{ '/journal/' | prepend: site.baseurl }}">journal</a>
+  </div>
+
+</div>
