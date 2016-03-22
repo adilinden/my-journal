@@ -1,3 +1,11 @@
+
+$main-font-family: "Open Sans", sans-serif;
+$main-font-size: 16px;
+$main-line-height: 1.5;
+$main-font-weight: 400;
+$main-font-color: #5e676d;
+$main-background: #fff;
+
 /**
  * Reset some basic elements
  */
@@ -17,9 +25,12 @@ body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, hr, dl, dd, ol, ul, figure {
  */
 
 body {
-  font: 400 16px / 1.5 "Open Sans", sans-serif;
-  color: #5e676d;
-  background-color: #fff;
+  font-family: $main-font-family;
+  font-size: $main-font-size;
+  line-height: $main-line-height;
+  font-weight: $main-font-weight;
+  color: $main-font-color;
+  background-color: $main-background;
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
   -moz-font-feature-settings: "kern" 1;
