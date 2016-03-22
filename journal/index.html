@@ -10,7 +10,7 @@ layout: default
         <h2>
           <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
         </h2>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}{% if site.comments %}{% if post.comments %} &#8226; <span class="disqus-comment-count" data-disqus-identifier="{{ post.slug }}"><!-- Disqus Comment Count --></span>{% else %} &#8226; 0 Comments (disabled){% endif %}{% endif %}</span>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}{% if site.comments %}{% if post.comments %} &#8226; <span class="icon icon-comment-empty"></span><span class="disqus-comment-count" data-disqus-identifier="{{ post.slug }}">Comments</span>{% else %} &#8226; <span class="icon icon-comment-empty"></span> 0 Comments (disabled){% endif %}{% endif %}</span>
         <div class="post-excerpt">{% if post.summary %}{{ post.summary }}{% else %}{{ post.excerpt }}{% endif %}</div>
         <div class="post-meta">{% if post.categories %}Filed under: <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ post.categories.first | replace: ' ', '_' }}">{{ post.categories.first }}</a>{% for category in post.categories offset:1 %}, <a href="{{ "/categories/" | prepend: site.baseurl }}#category-{{ category | replace: ' ', '_' }}">{{ category }}</a>{% endfor %}{% endif %}{% if post.tags %} &#8226; Tags: <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ post.tags.first | replace: ' ', '_' }}">{{ post.tags.first }}</a>{% for tag in post.tags offset:1 %}, <a href="{{ "/tags/" | prepend: site.baseurl }}#tag-{{ tag | replace: ' ', '_' }}">{{ tag }}</a>{% endfor %}{% endif %}</div>
         <div class="read-more"><a href="{{ post.url | prepend: site.baseurl }}">Read more &raquo;</a></div>
@@ -21,18 +21,18 @@ layout: default
   <div class="paginator">
     {% if paginator.previous_page %}
       {% if paginator.previous_page == 1 %}
-        <a class="prev_page" href="{{ "/journal/" | prepend: site.baseurl }}">← Newer posts</a>
+        <a class="prev_page" href="{{ "/journal/" | prepend: site.baseurl }}"><span class="icon icon-point-left"></span> Newer posts</a>
       {% else %}
-        <a class="prev_page" href="{{ paginator.previous_page_path }}">← Newer posts</a>
+        <a class="prev_page" href="{{ paginator.previous_page_path }}"><span class="icon icon-point-left"></span> Newer posts</a>
       {% endif %}
     {% else %}
-      <span class="prev_page inactive">← Newer posts</span>
+      <span class="prev_page inactive"><span class="icon icon-point-left"></span> Newer posts</span>
     {% endif %}
 
     {% if paginator.next_page %}
-      <a class="next_page" href="{{ paginator.next_page_path }}">Older posts →</a>
+      <a class="next_page" href="{{ paginator.next_page_path }}">Older posts <span class="icon icon-point-right"></span></a>
     {% else %}
-      <span class="next_page inactive">Older posts →</span>
+      <span class="next_page inactive">Older posts <span class="icon icon-point-right"></span></span>
     {% endif %}
     <div style="clear:both"></div>
   </div>
