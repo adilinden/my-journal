@@ -15,7 +15,7 @@ title: Archives
     {% assign cats = words | split:',' | sort %}
     <p>
     {% for word in cats %}
-      <a href="{{ site.baseurl }}/categories/#category-{{ word | strip | cgi_escape }}">{{ word | strip }}</a>
+      <a href="{{ site.baseurl }}/categories/#category-{{ word | strip | cgi_escape }}" class="category">{{ word | strip }}</a>
       {% unless forloop.last %} &#8226; {% endunless %}
     {% endfor %}
     </p>
@@ -32,7 +32,7 @@ title: Archives
     {% assign tags = words | split:',' | sort %}
     <p>
     {% for word in tags %}
-      <a href="{{ site.baseurl }}/tags/#tag-{{ word | strip | cgi_escape }}">{{ word | strip }}</a>
+      <a href="{{ site.baseurl }}/tags/#tag-{{ word | strip | cgi_escape }}" class="tag">{{ word | strip }}</a>
       {% unless forloop.last %} &#8226; {% endunless %}
     {% endfor %}
     </p>

@@ -12,13 +12,13 @@ title: Categories
 {% assign cats = words | split:',' | sort %}
 <p>
 {% for word in cats %}
-  <a href="#category-{{ word | strip | cgi_escape }}">{{ word | strip }}</a>
+  <a href="#category-{{ word | strip | cgi_escape }}" class="category">{{ word | strip }}</a>
   {% unless forloop.last %} &#8226; {% endunless %}
 {% endfor %}
 </p>
 
 {% for w in cats %}{% capture word %}{{ w | strip }}{% endcapture %}
-  <div id="category-{{ word | cgi_escape }}">{{ word }}</div>
+  <div id="category-{{ word | cgi_escape }}" class="category">{{ word }}</div>
   <ul class="posts">
     {% for post in site.categories[word] %}{% if post.title != null %}
     <li itemscope><span class="entry-date"><time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: "%b %d, %Y" }}</time></span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>

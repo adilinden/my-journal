@@ -184,6 +184,18 @@ blockquote {
 }
 
 /**
+ * Tags and Categories
+ */
+
+.tag {
+  text-transform: lowercase;
+}
+
+.category {
+  text-transform: capitalize;
+}
+
+/**
  * Site header
  */
 
