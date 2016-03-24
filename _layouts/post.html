@@ -23,9 +23,9 @@ layout: default
   	<span class="prev_page inactive"><span class="icon icon-point-left"></span> Newer posts</span>
   {% endif %}
   {% if page.previous.url %}
-    <a class="next_page" href="{{ page.previous.url }}" title="{{ page.previous.title }}">Older posts <span class="icon icon-point-left"></span></a>
+    <a class="next_page" href="{{ page.previous.url }}" title="{{ page.previous.title }}">Older posts <span class="icon icon-point-right"></span></a>
   {% else %}
-  	<span class="next_page inactive">Older posts →</span>
+  	<span class="next_page inactive">Older posts <span class="icon icon-point-right"></span></span>
   {% endif %}
   <div style="clear:both"></div>
 </div>
