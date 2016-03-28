@@ -43,7 +43,7 @@ body {
  * Set `margin-bottom` to maintain vertical rhythm
  */
 
-h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight {
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight, table {
   margin-bottom: 1.5em;
 }
 
@@ -131,6 +131,19 @@ blockquote {
   > :last-child {
     margin-bottom: 0;
   }
+}
+
+/**
+ * Tables
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+td, th {
+    padding: 0
 }
 
 /**
@@ -523,6 +536,30 @@ blockquote {
 @media screen and (max-width: 800px) {
   .post-content h4 {
     font-size: 18px;
+  }
+}
+
+.post-content {
+  table {
+    display: block;
+    width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all
+  }
+  table th {
+    font-weight: bold
+  }
+  table th, table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd
+  }
+  table tr {
+    background-color: #fff;
+    border-top: 1px solid #ccc
+  }
+  table tr:nth-child(2n) {
+    background-color: #f8f8f8
   }
 }
 
