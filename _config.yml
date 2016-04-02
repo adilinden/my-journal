@@ -34,6 +34,7 @@ kramdown:
 gems:
   - jekyll-paginate
   - jekyll-redirect-from
+  - jekyll-sitemap
 
 paginate: 6
 paginate_path: /journal/:num/
