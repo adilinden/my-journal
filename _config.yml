@@ -8,6 +8,7 @@ baseurl     : ""  # without trailing slash
 
 comments: true
 disqus_shortname      : "adilinden"
+google_verify         : "RBz5-YgaAL6kroz0uHk40Uboacv9vE9hZC77dXqmy0I"
 
 # Author settings
 author:
