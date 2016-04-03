@@ -2,7 +2,7 @@
 layout: post
 title: Partition And Format ESXi Disks using CLI
 date: 2016-04-03 16:21:00
-comments: 
+comments: yes
 tags:
   - vmware
   - esxi
