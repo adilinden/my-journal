@@ -23,7 +23,7 @@ draft_dir="_drafts"
 pid_file=".run-jekyll.pid"
 
 function usage {
-    echo $"Usage: $0 {start|stop|restart|post|draft}"
+    echo $"Usage: $0 {start|stop|restart|post}"
 }
 
 function check {
@@ -65,6 +65,21 @@ function stop {
     fi
 }
 
+function post {
+	cat <<-EOT
+	---
+	layout: post
+	title: $yaml_title
+	date: $yaml_date
+	comments: yes
+	tags:
+	  - draft
+	category:
+	  - Draft
+	---
+EOT
+}
+
 if [ "x$1" != "x" ]; then
     case "$1" in
         start)
@@ -77,6 +92,19 @@ if [ "x$1" != "x" ]; then
             stop
             start
             ;;
+        post)
+			if [ "x$2" == "x" ]; then
+				yaml_title="New Post"
+			else
+				yaml_title="$2"
+			fi
+			yaml_date=$(date "+%Y-%m-%d %H:%M:%S %z")
+			out_slug=$(echo $yaml_title | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)
+			out_date=$(date "+%Y-%m-%d")
+			out_file="_posts/${out_date}-${out_slug}.md"
+			post > "$out_file"
+			echo -ne "\nCreated\n  $out_file\n\n"
+			;;			
         *)
             usage
             ;;
